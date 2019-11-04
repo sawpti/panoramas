@@ -1,0 +1,665 @@
+[debug] [2019-10-29T21:06:40.609Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:06:40.611Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:06:40.611Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:06:40.611Z] Platform:      linux
+[debug] [2019-10-29T21:06:40.611Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:06:40.611Z] Time:          Tue Oct 29 2019 18:06:40 GMT-0300 (-03)
+[debug] [2019-10-29T21:06:40.611Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:06:40.617Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:06:40.617Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:06:40.617Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:06:40.618Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:06:41.685Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:06:41.690Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:06:42.736Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:06:42.742Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:06:43.001Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:06:43.320Z] Functions runtime initialized.
+[debug] [2019-10-29T21:06:43.320Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:06:43.370Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:08:03.567Z] File /home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions/tsconfig.json changed, reloading triggers
+[debug] [2019-10-29T21:08:04.916Z] Functions runtime initialized.
+[debug] [2019-10-29T21:08:04.916Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:08:04.969Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:10:40.782Z] File /home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions/package.json changed, reloading triggers
+[debug] [2019-10-29T21:10:42.139Z] Functions runtime initialized.
+[debug] [2019-10-29T21:10:42.139Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:10:42.198Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:10:53.411Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:10:53.412Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:10:53.412Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:10:53.412Z] Platform:      linux
+[debug] [2019-10-29T21:10:53.412Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:10:53.412Z] Time:          Tue Oct 29 2019 18:10:53 GMT-0300 (-03)
+[debug] [2019-10-29T21:10:53.413Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:10:53.418Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:10:53.418Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:10:53.418Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:10:53.419Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:10:54.493Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:10:54.494Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:10:55.564Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:10:55.584Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:10:56.000Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:10:56.425Z] Functions runtime initialized.
+[debug] [2019-10-29T21:10:56.425Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:10:56.480Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:15:51.202Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:15:51.204Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:15:51.205Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:15:51.205Z] Platform:      linux
+[debug] [2019-10-29T21:15:51.205Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:15:51.205Z] Time:          Tue Oct 29 2019 18:15:51 GMT-0300 (-03)
+[debug] [2019-10-29T21:15:51.205Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:15:51.211Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:15:51.211Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:15:51.211Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:15:51.212Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-10-29T21:15:51.213Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-10-29T21:15:51.329Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:15:51.469Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:15:52.538Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:15:52.539Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:15:53.566Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:15:53.571Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:15:53.951Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:15:54.322Z] Functions runtime initialized.
+[debug] [2019-10-29T21:15:54.323Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:15:54.385Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/App Panoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:19:26.853Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:19:26.855Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:19:26.855Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:19:26.855Z] Platform:      linux
+[debug] [2019-10-29T21:19:26.855Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:19:26.855Z] Time:          Tue Oct 29 2019 18:19:26 GMT-0300 (-03)
+[debug] [2019-10-29T21:19:26.855Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:19:26.860Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:19:26.861Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:19:26.861Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:19:26.862Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:19:27.916Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:19:27.917Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:19:28.977Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:19:28.998Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:19:29.389Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:19:29.762Z] Functions runtime initialized.
+[debug] [2019-10-29T21:19:29.762Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:19:29.818Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:20:29.099Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/package.json changed, reloading triggers
+[debug] [2019-10-29T21:20:30.481Z] Functions runtime initialized.
+[debug] [2019-10-29T21:20:30.481Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:20:30.534Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:24:28.769Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js changed, reloading triggers
+[debug] [2019-10-29T21:24:28.769Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js.map changed, reloading triggers
+[debug] [2019-10-29T21:24:28.772Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js.map changed, reloading triggers
+[debug] [2019-10-29T21:24:28.772Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js changed, reloading triggers
+[debug] [2019-10-29T21:24:29.991Z] Functions runtime initialized.
+[debug] [2019-10-29T21:24:29.992Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:24:30.042Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:24:50.600Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js.map changed, reloading triggers
+[debug] [2019-10-29T21:24:50.600Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js changed, reloading triggers
+[debug] [2019-10-29T21:24:50.603Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js.map changed, reloading triggers
+[debug] [2019-10-29T21:24:50.603Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js changed, reloading triggers
+[debug] [2019-10-29T21:24:51.376Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:24:51.378Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:24:51.378Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:24:51.378Z] Platform:      linux
+[debug] [2019-10-29T21:24:51.378Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:24:51.378Z] Time:          Tue Oct 29 2019 18:24:51 GMT-0300 (-03)
+[debug] [2019-10-29T21:24:51.378Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:24:51.383Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:24:51.383Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:24:51.383Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:24:51.385Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:24:51.910Z] Functions runtime initialized.
+[debug] [2019-10-29T21:24:51.911Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:24:51.961Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:24:52.440Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:24:52.441Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:24:53.515Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:24:53.523Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:24:53.907Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:24:53.950Z] Error: listen EADDRINUSE 127.0.0.1:5000
+    at Server.setupListenHandle [as _listen2] (net.js:1360:14)
+    at listenInCluster (net.js:1401:12)
+    at GetAddrInfoReqWrap.doListen [as callback] (net.js:1510:7)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:72:10)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-10-29T21:25:43.910Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/src/index.ts changed, reloading triggers
+[debug] [2019-10-29T21:25:45.280Z] Functions runtime initialized.
+[debug] [2019-10-29T21:25:45.281Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:25:45.338Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:25:49.464Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/src/createServer.ts changed, reloading triggers
+[debug] [2019-10-29T21:25:50.821Z] Functions runtime initialized.
+[debug] [2019-10-29T21:25:50.821Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:25:50.870Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:26:53.469Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js.map changed, reloading triggers
+[debug] [2019-10-29T21:26:53.469Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js changed, reloading triggers
+[debug] [2019-10-29T21:26:53.472Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js.map changed, reloading triggers
+[debug] [2019-10-29T21:26:53.472Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js changed, reloading triggers
+[debug] [2019-10-29T21:26:54.269Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:26:54.271Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:26:54.271Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:26:54.271Z] Platform:      linux
+[debug] [2019-10-29T21:26:54.271Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:26:54.271Z] Time:          Tue Oct 29 2019 18:26:54 GMT-0300 (-03)
+[debug] [2019-10-29T21:26:54.271Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:26:54.276Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:26:54.276Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:26:54.276Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:26:54.277Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:26:54.809Z] Functions runtime initialized.
+[debug] [2019-10-29T21:26:54.809Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:26:54.859Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:26:55.359Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:26:55.361Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:26:56.419Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:26:56.429Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:26:57.494Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:26:57.513Z] Error: listen EADDRINUSE 127.0.0.1:5000
+    at Server.setupListenHandle [as _listen2] (net.js:1360:14)
+    at listenInCluster (net.js:1401:12)
+    at GetAddrInfoReqWrap.doListen [as callback] (net.js:1510:7)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:72:10)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-10-29T21:27:17.039Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/package.json changed, reloading triggers
+[debug] [2019-10-29T21:27:18.386Z] Functions runtime initialized.
+[debug] [2019-10-29T21:27:18.387Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:27:18.442Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:27:24.606Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js.map changed, reloading triggers
+[debug] [2019-10-29T21:27:24.607Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js changed, reloading triggers
+[debug] [2019-10-29T21:27:24.610Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js.map changed, reloading triggers
+[debug] [2019-10-29T21:27:24.610Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js changed, reloading triggers
+[debug] [2019-10-29T21:27:25.494Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:27:25.496Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:27:25.496Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:27:25.496Z] Platform:      linux
+[debug] [2019-10-29T21:27:25.496Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:27:25.496Z] Time:          Tue Oct 29 2019 18:27:25 GMT-0300 (-03)
+[debug] [2019-10-29T21:27:25.496Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:27:25.502Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:27:25.502Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:27:25.502Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:27:25.503Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:27:26.006Z] Functions runtime initialized.
+[debug] [2019-10-29T21:27:26.007Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:27:26.057Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:27:26.569Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:27:26.570Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:27:27.627Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:27:27.636Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:27:28.685Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:27:28.704Z] Error: listen EADDRINUSE 127.0.0.1:5000
+    at Server.setupListenHandle [as _listen2] (net.js:1360:14)
+    at listenInCluster (net.js:1401:12)
+    at GetAddrInfoReqWrap.doListen [as callback] (net.js:1510:7)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:72:10)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-10-29T21:27:53.496Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js.map changed, reloading triggers
+[debug] [2019-10-29T21:27:53.496Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js changed, reloading triggers
+[debug] [2019-10-29T21:27:53.499Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js.map changed, reloading triggers
+[debug] [2019-10-29T21:27:53.499Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js changed, reloading triggers
+[debug] [2019-10-29T21:27:54.283Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:27:54.285Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:27:54.285Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:27:54.285Z] Platform:      linux
+[debug] [2019-10-29T21:27:54.285Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:27:54.285Z] Time:          Tue Oct 29 2019 18:27:54 GMT-0300 (-03)
+[debug] [2019-10-29T21:27:54.285Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:27:54.291Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:27:54.291Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:27:54.291Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:27:54.292Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:27:54.867Z] Functions runtime initialized.
+[debug] [2019-10-29T21:27:54.867Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:27:54.917Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:27:55.377Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:27:55.379Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:27:56.431Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:27:56.439Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:27:56.681Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:27:56.727Z] Error: listen EADDRINUSE 127.0.0.1:5000
+    at Server.setupListenHandle [as _listen2] (net.js:1360:14)
+    at listenInCluster (net.js:1401:12)
+    at GetAddrInfoReqWrap.doListen [as callback] (net.js:1510:7)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:72:10)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-10-29T21:35:42.370Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:35:42.376Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:35:42.377Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:35:42.377Z] Platform:      linux
+[debug] [2019-10-29T21:35:42.377Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:35:42.377Z] Time:          Tue Oct 29 2019 18:35:42 GMT-0300 (-03)
+[debug] [2019-10-29T21:35:42.377Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:35:42.399Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:35:42.400Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:35:42.400Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:35:42.403Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:35:43.574Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:35:43.575Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:35:44.621Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:35:44.629Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:35:45.703Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:35:45.927Z] Functions runtime initialized.
+[debug] [2019-10-29T21:35:45.927Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:35:46.659Z] firebase-admin has been stubbed.
+[warn] ⚠  TypeError: _onRequestWithOpts is not a function
+    at Object.httpsProvider._onRequestWithOpts (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:278:24)
+    at Object.httpsProvider.onRequest (/home/hugomartinez/.config/yarn/global/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:283:34)
+    at Object.<anonymous> (/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js:5:31)
+    at Module._compile (module.js:653:30)
+    at Object.Module._extensions..js (module.js:664:10)
+    at Module.load (module.js:566:32)
+    at tryModuleLoad (module.js:506:12)
+    at Function.Module._load (module.js:498:3)
+    at Module.require (module.js:597:17)
+    at require (internal/module.js:11:18)
+[warn] ⚠  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2019-10-29T21:50:03.405Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/yarn.lock changed, reloading triggers
+[debug] [2019-10-29T21:50:03.405Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/package.json changed, reloading triggers
+[debug] [2019-10-29T21:50:04.668Z] Functions runtime initialized.
+[debug] [2019-10-29T21:50:04.668Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:50:04.718Z] firebase-admin has been stubbed.
+[info] i  functions: HTTP trigger initialized at http://localhost:5000/app-panoramas/us-central1/api
+[debug] [2019-10-29T21:50:50.438Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js.map changed, reloading triggers
+[debug] [2019-10-29T21:50:50.438Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js changed, reloading triggers
+[debug] [2019-10-29T21:50:50.442Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js.map changed, reloading triggers
+[debug] [2019-10-29T21:50:50.442Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js changed, reloading triggers
+[debug] [2019-10-29T21:50:51.227Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:50:51.229Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:50:51.229Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:50:51.229Z] Platform:      linux
+[debug] [2019-10-29T21:50:51.229Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:50:51.229Z] Time:          Tue Oct 29 2019 18:50:51 GMT-0300 (-03)
+[debug] [2019-10-29T21:50:51.229Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:50:51.234Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:50:51.235Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:50:51.235Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:50:51.236Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:50:51.797Z] Functions runtime initialized.
+[debug] [2019-10-29T21:50:51.798Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:50:51.847Z] firebase-admin has been stubbed.
+[debug] [2019-10-29T21:50:52.328Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:50:52.331Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:50:53.388Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:50:53.396Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:50:53.670Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:50:53.710Z] Error: listen EADDRINUSE 127.0.0.1:5000
+    at Server.setupListenHandle [as _listen2] (net.js:1360:14)
+    at listenInCluster (net.js:1401:12)
+    at GetAddrInfoReqWrap.doListen [as callback] (net.js:1510:7)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:72:10)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-10-29T21:50:53.931Z] Functions runtime initialized.
+[debug] [2019-10-29T21:50:53.932Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:52:17.947Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/tsconfig.json changed, reloading triggers
+[debug] [2019-10-29T21:52:19.238Z] Functions runtime initialized.
+[debug] [2019-10-29T21:52:19.239Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:52:19.291Z] firebase-admin has been stubbed.
+[debug] [2019-10-29T21:52:34.573Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js.map changed, reloading triggers
+[debug] [2019-10-29T21:52:34.573Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/createServer.js changed, reloading triggers
+[debug] [2019-10-29T21:52:34.579Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js.map changed, reloading triggers
+[debug] [2019-10-29T21:52:34.579Z] File /home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions/lib/index.js changed, reloading triggers
+[debug] [2019-10-29T21:52:35.408Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:52:35.410Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:52:35.410Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:52:35.410Z] Platform:      linux
+[debug] [2019-10-29T21:52:35.410Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:52:35.410Z] Time:          Tue Oct 29 2019 18:52:35 GMT-0300 (-03)
+[debug] [2019-10-29T21:52:35.410Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:52:35.416Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:52:35.416Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:52:35.416Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:52:35.417Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:52:35.859Z] Functions runtime initialized.
+[debug] [2019-10-29T21:52:35.860Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:52:35.917Z] firebase-admin has been stubbed.
+[debug] [2019-10-29T21:52:36.507Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:52:36.512Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:52:37.575Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:52:37.583Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:52:37.831Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:52:37.864Z] Error: listen EADDRINUSE 127.0.0.1:5000
+    at Server.setupListenHandle [as _listen2] (net.js:1360:14)
+    at listenInCluster (net.js:1401:12)
+    at GetAddrInfoReqWrap.doListen [as callback] (net.js:1510:7)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:72:10)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-10-29T21:56:13.225Z] ----------------------------------------------------------------------
+[debug] [2019-10-29T21:56:13.226Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2019-10-29T21:56:13.226Z] CLI Version:   7.0.2
+[debug] [2019-10-29T21:56:13.226Z] Platform:      linux
+[debug] [2019-10-29T21:56:13.226Z] Node Version:  v8.16.0
+[debug] [2019-10-29T21:56:13.227Z] Time:          Tue Oct 29 2019 18:56:13 GMT-0300 (-03)
+[debug] [2019-10-29T21:56:13.227Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-29T21:56:13.232Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-29T21:56:13.232Z] > authorizing via signed-in user
+[debug] [2019-10-29T21:56:13.232Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2019-10-29T21:56:13.233Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2019-10-29T21:56:14.307Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-29T21:56:14.308Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2019-10-29T21:56:15.346Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2019-10-29T21:56:15.366Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2019-10-29T21:56:15.630Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2019-10-29T21:56:15.992Z] Functions runtime initialized.
+[debug] [2019-10-29T21:56:15.992Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:56:16.041Z] firebase-admin has been stubbed.
+[info] i  functions: HTTP trigger initialized at http://localhost:5000/app-panoramas/us-central1/api
+[debug] [2019-10-29T21:56:28.027Z] Accepted request GET /app-panoramas/us-central1/api --> api
+[debug] [2019-10-29T21:56:28.398Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2019-10-29T21:56:28.399Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-10-29T21:56:28.465Z] firebase-admin has been stubbed.
+[debug] [2019-10-29T21:56:28.529Z] Trigger "api" has been found, beginning invocation!
+[debug] [2019-10-29T21:56:28.529Z] 
+[debug] [2019-10-29T21:56:28.529Z] Running api in mode HTTPS
+[info] i  Your code does not appear to initialize the 'firebase-admin' module, so we've done it automatically.
+   - Learn more: https://firebase.google.com/docs/admin/setup
+[debug] [2019-10-29T21:56:28.535Z] {"socketPath":"/tmp/firebase_emulator_invocation_5814.sock"}
+[debug] [2019-10-29T21:56:28.537Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_5814.sock"}
+[debug] [2019-10-29T21:56:28.555Z] Ephemeral server used!
+[debug] [2019-10-29T21:56:28.556Z] Bodyundefined
+[debug] [2019-10-29T21:56:28.564Z] Ephemeral server survived.
+[info] i  functions: Finished "api" in ~1s

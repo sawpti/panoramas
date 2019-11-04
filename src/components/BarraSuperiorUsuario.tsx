@@ -1,0 +1,49 @@
+import * as React from 'react';
+import { Navbar, Nav, Button } from 'react-bootstrap/';
+// import Nav from 'react-bootstrap/Nav';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser,  faQuestionCircle, faInfoCircle, faHiking} from '@fortawesome/free-solid-svg-icons'
+import logo from '../images/logo.png';
+
+interface IBarraSUperiorInicioProps {
+  todosClicked: () => any
+  realizadosClicked: () => any
+  porRealziarClicked: () => any
+ 
+  }
+
+export default class BarraSuperiorUsuario extends React.Component<IBarraSUperiorInicioProps> {
+  public render() {
+    const {todosClicked, realizadosClicked, porRealziarClicked} =this.props
+    return (
+      <div>
+       <Navbar collapseOnSelect={true} expand="lg" bg="light" variant="light">
+          <Navbar.Brand href="#home">
+            <img
+              src={logo}
+              width="70"
+              height="70"
+              className="d-inline-block align-top"
+              alt="Logo Saltos Pocolpén"
+            />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="#ayuda"><FontAwesomeIcon icon={faQuestionCircle} /> Ayuda </Nav.Link>
+              <Nav.Link href="#acercada"><FontAwesomeIcon icon={faInfoCircle} /> Acerca de..</Nav.Link>
+            </Nav>
+            <Nav>
+              <Button variant="outline-primary" onClick={todosClicked} >
+                <FontAwesomeIcon icon={faUser} /> Todos </Button>
+
+              <Button variant="outline-success" onClick={realizadosClicked}><FontAwesomeIcon icon={faHiking} /> Realizados</Button>
+              <Button variant="outline-success" onClick={porRealziarClicked}><FontAwesomeIcon icon={faHiking} /> Por Realizados</Button>
+
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+      </div>
+    );
+  }
+}

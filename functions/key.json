@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "app-panoramas",
+  "private_key_id": "2b17c450138a3c51a1a1222ad876928ba61ab1f2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCoRV/wy3RA/+xZ\nUJhBOuNbPvUzWLDWPUCjAeUvu8yHx3cxC01osmjIR9bgIREX5u3/Z82pG6qj4gXr\n5hmgBWIVP5QJsZcgK+8mwsI2M7sX2C7ugaYVI8r7JRrJ88vt46cPnPKuPdNZnDMH\n/AGxeeG+CaCPRL6Sdtyaj/TtcIlOEirmAJ1Jkcoj/+rVs1UQApkw66t2QPtFsYj1\nKlZS1jzzxIoyuqwH1UDcvxE+9EVyERig2t/wL2euh4k7YzHv1D5f4naE+4LfaZbN\nbwp5T9awXPu7Nv1faMWpiLrSvUrUnPyrsdFDg0HG/qnsWLMr6Amc+5k3gnx05u3C\niyOWyQ41AgMBAAECggEAJ18uItsT7TaEcGR3b4HOGzY4rKYyoDouQsXJgJj2Mwnk\nlVzh5J6j/kKy3/fUtk1CACnjWM9gpp5WyNqqwcKor7ST2I3NQMmO2DinNQP3IY3j\nc0pyGA2rK4bDxR+OZm/HEdPlA4hzSIsP9K0OH17Xhz3c69DHr2Dw3phS1HCpq9Ka\nr+bOl3RajZEUASoWLa0DP64vAPfs1uBtenUmSnyMSiO5LWXm9OLPUWgdi1QqEmcP\nfcwMxZn00yrrTspjRbOkb2fIKcjBnm2RDjQub8t+HivSTD+dTNcEY92bddzZ/Jji\niOzobaFEhoMq9hGQiyHB5UtknP5ZIrZs+VMYUFmXmQKBgQDYuA7s2BUAYYTLTgAi\n09K7fwx63AtkHpDyWYK5vKhdj0oid3bXiA6REscUgss+uItt64VlTGQXr/PEFuIJ\n7mU1/liZa0QOyuXV7FeFux4Zuxd10ip6avdnQZ3tcB0N8hkao4r98PtigrjcWwT/\nKjoreIZGO34N5ru38Q1L4UZfDQKBgQDGxUoiKbWu8fqugNMOchuGWn9QRQSIQILg\nV4WPC4Uva1srG2VHvd8h8YC0azq8nbLCx70zqPQE+qdx9T4sDoYU44C2v1/1WAD+\nKj1d/JiNuNVxrN25VZNNDcUxL7f+H0PV+0GJAnoDUo09Z8gpxpVa+L4hjsFwL60P\n819KAXbhyQKBgFKoQOkMsVXn2+I+6cZezC0/E994NdAF6HrGsRluXzjwAfKLZgRm\nnEewxcWI7UQK1wMhpUsxi6uNLIhJwgTPrEKfs+MwClEqCedBsVAMQjrGJPiHJDR0\nv8/eMwHwlORQxkpmvgiE9Rxph2BkRs+bp3wVCAGZh0Z+DnLluZCLZ2+xAoGAHPYw\nGAw1wbjWSsjQd8Fei1PySvLTdzrXFvMJrc8C5+bfkMdcGXjr4xk6JI+fLk5X9pN9\n2OIcNAGFllAib+7p0G9ZmMcHp0rcUiw7Zs9gNv4gc4C5icCTRt3jxofqaieKDcqf\nQORQfN1xYOoXOycJKgkmQuN3Ae6ga7uNPc460SkCgYEAxIfJeyOL+3DV8WZRPsMs\nNJPrw1TsdtM6lac5de+Oirc+93TKM3mVTjNKLLrfKWURjZsfSVO+IMHfFNqfd/p5\nUk0ifr2w3rIEX/pS6DIuFWZzmGA3nE1PrJLed34GngVm0FNmWX6iL9ziaruOr4gX\nPCDgsJjbVtgNkJJ9m/N9iEo=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-ar3qs@app-panoramas.iam.gserviceaccount.com",
+  "client_id": "110797643190729664481",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ar3qs%40app-panoramas.iam.gserviceaccount.com"
+}
