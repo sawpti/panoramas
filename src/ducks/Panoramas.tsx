@@ -1,10 +1,7 @@
-import { firestore} from 'firebase';
+import { firestore } from 'firebase';
 import { AnyAction, Dispatch } from 'redux';
 import { IServices } from '../service';
 import * as utils from '../utils';
-// import { setProfileImage } from './Users';
-// import { IServices } from '../service/index';
-
 
 // Definicion de tipos para nuestras acciones
 const START = 'posts/fetch-start'
@@ -13,11 +10,20 @@ const ERROR = 'posts/fetch-error'
 const ADD = 'posts/add' // va a ser de tipo post y accion add
 
 // creamos interfaz de Post (para compartir los post - C93)
-export interface IPost{
-    comment: string,
-    userId: string,
+export interface IPost {
     createdAt: firestore.Timestamp
-    imageURL: string
+    calificacion?: number
+    descripcion: string
+    destacado?: boolean
+    nomProveedor?: string
+    nombre: string
+    urlImagen: string
+    urlImagen1: string
+    urlImagen2: string
+    urlWeb?: string
+    urlMapUbicacion: string
+    urlInstagram?: string
+    urlFacebbok?: string
 }
 
 // creamos una interfaz para indicar que tipo de datos es payload
@@ -83,7 +89,7 @@ export default function reducer(state = initialState, action: AnyAction) {
         default:
             return state
     }
-    return state
+    // return state
 }
 
 
@@ -93,25 +99,58 @@ export const fetchPosts = () =>
         dispatch(fetchStart())
 
         try {
-            const snaps = await db.collection('posts').get()
-            const posts = {}
+            const snaps = await db.collection('panoramas').get()
+            const posts = {} // Panoramas 
             snaps.forEach(x => posts[x.id] = x.data())
             const imgIds = await Promise.all(Object.keys(posts).
                 map(async x => {
-                    const ref = storage.ref(`posts/${x}.jpeg`)
+                    const ref = storage.ref(`panoramas/${x}.jpeg`)
                     const url = await ref.getDownloadURL()
-                    return [x, url]
+                    const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
+                    const url1 = await ref1.getDownloadURL()
+                    const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
+                    const url2 = await ref2.getDownloadURL()
+                    return [x, url, `${x}1`, url1, `${x}2`,url2]
                 }))
 
-            const keyedImages = {}
-            imgIds.forEach(x => keyedImages[x[0]] = x[1])
+            // tslint:disable-next-line: no-console
+          
 
+            const keyedImages = {}
+            // Opción 1: una clave para una arreglo que contiene las tres imagens
+             imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
+            
+             // OPcion 2: una clave para cada imagen
+            //  imgIds.forEach(x => {
+            //     keyedImages[x[0]] = x[1]
+            //     keyedImages[x[2]] = x[3]
+            //     keyedImages[x[4]] = x[5]
+            
+            // })
+
+            // tslint:disable-next-line: no-console
+          
+            // Opción 2: Una clave para cada imagen
+            // Object.keys(posts).forEach(x => posts[x] = {
+            //     ...posts[x],
+            //     urlImagen: keyedImages[x],
+            //     urlImagen1: keyedImages[`${x}1`],
+            //     urlImagen2: keyedImages[`${x}2`],
+            // })
+
+          // Opción 1: de una clave para cada imagen
             Object.keys(posts).forEach(x => posts[x] = {
-                 ...posts[x],
-               imageURL: keyedImages[x],
-              })
-             // tslint:disable-next-line: no-console
-           //   console.log(posts)
+                ...posts[x],
+                
+                urlImagen: keyedImages[x][0],
+                urlImagen1: keyedImages[x][1],
+                urlImagen2: keyedImages[x][2],
+                urlMapUbicacion:posts[x].url_map_ubicacion
+              
+            })
+
+            // tslint:disable-next-line: no-console
+            //   console.log(posts)
             dispatch(fetchSuccess(posts))
         } catch (e) {
             // tslint:disable-next-line: no-console
@@ -129,13 +168,13 @@ export const like = (id: string) =>
         }
         const token = await auth.currentUser.getIdToken()
         // tslint:disable-next-line:no-console
-        console.log("token",token)
-         // tslint:disable-next-line:no-console
-        console.log("ID",id)
+        console.log("token", token)
+        // tslint:disable-next-line:no-console
+        console.log("ID", id)
         // C87 - Conectando react con backend + C88 agregar token auth  
         // C89 - Agregamos un template string con el id del post seguido de la accion que queremos ejecutar
         // accion = like    
-       // const result =
+        // const result =
         await fetch(`/api/posts/${id}/like`, {
             headers: {
                 authorization: token
@@ -149,8 +188,8 @@ export const like = (id: string) =>
 
 export const share = (id: string) =>
     async (dispatch: Dispatch, getState: () => any, { auth, db, storage }: IServices) => {
-         // tslint:disable-next-line: no-console
-        console.log(id) 
+        // tslint:disable-next-line: no-console
+        console.log(id)
         if (!auth.currentUser) {
             return
         }
@@ -176,27 +215,10 @@ export const share = (id: string) =>
         dispatch(add({
             [snap.id]: {
                 ...snap.data(), // para pasar imageURL transformamos un objeto que hace destructuring 
-                imageURL,
+                urlImagen: imageURL,
             }
         } as IDataPosts)) // esto actualiza el post
     }
-    
-    // Cambia la foto de perfil
 
-    // export const handleProfileImageSubmit= (payload:{file: File})=>
-    // async (dispatch:Dispatch, getState:()=> any, {auth, storage}:IServices)=>{
-    //     if (!auth.currentUser){
-    //         return
-    //     }
-    //     const {uid} = auth.currentUser
-    //     const storageRef= storage.ref()
-    //     const response = await storageRef
-    //     .child(`profileImages`)
-    //     .child(`${uid}.jpg` )
-    //     .put(payload.file)
-    //     const url= await response.ref.getDownloadURL()
-    //   dispatch(setProfileImage(url))
-    //    console.log(payload);
-    //    console.log(setProfileImage(url))
-    // }
+
 

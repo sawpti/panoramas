@@ -1,6 +1,6 @@
-import { IDataPosts } from './Posts';
+import { IDataPosts } from './Panoramas';
 export {default as Users} from './Users'
-export {default as Posts} from './Posts'
+export {default as Posts} from './Panoramas'
 export interface IState {
     Posts: {
         data: IDataPosts

@@ -65,7 +65,6 @@ export const register = ({ email, password, rePassword, nombre, ciudad, fono, co
                 const doc = db.collection('users').doc(id)
                 // Almaceno el registro en la colección "users"
                 doc.set({
-                    infoBasica: {
                         ciudad,
                         comuna,
                         createdAt: new Date(),
@@ -74,9 +73,8 @@ export const register = ({ email, password, rePassword, nombre, ciudad, fono, co
                         emailVerified: user ? user.emailVerified : undefined,
                         fono,
                         nombre,
-                        role: 'user',
-                    }
-
+                        role: 'turista',
+                 
                 })
             }, error => {
                 // Manejo los errores.

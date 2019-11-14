@@ -1,11 +1,13 @@
 import * as React from 'react'
 import {History} from 'history'
 import {Route} from 'react-router'
-// import BarraSuperior from './components/BarraSuperiorInicio';
+import { Spinner, Container } from 'react-bootstrap'
+import BarraSuperior from './components/BarraSuperiorUsuario';
 import Inicio from './containers/Inicio';
 import Register from './containers/Auth/Register'
 import Login from './containers/Auth/Login';
 import Perfil from './containers/Profile/perfil';
+import AllPanoramas from './containers/Panoramas';
 import service from './service'
 // import BarraSuperiorUsuario from './components/BarraSuperiorUsuario';
 // import Login from './containers/Auth/Login';
@@ -13,8 +15,6 @@ interface IAppProps{
   history: History  
   loadInitialData: () => void
 }
-
-
 
 class App extends React.Component<IAppProps> {
   public state ={
@@ -56,15 +56,19 @@ class App extends React.Component<IAppProps> {
   public render() {
     const {loading} = this.state
     return (
-      loading ? 'Loading' : 
+      loading ? (
+      <Container fluid={true} className="align-content-center justify-content-center d-flex p-5"> 
+      <Spinner className="mt-5 align-middle"  animation="border" variant="primary"/>
+      </Container>)  : 
 
       <div >
         
            <Route exact={true} path='/' component={Inicio} />
           {  <Route exact={true} path='/login' component={Login} />}
            <Route exact={true} path='/register' component={Register} />
-          {/* { <Route path='/app' component={BarraSuperiorUsuario} />} */}
-            <Route exact={true} path='/app/perfil' component={Perfil} />
+          { <Route path='/app' component={BarraSuperior} />}
+          <Route exact={true} path='/app/allpanoramas' component={AllPanoramas} />
+           <Route exact={true} path='/app/perfil' component={Perfil} />
 
 
 
