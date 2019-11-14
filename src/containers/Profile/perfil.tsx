@@ -29,43 +29,43 @@ export default class Inicio extends React.Component {
          //    </div>}
 
          <div>
-         
+
 
 
             <div className="d-flex flex-column justify-content-center container ">
-              <h3>Araucanía Lacustre/Curarrehue</h3>   
-              <h4>En esta zona tienes los siguientes panoramas por realizar:</h4>   
+               <h3>Araucanía Lacustre/Curarrehue</h3>
+               <h4>En esta zona tienes los siguientes panoramas por realizar:</h4>
 
-             </div>
+            </div>
             <div className="d-flex flex-wrap container justify-content-center">
-               <Panorama 
-               setSharedClicked={this.setSharedClicked} 
-               urlMapUbicacion="" 
-               urlImagen="http://lorempixel.com/200/200/nature" 
-               nombre="Parque Saltos Pocolpén" 
-               descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" 
-               urlImagen1=""
-               urlImagen2=""
+               <Panorama
+                  setSharedClicked={this.setSharedClicked}
+                  urlMapUbicacion=""
+                  urlImagen="http://lorempixel.com/200/200/nature"
+                  nombre="Parque Saltos Pocolpén"
+                  descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores"
+                  urlImagen1=""
+                  urlImagen2=""
                />
-               <Panorama 
-               setSharedClicked={this.setSharedClicked} urlMapUbicacion="" 
-               urlImagen1=""
-               urlImagen2=""
-               urlImagen="http://lorempixel.com/200/200/nature" 
-               nombre="Parque Saltos Pocolpén" 
-               descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
-               <Panorama 
-               urlImagen1=""
-               urlImagen2=""
-               setSharedClicked={this.setSharedClicked} urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
-               <Panorama 
-               urlImagen1=""
-               urlImagen2=""
-               setSharedClicked={this.setSharedClicked} urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
-               <Panorama 
-               urlImagen1=""
-               urlImagen2=""
-               setSharedClicked={this.setSharedClicked} urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
+               <Panorama
+                  setSharedClicked={this.setSharedClicked} urlMapUbicacion=""
+                  urlImagen1=""
+                  urlImagen2=""
+                  urlImagen="http://lorempixel.com/200/200/nature"
+                  nombre="Parque Saltos Pocolpén"
+                  descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
+               <Panorama
+                  urlImagen1=""
+                  urlImagen2=""
+                  setSharedClicked={this.setSharedClicked} urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
+               <Panorama
+                  urlImagen1=""
+                  urlImagen2=""
+                  setSharedClicked={this.setSharedClicked} urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
+               <Panorama
+                  urlImagen1=""
+                  urlImagen2=""
+                  setSharedClicked={this.setSharedClicked} urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
 
             </div>
          </div>
@@ -74,7 +74,7 @@ export default class Inicio extends React.Component {
 
       )
    }
-   
+
    private setSharedClicked = () => {
       alert(" Compartir")
 
