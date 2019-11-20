@@ -55,6 +55,13 @@ class AllPanoramas extends React.Component<INewsFeedProps>{
                         descripcion={post.descripcion} 
                         urlImagen1={post.urlImagen1}
                         urlImagen2={post.urlImagen2}
+                        urlFacebook={post.urlFacebbok}
+                        urlInstagram={post.urlInstagram}
+                        urlTripAdvisor={post.urlTripAdvisor}
+                        urlWeb={post.urlWeb}
+                        calificacion={post.calificacion}
+
+
                         />
 
 

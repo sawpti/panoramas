@@ -12,7 +12,7 @@ const ADD = 'posts/add' // va a ser de tipo post y accion add
 // creamos interfaz de Post (para compartir los post - C93)
 export interface IPost {
     createdAt: firestore.Timestamp
-    calificacion?: number
+    calificacion: number
     descripcion: string
     destacado?: boolean
     nomProveedor?: string
@@ -23,7 +23,8 @@ export interface IPost {
     urlWeb?: string
     urlMapUbicacion: string
     urlInstagram?: string
-    urlFacebbok?: string
+    urlFacebbok: string
+    urlTripAdvisor?:string
 }
 
 // creamos una interfaz para indicar que tipo de datos es payload
@@ -142,10 +143,14 @@ export const fetchPosts = () =>
             Object.keys(posts).forEach(x => posts[x] = {
                 ...posts[x],
                 
+                urlFacebbok: posts[x].facebook,
                 urlImagen: keyedImages[x][0],
                 urlImagen1: keyedImages[x][1],
                 urlImagen2: keyedImages[x][2],
-                urlMapUbicacion:posts[x].url_map_ubicacion
+                urlInstagram: posts[x].instagram,
+                urlMapUbicacion:posts[x].url_map_ubicacion,
+                urlTripAdvisor:posts[x].trip_advisor,
+                urlWeb:posts[x].web,
               
             })
 

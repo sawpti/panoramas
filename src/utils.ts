@@ -7,3 +7,16 @@ export const download = (url: string) => new Promise((resolve, reject) => {
     xhr.open('GET', url) // 3. abrimos la url que le pasamos a la funcion 
     xhr.send() // 4. hacemos el llamado
 })
+
+
+export const calificacion = (c: number)=>{
+
+    if (c<=2.3) {
+        return "Regular"
+    }else if (c>2.3 && c<4.6){
+        return "Bueno"
+    }else{
+        return "Excelente"
+    }
+
+}

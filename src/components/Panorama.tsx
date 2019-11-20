@@ -1,11 +1,17 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Card, Button, Modal, Container, Row, Col, ProgressBar, Carousel } from 'react-bootstrap'
+import { Card, Button, Modal, Container, Row, Col, ProgressBar, Carousel, OverlayTrigger, Tooltip} from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfoCircle, faShare, faMapMarked,  faWindowClose, faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle, faShare, faMapMarked, faThumbsUp, faHiking } from '@fortawesome/free-solid-svg-icons'
+import iconFb from '../images/iconfacebook.png'
+import iconIn from '../images/iconinstagram.png'
+import iconWeb from '../images/iweb.png'
+import iconTA from '../images/tripAdvisor.png'
+import * as utils from '../utils';
+
 
 export interface IPanoramaProps {
-  calificacion?: number
+  calificacion: number
   descripcion: string
   destacado?: boolean
   nomProveedor?: string
@@ -16,7 +22,8 @@ export interface IPanoramaProps {
   urlWeb?: string
   urlMapUbicacion: string
   urlInstagram?: string
-  urlFacebbok?: string
+  urlFacebook?: string
+  urlTripAdvisor?:string
   setSharedClicked: () => void
 }
 function ModalPanorama(datos: IPanoramaProps) {
@@ -37,7 +44,7 @@ function ModalPanorama(datos: IPanoramaProps) {
         dialogClassName="modal-90w"
       >
         <Modal.Header closeButton={true}>
-          <Modal.Title>{datos.nombre}</Modal.Title>
+          <Modal.Title> {datos.nombre}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
@@ -65,40 +72,87 @@ function ModalPanorama(datos: IPanoramaProps) {
                 </Carousel>
               </Col>
               <Col xs={12} md={6}>
-
-                {datos.descripcion}
+                <h4> Descripción</h4>
+                  {datos.descripcion}
+                  <h4> Valores</h4>
+                       $2.000 p/p
                 <div>
-                  <code>
-
-                    <ProgressBar variant="warning" now={6.9} max={7} />
-                    <h6>Calificación promedio</h6>
+                  <h4>Indicadores</h4>
+                     <code>
+                    <ProgressBar variant="warning" now={datos.calificacion} max={7} />
+                    <h6> <small>Calificación promedio:</small> {utils.calificacion(datos.calificacion)} 
+                    </h6>
 
                     <ProgressBar variant="success" now={3} max={7} />
-                    <h6>Exigencia física</h6>
-
-                    <ProgressBar variant="info" now={0.5} max={7} />
-                    <h6>Nivel técnico requerido</h6>
+                    <h6><small>Exigencia física :</small> Baja </h6>
                   </code>
+
+                  <h4>Web y redes</h4>
+                  <div className="d-flex justify-content-around">
+                  <a href={datos.urlWeb} target="_blank" >
+                  <img src={iconWeb} width="38" height="38" className="rounded bg-info"  /> 
+                </a>
+              
+                <a href={datos.urlFacebook} target="_blank">
+                     <img src={iconFb} width="40" height="40" className="rounded bg-info"  /> 
+                </a>
+                
+                <a href={datos.urlInstagram} target="_blank">
+                <img src={iconIn} width="40" height="40" className="rounded bg-info"  /> 
+                </a>
+
+                <a href={datos.urlTripAdvisor} target="_blank">
+                <img src={iconTA} width="40" height="40" className="rounded bg-info"  /> 
+                </a>
+                   </div>
+                              
                 </div>
 
               </Col>
             </Row>
           </Container>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="justify-content-center">
 
-          <div onClick={datos.setSharedClicked}>
-            <FontAwesomeIcon icon={faShare} size="2x" />
+          <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Compartir en redes sociales</Tooltip>}>
+            <span className="d-inline-block">
+               <div onClick={datos.setSharedClicked} >
+                  <FontAwesomeIcon icon={faShare} size="2x" color="Dodgerblue" />
+                  <p className="text-info text-center small">Compartir</p>
+              </div>
+            </span>
+          </OverlayTrigger>
+
+          <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Agrega el panorama a tu lista "Por realizar"</Tooltip>}>
+            <span className="d-inline-block">
+            <div onClick={datos.setSharedClicked} >
+              <FontAwesomeIcon icon={faHiking} size="2x" color="Dodgerblue" />
+             <p className="text-info text-center small">Por realizar</p>
+            </div>
+            </span>
+          </OverlayTrigger>
+         
+          <OverlayTrigger overlay={<Tooltip id="tooltip-disabled"> Agrega el panorama a tu lista de "Realizados"</Tooltip>}>
+            <span className="d-inline-block">
+          <div onClick={handleClose} >
+            <FontAwesomeIcon icon={faThumbsUp} size="2x" color="Dodgerblue" />
+            <p className="text-info text-center small">Realizado</p>
           </div>
-          <div onClick={datos.setSharedClicked}>
-            <FontAwesomeIcon icon={faHeart} size="2x" />
+            </span>
+          </OverlayTrigger>
+
+
+          <OverlayTrigger overlay={<Tooltip id="tooltip-disabled"> Te lleva a la ubicación del panorama</Tooltip>}>
+            <span className="d-inline-block">
+            <div >
+            <a href={datos.urlMapUbicacion} target="_blank">
+              <FontAwesomeIcon icon={faMapMarked} size="2x" color="Dodgerblue" />
+              <p className="text-info text-center small">Ubicación</p>
+            </a>
           </div>
-          <a href={datos.urlMapUbicacion} target="_blank">
-            <FontAwesomeIcon icon={faMapMarked} size="2x" />
-          </a>
-          <div onClick={handleClose}>
-            <FontAwesomeIcon icon={faWindowClose} size="2x" />
-          </div>
+
+            </span>
+          </OverlayTrigger>
 
         </Modal.Footer>
       </Modal>
@@ -108,9 +162,11 @@ function ModalPanorama(datos: IPanoramaProps) {
 
 export default class Panorama extends React.Component<IPanoramaProps> {
   public render() {
-    const { descripcion, nombre, urlImagen, urlImagen1, urlImagen2, setSharedClicked, urlMapUbicacion } = this.props
+    const { descripcion, nombre, urlImagen, urlImagen1, urlImagen2, setSharedClicked, urlMapUbicacion, 
+      urlFacebook, urlWeb, urlInstagram, urlTripAdvisor, calificacion } = this.props
     // tslint:disable-next-line: no-console
-    console.log("UrlImagen1:" + urlImagen1)
+  //  console.log(utils.calificacion(2))
+  //   console.log("Url:" + urlWeb)
     return (
       <div>
         <Card style={{ width: '18rem' }}>
@@ -128,7 +184,13 @@ export default class Panorama extends React.Component<IPanoramaProps> {
               urlImagen={urlImagen}
               urlImagen1={urlImagen1}
               urlImagen2={urlImagen2}
-              urlMapUbicacion={urlMapUbicacion} />
+              urlMapUbicacion={urlMapUbicacion}
+              urlFacebook={urlFacebook}
+              urlInstagram={urlInstagram}
+              urlTripAdvisor={urlTripAdvisor}
+              urlWeb={urlWeb}
+              calificacion={calificacion}
+               />
           </Card.Body>
         </Card>
 
