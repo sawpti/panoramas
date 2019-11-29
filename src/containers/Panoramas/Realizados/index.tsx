@@ -1,14 +1,18 @@
 import * as React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+// import { IServices } from '../../../service';
 import { ThunkDispatch } from 'redux-thunk';
-import Panorama from '../../components/Panorama'
-import { IState } from '../../ducks'
-import * as postsDuck from '../../ducks/Panoramas'
+import Panorama from '../../../components/Panorama'
+import { IState } from '../../../ducks'
+import * as postsDuck from '../../../ducks/PanoramasRealizados'
 import { Spinner, Container } from 'react-bootstrap'
+// import { realizado } from '../../../ducks/PanoramasRealizados';
+// IPanoramasRealizadosimport service from '../../../service'
 
 
-interface INewsFeedProps {
+
+interface IPanoramasRealizados {
     fetchPosts: () => void
     xrealizar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
     realizado: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
@@ -17,9 +21,10 @@ interface INewsFeedProps {
     fetched: boolean
     loading: boolean
     data: postsDuck.IDataPosts
+    
 }
-class AllPanoramas extends React.Component<INewsFeedProps>{
-    constructor(props: INewsFeedProps) {
+class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
+    constructor(props: IPanoramasRealizados) {
         super(props)
         const { fetchPosts, fetched} = props
         if (fetched) {
@@ -30,30 +35,34 @@ class AllPanoramas extends React.Component<INewsFeedProps>{
     // handleLike recibe un id y retorna una funcion. Esto nos permite 
     public render() {
         const { data, loading} = this.props
-        // const {loading} = this.state
+      //  const {auth, db} = service   
+     //   const uid = auth.currentUser ? auth.currentUser.uid : undefined
+            // const {loading} = this.state
       
         //  tslint:disable-next-line: no-console
-         //       console.log("Data",data.idPanoroma)
+          console.log("data",data.size)
                 
                
         return (
             loading ? (
-                <Container fluid={true} className="align-content-center justify-content-center d-flex p-5"> 
+               <Container fluid={true} className="align-content-center justify-content-center d-flex p-5"> 
                 <Spinner className="mt-5 align-middle"  animation="border" variant="primary"/>
                 </Container>) :
-            <div className="d-flex flex-wrap container justify-content-center">
-                 {Object.keys(data).map(x => {
-                    const post = data[x]
-                    //  tslint:disable-next-line: no-console
-                    console.log("key ",x)
                 
+                 
+            <div className="d-flex flex-wrap container justify-content-center">
+                 <div className="container bg-light d-flex justify-content-center"> <h4> Estos son los panoramas que has marcado como realizados</h4></div>
+                 {
+                 
+        
+                 
+                 Object.keys(data).map(x => {
+                    const post = data[x]
+
+                  
+
                     return <div key={x} style={{ margin: '0 auto' }}>
-                        {/* { <Post 
-                        share={this.handleShare(x)} 
-                        like={this.handleLike(x)} 
-                        image= {post.imageURL}
-                    />} */}
-                        <Panorama 
+                         <Panorama 
                         setSharedClicked={this.handleShare(x)} 
                         urlMapUbicacion={post.urlMapUbicacion} 
                         urlImagen={post.urlImagen}
@@ -71,11 +80,11 @@ class AllPanoramas extends React.Component<INewsFeedProps>{
                         porRealizar={this.handlePorRealizar(x)}
                         realizado={this.handleRealizado(x)}
 
-
                         />
 
 
                     </div>
+                    
                 })}
             </div>
         )
@@ -109,5 +118,5 @@ const mapStateToProps = (state: IState) => {
     }
 }
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => bindActionCreators(postsDuck, dispatch)
-export default connect(mapStateToProps, mapDispatchToProps)(AllPanoramas)
+export default connect(mapStateToProps, mapDispatchToProps)(PanoramasRealizados)
 

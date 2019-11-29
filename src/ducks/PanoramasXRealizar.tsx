@@ -103,16 +103,48 @@ export const fetchPosts = () =>
         dispatch(fetchStart())
 
         try {
-            const snaps = await db.collection('panoramas').get()
 
-            //          const snap = await db.collection('panoramas').doc().get()
-            //   // tslint:disable-next-line: no-console
-            //          console.log("snap.id", snap.id);
+            const uid = auth.currentUser ? auth.currentUser.uid : undefined
+            const snaps = await db.collection('panoramas').get()
+            const xrealizarRef = db.collection('xrealizar')
+                .where('uid', '==', uid)
+            const realizados = {} // Panoramas   realizados 
+
+            await xrealizarRef.get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // tslint:disable-next-line: no-console
+                        console.log('Consulta vacía');
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        // tslint:disable-next-line: no-console
+                        realizados[doc.id] = doc.data()
+                        //   console.log(doc.id, '=>', doc.data());
+                    });
+                })
+                .catch(err => {
+                    // tslint:disable-next-line: no-console
+                    console.log('Error getting documents', err);
+                });
+
 
             const posts = {} // Panoramas 
-            snaps.forEach(x => posts[x.id] = x.data())
+            snaps.forEach((x) => {
+
+                Object.keys(realizados).forEach(r => {
+                    if (realizados[r].pid === x.id) {
+                        posts[x.id] = x.data()
+                        return
+
+                    }
+
+                })
+
+            })
             // tslint:disable-next-line: no-console
-            //   console.log("posts", snaps);
+            console.log('Panoramas realizados', realizados);
+
             const imgIds = await Promise.all(Object.keys(posts).
                 map(async x => {
                     const ref = storage.ref(`panoramas/${x}.jpeg`)
@@ -131,43 +163,25 @@ export const fetchPosts = () =>
             // Opción 1: una clave para una arreglo que contiene las tres imagens
             imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
 
-            // OPcion 2: una clave para cada imagen
-            //  imgIds.forEach(x => {
-            //     keyedImages[x[0]] = x[1]
-            //     keyedImages[x[2]] = x[3]
-            //     keyedImages[x[4]] = x[5]
+            Object.keys(posts).forEach(x => {
 
-            // })
+                posts[x] = {
 
-            // tslint:disable-next-line: no-console
+                    ...posts[x],
 
-            // Opción 2: Una clave para cada imagen
-            // Object.keys(posts).forEach(x => posts[x] = {
-            //     ...posts[x],
-            //     urlImagen: keyedImages[x],
-            //     urlImagen1: keyedImages[`${x}1`],
-            //     urlImagen2: keyedImages[`${x}2`],
-            // })
+                    exigenciaFisica: posts[x].exigencia_fisica,
+                    idPanorama: x,
+                    urlFacebbok: posts[x].facebook,
+                    urlImagen: keyedImages[x][0],
+                    urlImagen1: keyedImages[x][1],
+                    urlImagen2: keyedImages[x][2],
+                    urlInstagram: posts[x].instagram,
+                    urlMapUbicacion: posts[x].url_map_ubicacion,
+                    urlTripAdvisor: posts[x].trip_advisor,
+                    urlWeb: posts[x].web,
+                }
 
-            // Opción 1: de una clave para cada imagen
-            Object.keys(posts).forEach(x => 
-                    posts[x] = {
-                       ...posts[x],
-
-                        exigenciaFisica: posts[x].exigencia_fisica,
-                        idPanorama: x,
-                        urlFacebbok: posts[x].facebook,
-                        urlImagen: keyedImages[x][0],
-                        urlImagen1: keyedImages[x][1],
-                        urlImagen2: keyedImages[x][2],
-                        urlInstagram: posts[x].instagram,
-                        urlMapUbicacion: posts[x].url_map_ubicacion,
-                        urlTripAdvisor: posts[x].trip_advisor,
-                        urlWeb: posts[x].web,
-                    }
-              
-
-            )
+            })
 
             // tslint:disable-next-line: no-console
             //   console.log(posts)

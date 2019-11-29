@@ -15,8 +15,37 @@ export const calificacion = (c: number)=>{
         return "Regular"
     }else if (c>2.3 && c<4.6){
         return "Bueno"
-    }else{
+    }else if (c>4.6 && c<=7){
         return "Excelente"
     }
+     else{
+        return "No determinada"
+    }
+
+}
+
+export const eFisica = (c: number)=>{
+
+    if (c<=2.3) {
+        return "Baja"
+    }else if (c>2.3 && c<4.6){
+        return "Media"
+    }else if (c>4.6 && c<=7){
+        return "Alta"
+    } else {
+        return "No determinada"
+    }
+
+}
+export const eMensaje = (c:any)=>{
+
+    if (c===null) {
+        return "El panorama no tiene esta información"
+    }else if (c===undefined){
+        return "El panorama no tiene esta información"
+    } else {
+        return c
+    }
+    
 
 }

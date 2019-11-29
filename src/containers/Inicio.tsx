@@ -2,17 +2,17 @@ import * as React from 'react';
 import { Carousel, Button, Jumbotron } from 'react-bootstrap/';
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GoogleLogin } from 'react-google-login';
+// import { GoogleLogin } from 'react-google-login';
 import { faHiking, faEnvelope, faUser } from '@fortawesome/free-solid-svg-icons'
 import slide1 from '../images/01.jpg';
 import slide2 from '../images/02.jpg';
 import slide3 from '../images/06.jpg';
 import BarraSuperior from '../components/BarraSuperiorInicio';
 import Login from './Auth/Login';
-const responseGoogle = (response: any) => {
-  // tslint:disable-next-line:no-console
- //  console.log(response);
-}
+// const responseGoogle = (response: any) => {
+//   // tslint:disable-next-line:no-console
+//  //  console.log(response);
+// }
 
 const styles = {
   body: {
@@ -105,19 +105,19 @@ export default class Inicio extends React.Component<any, IState> {
                   color: '#5a9216'
                 }} > <FontAwesomeIcon icon={faHiking} size="3x" style={{
                   color: 'blue'
-                }} />  Regístrate en nuestra App y conoce los panoramas más importantes de Curarrehue.¡Anímate, es gratis!</h2>
+                }} />  Regístrate en nuestra App y conoce los panoramas más importantes de Curarrehue y Pucón.¡Anímate, es gratis!</h2>
                 <></>
                 <h4 style={{
                   color: '#bc5100'
                 }}> Te entregamos información precisa de cada actividad: Atractivos turísticos, senderos, excursiones, miradores y sitios de interés.</h4>
-                <h3 style={{
+                <h4 style={{
                   color: 'blue'
-                }}>Solo publicamos información validada por nuestros propio personal especializado. </h3>
+                }}>Solo publicamos información validada por nuestros propio personal especializado. Ándate a la segura y no pierdas tiempo en tus vacaciones. </h4>
 
               </Jumbotron>
 
             </div>
-            <div style={{
+          {/* {  <div style={{
               display: 'flex',
               flexDirection: 'column',
             }}>
@@ -132,7 +132,7 @@ export default class Inicio extends React.Component<any, IState> {
                 cookiePolicy={'single_host_origin'}
 
               />
-            </div>
+            </div>} */}
 
 
             <div  style={{
@@ -146,11 +146,14 @@ export default class Inicio extends React.Component<any, IState> {
                 size='sm'>
                 <FontAwesomeIcon 
                 icon={faEnvelope} 
-                size="2x" />  <Link to='/register'>Registrarse con correo</Link></Button>
+                size="2x" />  <Link  className=" display-5 text-white" to='/register'>Registrarse con correo</Link></Button>
+            </div >
+            <div className="d-flex justify-content-center">
+            O inicia sesión si ya estás registrado
             </div>
-            <p className="align-content-center">O inicia sesión si ya estás registrado</p>
+           
             <div >
-              <Button variant="info" size="sm" block={true} onClick={this.setInicioClicked} >
+              <Button variant="info" size="sm" block={true} onClick={this.setInicioClicked} className=" display-5 text-white" >
                 <FontAwesomeIcon icon={faUser} size="2x" /> Iniciar sesión</Button>
 
             </div>

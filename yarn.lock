@@ -7285,6 +7285,11 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-bootstrap-sweetalert@^5.1.7:
+  version "5.1.7"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-sweetalert/-/react-bootstrap-sweetalert-5.1.7.tgz#2865d77e3613cdc6e6239e49e5165dc66f499023"
+  integrity sha512-0IvGP7wQNWkLLnG1mlLZ9/NsD5QfJX2AenYSEHxcL/MQgAOfsUDjDnYxq/U/nJ/pt1+Y2XggmOoHNh+xPWRn6g==
+
 react-bootstrap@^1.0.0-beta.14:
   version "1.0.0-beta.14"
   resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-1.0.0-beta.14.tgz#30330df61edbed1f0405f75363ef72d77c1fed57"

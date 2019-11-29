@@ -2,21 +2,21 @@ import * as React from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap/';
 // import Nav from 'react-bootstrap/Nav';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser,  faQuestionCircle, faInfoCircle, faHiking} from '@fortawesome/free-solid-svg-icons'
+import { faUser, faQuestionCircle, faInfoCircle, faHiking } from '@fortawesome/free-solid-svg-icons';
 import logo from '../images/logo.png';
 
 interface IBarraSUperiorInicioProps {
   setInicioClicked: () => void
-  setRegistroClicked: () => void
- 
-  }
+  setRegistroClicked?: () => void
+
+}
 
 export default class BarraSuperior extends React.Component<IBarraSUperiorInicioProps> {
   public render() {
-    const {setRegistroClicked, setInicioClicked} =this.props
+    const {  setInicioClicked } = this.props
     return (
       <div>
-       <Navbar collapseOnSelect={true} expand="lg" bg="light" variant="light">
+        <Navbar collapseOnSelect={true} expand="lg" bg="light" variant="light">
           <Navbar.Brand href="#home">
             <img
               src={logo}
@@ -33,10 +33,12 @@ export default class BarraSuperior extends React.Component<IBarraSUperiorInicioP
               <Nav.Link href="#acercada"><FontAwesomeIcon icon={faInfoCircle} /> Acerca de..</Nav.Link>
             </Nav>
             <Nav>
+            
+              <Nav.Link href="/register"><FontAwesomeIcon icon={faHiking} /> Registrarse</Nav.Link>
               <Button variant="outline-primary" onClick={setInicioClicked} >
-                <FontAwesomeIcon icon={faUser} />  Iniciar sesión</Button>
+              <FontAwesomeIcon icon={faUser} />  Iniciar sesión</Button>
 
-              <Button variant="outline-success" onClick={setRegistroClicked}><FontAwesomeIcon icon={faHiking} />  Registrarse</Button>
+
 
             </Nav>
           </Navbar.Collapse>

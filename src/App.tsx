@@ -8,6 +8,8 @@ import Register from './containers/Auth/Register'
 import Login from './containers/Auth/Login';
 import Perfil from './containers/Profile/perfil';
 import AllPanoramas from './containers/Panoramas';
+import PanoramasRealizados from './containers/Panoramas/Realizados';
+import PanoramasXRealizar from './containers/Panoramas/XRealizar'
 import service from './service'
 // import BarraSuperiorUsuario from './components/BarraSuperiorUsuario';
 // import Login from './containers/Auth/Login';
@@ -66,9 +68,11 @@ class App extends React.Component<IAppProps> {
            <Route exact={true} path='/' component={Inicio} />
           {  <Route exact={true} path='/login' component={Login} />}
            <Route exact={true} path='/register' component={Register} />
-          { <Route path='/app' component={BarraSuperior} />}
+          <Route path='/app' component={BarraSuperior} />
           <Route exact={true} path='/app/allpanoramas' component={AllPanoramas} />
-           <Route exact={true} path='/app/perfil' component={Perfil} />
+          <Route exact={true} path='/app/realizados' component={PanoramasRealizados} />
+          <Route exact={true} path='/app/xrealizar' component={PanoramasXRealizar} />
+          <Route exact={true} path='/app/perfil' component={Perfil} />
 
 
 
