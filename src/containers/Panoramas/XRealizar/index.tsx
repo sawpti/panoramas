@@ -5,7 +5,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import Panorama from '../../../components/Panorama'
 import { IState } from '../../../ducks'
 import * as postsDuck from '../../../ducks/PanoramasXRealizar'
-import { Spinner, Container } from 'react-bootstrap'
+import { Spinner, Container, Alert } from 'react-bootstrap'
+import SweetAlert from 'react-bootstrap-sweetalert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {  faHiking} from '@fortawesome/free-solid-svg-icons'
+
+
 
 
 interface IPanoramasRealizados {
@@ -17,76 +22,143 @@ interface IPanoramasRealizados {
     fetched: boolean
     loading: boolean
     data: postsDuck.IDataPosts
-    
+
 }
-class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
+interface IStatePanorama {
+    alert: any
+
+}
+class PanoramasXRealizar extends React.Component<IPanoramasRealizados, IStatePanorama>{
     constructor(props: IPanoramasRealizados) {
         super(props)
-        const { fetchPosts, fetched} = props
+        const { fetchPosts, fetched } = props
         if (fetched) {
             return
         }
+        this.state = {
+            alert: null
+        };
         fetchPosts()
     }
+
+    public accionThisGoal(mensaje: string) {
+        const getAlert = () => (
+            <SweetAlert
+                success={true}
+                title="¡Listo"
+                onConfirm={this.hideAlert}
+            >
+                {mensaje}
+            </SweetAlert>
+        );
+
+        this.setState({
+            alert: getAlert()
+        });
+    }
+
+    public hideAlert = () => {
+        //  tslint:disable-next-line: no-console
+        console.log('Oculatando...');
+        this.setState({
+            alert: null
+        });
+    }
+
     // handleLike recibe un id y retorna una funcion. Esto nos permite 
     public render() {
-        const { data, loading} = this.props
-                   
-        return (
-            loading ? (
-                <Container fluid={true} className="align-content-center justify-content-center d-flex p-5"> 
-                <Spinner className="mt-5 align-middle"  animation="border" variant="primary"/>
-                </Container>) :
-            <div className="d-flex flex-wrap container justify-content-center">
-                 {Object.keys(data).map(x => {
+        const { data, loading } = this.props
+        //  tslint:disable-next-line: no-console
+        console.log("data", Object.keys(data).length);
+        //  console.log('Oculatando...');
+        if (loading) {
+
+            return (<Container fluid={true} className="align-content-center justify-content-center d-flex p-5">
+                 <Spinner className="mt-5 align-middle" animation="border" variant="primary" />
+            </Container>)
+
+        } else if (Object.keys(data).length > 0) {
+
+
+            return (<div className="d-flex flex-wrap container justify-content-center">
+                 <Alert variant="info" className="container">
+                    <Alert.Heading><FontAwesomeIcon icon={faHiking}  /> Tus panoramas Por realizar</Alert.Heading>
+                       <p>
+                        Tienes {Object.keys(data).length} panoramas agregados a tu lista como pendiente de realizar.
+                      </p>
+                      <hr />
+                        <p className="mb-0">
+                          Esperamos pronto los puedas concretar. Recuerda equiparte adecuadamente y calcular bien los tiempos
+                        </p>
+                     
+                </Alert>
+                {Object.keys(data).map(x => {
                     const post = data[x]
-
-                  
-
-                    return <div key={x} style={{ margin: '0 auto' }}>
-                         <Panorama 
-                        setSharedClicked={this.handleShare(x)} 
-                        urlMapUbicacion={post.urlMapUbicacion} 
-                        urlImagen={post.urlImagen}
-                        nombre={post.nombre}
-                        descripcion={post.descripcion} 
-                        urlImagen1={post.urlImagen1}
-                        urlImagen2={post.urlImagen2}
-                        urlFacebook={post.urlFacebbok}
-                        urlInstagram={post.urlInstagram}
-                        urlTripAdvisor={post.urlTripAdvisor}
-                        urlWeb={post.urlWeb}
-                        calificacion={post.calificacion}
-                        exigenciaFisica={post.exigenciaFisica}
-                        valor={post.valor}
-                        porRealizar={this.handlePorRealizar(x)}
-                        realizado={this.handleRealizado(x)}
+                   return <div key={x} style={{ margin: '0 auto' }}>
+                        <Panorama
+                            setSharedClicked={this.handleShare(x)}
+                            urlMapUbicacion={post.urlMapUbicacion}
+                            urlImagen={post.urlImagen}
+                            nombre={post.nombre}
+                            descripcion={post.descripcion}
+                            urlImagen1={post.urlImagen1}
+                            urlImagen2={post.urlImagen2}
+                            urlFacebook={post.urlFacebbok}
+                            urlInstagram={post.urlInstagram}
+                            urlTripAdvisor={post.urlTripAdvisor}
+                            urlWeb={post.urlWeb}
+                            calificacion={post.calificacion}
+                            exigenciaFisica={post.exigenciaFisica}
+                            valor={post.valor}
+                            porRealizar={this.handlePorRealizar(x)}
+                            realizado={this.handleRealizado(x)}
+                            titulo={"Por realizar"}
 
                         />
 
-
                     </div>
                 })}
-            </div>
-        )
+                {this.state.alert
+
+                }
+            </div>)
+
+
+
+        } else {
+            return (<Alert variant="info" className="container">
+            <Alert.Heading>¡Hola!, nada por acá</Alert.Heading>
+            <p>
+              No tienes panoramas en tu lista "Por realizar". Aquí econtrarás los panoramas que marques "Por realizar".
+              Y cuando los marques como "Realizados" desaparecerán de acá.
+            </p>
+            <hr />
+            <p className="mb-0">
+              Sigue explorando panoramas y márcalos según tu interés. Que tu espiritu aventurero te lleve a hermosos parajes.
+            </p>
+          </Alert>)
+        }
+
     }
     private handlePorRealizar = (id: string) => () => {
-        const {xrealizar } = this.props
-       xrealizar(id)
+        const { xrealizar } = this.props
+        xrealizar(id)
+        this.accionThisGoal('El panorama fue agregado a tu lista de "Por realizar".')
+
     }
     private handleRealizado = (id: string) => () => {
-        const {realizado } = this.props
-       realizado(id)
+        const { realizado } = this.props
+        realizado(id)
+        this.accionThisGoal('El panorama fue agregado a tu lista de "Realizados". Y quitado de tu lista "Por realizar"')
     }
 
 
     private handleShare = (id: string) => () => {
-        const { share} = this.props
+        const { share } = this.props
         share(id)
     }
 
 }
-
 const mapStateToProps = (state: IState) => {
     const { Posts: { data, fetched, fetching } } = state
     const loading = fetching || !fetched
@@ -99,5 +171,5 @@ const mapStateToProps = (state: IState) => {
     }
 }
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => bindActionCreators(postsDuck, dispatch)
-export default connect(mapStateToProps, mapDispatchToProps)(PanoramasRealizados)
+export default connect(mapStateToProps, mapDispatchToProps)(PanoramasXRealizar)
 

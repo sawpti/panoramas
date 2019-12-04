@@ -253,6 +253,7 @@ export const xrealizar = (id: string) =>
                 authorization: token
             }
         })
+       
     }
 export const realizado = (id: string) =>
     async (dispatch: Dispatch, getState: () => any, { auth }: IServices) => {

@@ -25,6 +25,7 @@ export interface IPanoramaProps {
   urlInstagram?: string
   urlFacebook?: string
   urlTripAdvisor?: string
+  titulo?:string
   valor: number
   setSharedClicked: () => void
   porRealizar?: () => void
@@ -49,7 +50,7 @@ function ModalPanorama(datos: IPanoramaProps) {
         dialogClassName="modal-90w"
       >
         <Modal.Header closeButton={true}>
-          <Modal.Title> {datos.nombre}</Modal.Title>
+  <Modal.Title>  {datos.nombre}: <mark> {datos.titulo}</mark></Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
@@ -186,7 +187,7 @@ function ModalPanorama(datos: IPanoramaProps) {
 export default class Panorama extends React.Component<IPanoramaProps> {
   public render() {
     const { descripcion, nombre, urlImagen, urlImagen1, urlImagen2, setSharedClicked, urlMapUbicacion,
-      urlFacebook, urlWeb, urlInstagram, urlTripAdvisor, calificacion, exigenciaFisica, valor , porRealizar, realizado} = this.props
+      urlFacebook, urlWeb, urlInstagram, urlTripAdvisor, calificacion, exigenciaFisica, valor , porRealizar, realizado, titulo} = this.props
     // tslint:disable-next-line: no-console
   //   console.log(utils.eFisica(exigenciaFisica) + "=>" + exigenciaFisica)
     //   console.log("Url:" + urlWeb)
@@ -212,6 +213,7 @@ export default class Panorama extends React.Component<IPanoramaProps> {
               urlInstagram={urlInstagram}
               urlTripAdvisor={urlTripAdvisor}
               urlWeb={urlWeb}
+              titulo={titulo}
               calificacion={calificacion}
               exigenciaFisica={exigenciaFisica}
               valor={valor}

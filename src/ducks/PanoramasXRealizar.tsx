@@ -26,6 +26,7 @@ export interface IPost {
     urlInstagram?: string
     urlFacebbok: string
     urlTripAdvisor?: string
+    vacio?:boolean
     valor: number
     idPanorama?: string
 }
@@ -109,12 +110,14 @@ export const fetchPosts = () =>
             const xrealizarRef = db.collection('xrealizar')
                 .where('uid', '==', uid)
             const realizados = {} // Panoramas   realizados 
+            let vacio=false
 
             await xrealizarRef.get()
                 .then(snapshot => {
                     if (snapshot.empty) {
                         // tslint:disable-next-line: no-console
                         console.log('Consulta vacía');
+                        vacio= true
                         return;
                     }
                     snapshot.forEach(doc => {
@@ -142,8 +145,13 @@ export const fetchPosts = () =>
                 })
 
             })
-            // tslint:disable-next-line: no-console
-            console.log('Panoramas realizados', realizados);
+            
+            {
+                // tslint:disable-next-line: no-console
+                console.log('Panoramas por realizar', realizados);
+
+            }
+            
 
             const imgIds = await Promise.all(Object.keys(posts).
                 map(async x => {
@@ -179,6 +187,7 @@ export const fetchPosts = () =>
                     urlMapUbicacion: posts[x].url_map_ubicacion,
                     urlTripAdvisor: posts[x].trip_advisor,
                     urlWeb: posts[x].web,
+                    vacio
                 }
 
             })

@@ -6,9 +6,11 @@ import { ThunkDispatch } from 'redux-thunk';
 import Panorama from '../../../components/Panorama'
 import { IState } from '../../../ducks'
 import * as postsDuck from '../../../ducks/PanoramasRealizados'
-import { Spinner, Container } from 'react-bootstrap'
-// import { realizado } from '../../../ducks/PanoramasRealizados';
-// IPanoramasRealizadosimport service from '../../../service'
+import { Spinner, Container, Alert } from 'react-bootstrap'
+import SweetAlert from 'react-bootstrap-sweetalert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {  faThumbsUp, faChartLine} from '@fortawesome/free-solid-svg-icons'
+import * as utils from '../../../utils';
 
 
 
@@ -21,87 +23,140 @@ interface IPanoramasRealizados {
     fetched: boolean
     loading: boolean
     data: postsDuck.IDataPosts
-    
+
 }
-class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
+interface IStatePanorama {
+    alert: any
+
+}
+class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStatePanorama>{
     constructor(props: IPanoramasRealizados) {
         super(props)
-        const { fetchPosts, fetched} = props
+        const { fetchPosts, fetched } = props
         if (fetched) {
             return
         }
+        this.state = {
+            alert: null
+        };
         fetchPosts()
+    }
+    public accionThisGoal(mensaje: string) {
+        const getAlert = () => (
+            <SweetAlert
+                success={true}
+                title="¡Listo"
+                onConfirm={this.hideAlert}
+            >
+                {mensaje}
+            </SweetAlert>
+        );
+
+        this.setState({
+            alert: getAlert()
+        });
+    }
+
+    public hideAlert = () => {
+        //  tslint:disable-next-line: no-console
+        console.log('Oculatando...');
+        this.setState({
+            alert: null
+        });
     }
     // handleLike recibe un id y retorna una funcion. Esto nos permite 
     public render() {
-        const { data, loading} = this.props
-      //  const {auth, db} = service   
-     //   const uid = auth.currentUser ? auth.currentUser.uid : undefined
-            // const {loading} = this.state
-      
-        //  tslint:disable-next-line: no-console
-          console.log("data",data.size)
-                
-               
-        return (
-            loading ? (
-               <Container fluid={true} className="align-content-center justify-content-center d-flex p-5"> 
-                <Spinner className="mt-5 align-middle"  animation="border" variant="primary"/>
-                </Container>) :
-                
-                 
-            <div className="d-flex flex-wrap container justify-content-center">
-                 <div className="container bg-light d-flex justify-content-center"> <h4> Estos son los panoramas que has marcado como realizados</h4></div>
-                 {
-                 
-        
-                 
-                 Object.keys(data).map(x => {
+        const { data, loading } = this.props
+        //  const {auth, db} = service   
+        //   const uid = auth.currentUser ? auth.currentUser.uid : undefined
+        // const {loading} = this.state
+
+        if (loading) {
+
+            return (<Container fluid={true} className="align-content-center justify-content-center d-flex p-5">
+                <Spinner className="mt-5 align-middle" animation="border" variant="primary" />
+            </Container>)
+
+        } else if (Object.keys(data).length > 0) {
+
+
+            return (<div className="d-flex flex-wrap container justify-content-center">
+                <Alert variant="info" className="container">
+                    <Alert.Heading>  <FontAwesomeIcon icon={faThumbsUp}  /> Tus panoramas realizados</Alert.Heading>
+                       <p>
+                        Tienes {Object.keys(data).length} panoramas en esta lista
+                      </p>
+                      <hr />
+                        <p className="mb-0 font-weight-bold">
+                        <code> <FontAwesomeIcon icon={faChartLine} size="2x" /> Tu nivel es  {utils.nivelEplorador(Object.keys(data).length)} </code>
+                        </p>
+                </Alert>
+                {Object.keys(data).map(x => {
                     const post = data[x]
-
-                  
-
                     return <div key={x} style={{ margin: '0 auto' }}>
-                         <Panorama 
-                        setSharedClicked={this.handleShare(x)} 
-                        urlMapUbicacion={post.urlMapUbicacion} 
-                        urlImagen={post.urlImagen}
-                        nombre={post.nombre}
-                        descripcion={post.descripcion} 
-                        urlImagen1={post.urlImagen1}
-                        urlImagen2={post.urlImagen2}
-                        urlFacebook={post.urlFacebbok}
-                        urlInstagram={post.urlInstagram}
-                        urlTripAdvisor={post.urlTripAdvisor}
-                        urlWeb={post.urlWeb}
-                        calificacion={post.calificacion}
-                        exigenciaFisica={post.exigenciaFisica}
-                        valor={post.valor}
-                        porRealizar={this.handlePorRealizar(x)}
-                        realizado={this.handleRealizado(x)}
+                        <Panorama
+                            setSharedClicked={this.handleShare(x)}
+                            urlMapUbicacion={post.urlMapUbicacion}
+                            urlImagen={post.urlImagen}
+                            nombre={post.nombre}
+                            descripcion={post.descripcion}
+                            urlImagen1={post.urlImagen1}
+                            urlImagen2={post.urlImagen2}
+                            urlFacebook={post.urlFacebbok}
+                            urlInstagram={post.urlInstagram}
+                            urlTripAdvisor={post.urlTripAdvisor}
+                            urlWeb={post.urlWeb}
+                            calificacion={post.calificacion}
+                            exigenciaFisica={post.exigenciaFisica}
+                            valor={post.valor}
+                            porRealizar={this.handlePorRealizar(x)}
+                            realizado={this.handleRealizado(x)}
+                            titulo={"Por realizar"}
 
                         />
 
-
                     </div>
-                    
                 })}
-            </div>
-        )
+                {this.state.alert
+
+                }
+            </div>)
+
+
+
+        } else {
+            return (<Alert variant="info" className="container">
+                <Alert.Heading>¡Hola!, nada por acá</Alert.Heading>
+                <p>
+                    No tienes panoramas en tu lista de  "Realizados". Cada vez que concretes un panorama, márcalo como "Realizado" para que aparezca acá.
+              </p>
+                <hr />
+                <p className="mb-0">
+                  Que tu espiritu aventurero te lleve a hermosos parajes.
+            </p>
+            </Alert>)
+        }
+
+
+
+
     }
     private handlePorRealizar = (id: string) => () => {
-        const {xrealizar } = this.props
-       xrealizar(id)
+        const { xrealizar } = this.props
+        xrealizar(id)
+        this.accionThisGoal('El panorama fue agregado a tu lista de "Por realizar".')
     }
     private handleRealizado = (id: string) => () => {
-        const {realizado } = this.props
-       realizado(id)
+        const { realizado } = this.props
+        realizado(id)
+        this.accionThisGoal('El panorama fue agregado a tu lista de "Realizados". Y quitado de tu lista "Por realizar"')
     }
 
 
     private handleShare = (id: string) => () => {
-        const { share} = this.props
-        share(id)
+        // const { share } = this.props
+        // share(id)
+        // Pendiente
     }
 
 }

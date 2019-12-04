@@ -6,6 +6,7 @@ import Panorama from '../../components/Panorama'
 import { IState } from '../../ducks'
 import * as postsDuck from '../../ducks/Panoramas'
 import { Spinner, Container } from 'react-bootstrap'
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 
 interface INewsFeedProps {
@@ -17,17 +18,49 @@ interface INewsFeedProps {
     fetched: boolean
     loading: boolean
     data: postsDuck.IDataPosts
+    // hideAlert: () => void
 }
-class AllPanoramas extends React.Component<INewsFeedProps>{
+interface IStatePanorama{
+    alert: any
+
+}
+class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
     constructor(props: INewsFeedProps) {
         super(props)
         const { fetchPosts, fetched} = props
         if (fetched) {
             return
         }
+        this.state = {
+            alert: null
+          };
         fetchPosts()
+
     }
-    // handleLike recibe un id y retorna una funcion. Esto nos permite 
+
+    public accionThisGoal(mensaje:string) {
+        const getAlert = () => (
+          <SweetAlert 
+            success={true}
+            title="¡Listo" 
+            onConfirm={this.hideAlert}
+          >
+            {mensaje}
+          </SweetAlert>
+        );
+    
+        this.setState({
+          alert: getAlert()
+        });
+      }
+    
+     public hideAlert=()=> {
+          //  tslint:disable-next-line: no-console
+        console.log('Oculatando...');
+        this.setState({
+          alert: null
+        });
+      }
     public render() {
         const { data, loading} = this.props
         // const {loading} = this.state
@@ -45,7 +78,7 @@ class AllPanoramas extends React.Component<INewsFeedProps>{
                  {Object.keys(data).map(x => {
                     const post = data[x]
                     //  tslint:disable-next-line: no-console
-                    console.log("key ",x)
+                    // console.log("key ",x)
                 
                     return <div key={x} style={{ margin: '0 auto' }}>
                         {/* { <Post 
@@ -73,7 +106,7 @@ class AllPanoramas extends React.Component<INewsFeedProps>{
 
 
                         />
-
+                         {this.state.alert}
 
                     </div>
                 })}
@@ -83,16 +116,21 @@ class AllPanoramas extends React.Component<INewsFeedProps>{
     private handlePorRealizar = (id: string) => () => {
         const {xrealizar } = this.props
        xrealizar(id)
+       this.accionThisGoal('El panorama fue agregado a tu lista de "Por realizar".')
     }
     private handleRealizado = (id: string) => () => {
         const {realizado } = this.props
-       realizado(id)
+       realizado(id);
+       this.accionThisGoal('El panorama fue agregado a tu lista de "Realizados". Y quitado de tu lista "Por realizar"')
+       
+   
     }
 
 
     private handleShare = (id: string) => () => {
-        const { share} = this.props
-        share(id)
+        // const { share} = this.props
+        // share(id)
+        // Implmentar compartir
     }
 
 }

@@ -49,3 +49,16 @@ export const eMensaje = (c:any)=>{
     
 
 }
+export const nivelEplorador = (c: number)=>{
+
+    if (c<=9) {
+        return "Principiante"
+    }else if (c>9 && c<=20){
+        return "Explorador"
+    }else if (c>20 && c<=50){
+        return "Guia Local"
+    } else {
+        return "Experto"
+    }
+
+}

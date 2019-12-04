@@ -16,7 +16,7 @@ export interface ILogin {
 
 export interface IRegister {
     email: string
-    direccion: string
+    direccion?: string
     password: string
     rePassword: string
     nombre: string
@@ -59,16 +59,18 @@ export const register = ({ email, password, rePassword, nombre, ciudad, fono, co
             await auth.createUserWithEmailAndPassword(email, password).then(respuesta => {
 
                 const { user } = respuesta // de la respuesta entregada obtengo el usuario
-                // tslint:disable-next-line: no-console
-                // console.log("user", user)
+               
                 const id = user ? user.uid : undefined
+                const direc= direccion?direccion:"No ingresada"
+                 // tslint:disable-next-line: no-console
+                 console.log("direccion", direc)
                 const doc = db.collection('users').doc(id)
                 // Almaceno el registro en la colección "users"
                 doc.set({
                         ciudad,
                         comuna,
                         createdAt: new Date(),
-                        direccion,
+                        direccion:direc,
                         email: user ? user.email : undefined,
                         emailVerified: user ? user.emailVerified : undefined,
                         fono,
@@ -84,25 +86,6 @@ export const register = ({ email, password, rePassword, nombre, ciudad, fono, co
                 alert(` Se ha producido un error: ${errorCode}, mensaje : ${errorMessage}`)
 
             });
-
-            // const userCredential = await auth.createUserWithEmailAndPassword(email, password)
-            // const { user } = userCredential
-            // const id = user ? user.uid : undefined
-            //   const doc = db.collection('users').doc(id)
-            // await doc.set({
-            //     ciudad,
-            //     comuna,
-            //     createdAt: new Date(),
-            //     direccion,
-            //     email:user ? user.email:undefined,
-            //     emailVerified:user ? user.emailVerified:undefined,
-            //     fono,
-            //     nombre,
-            //     role: 'user',
-
-            // })
-
-
         }
 
     }
