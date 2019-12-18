@@ -11,23 +11,7 @@ import Center from './Center';
 class RegisterForm extends React.Component<InjectedFormProps<{ email: string }>>{
     public render() {
         const { handleSubmit } = this.props
-        const data = [{
-            "id": 1,
-            "nombre": "Victoria"
-        },
-        {
-            "id": 2,
-            "nombre": "Isabella"
-        },
-        {
-            "id": 3,
-            "nombre": "Elizabeth"
-        },
-        {
-            "id": 4,
-            "nombre": "Hugo"
-        }
-        ]
+    
         return (
             <form onSubmit={handleSubmit}>
                 {/* <Input placeholder='Correo' label='Correo' />
@@ -36,7 +20,7 @@ class RegisterForm extends React.Component<InjectedFormProps<{ email: string }>>
                 <Field label='Teléfono(*)' placeholder='Teléfono' name='fono' type='number' required={true} component={Input} />
                 <Field label='Ciudad(*)' placeholder='Ciudad o Localidad' name='ciudad' type='string' required={true} component={Input} />
                 <Field label='Dirección' placeholder='Dirección (opcional)' name='direccion' type='string'  component={Input} />
-                <Field label='Comuna(*)' data={data} placeholder='Comuna' name='comuna' type='select'required={true}  component={Input} />
+                <Field label='Comuna(*)'  placeholder='Comuna' name='comuna' type='select'required={true}  component={Input} />
                 <Field label='Correo(*)' placeholder='Correo' name='email' type='email' component={Input} required={true} />
                 <Field label='Contraseña(*)' placeholder='Contraseña' name='password' type='password' component={Input} required={true}/>
                 <Field label='Repetir Contraseña(*)' placeholder='Repetir contraseña' name='rePassword' type='password' required={true} component={Input} />

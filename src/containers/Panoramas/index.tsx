@@ -5,8 +5,9 @@ import { ThunkDispatch } from 'redux-thunk';
 import Panorama from '../../components/Panorama'
 import { IState } from '../../ducks'
 import * as postsDuck from '../../ducks/Panoramas'
-import { Spinner, Container } from 'react-bootstrap'
-import SweetAlert from 'react-bootstrap-sweetalert';
+import { Spinner, Container, Alert } from 'react-bootstrap'
+// import { useState } from 'react';
+// import SweetAlert from 'react-bootstrap-sweetalert';
 
 
 interface INewsFeedProps {
@@ -18,112 +19,219 @@ interface INewsFeedProps {
     fetched: boolean
     loading: boolean
     data: postsDuck.IDataPosts
-    // hideAlert: () => void
+    work: boolean
+    
 }
-interface IStatePanorama{
-    alert: any
+interface IStatePanorama {
+    // alert: any
+    work: boolean
 
 }
+
+
 class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
     constructor(props: INewsFeedProps) {
         super(props)
-        const { fetchPosts, fetched} = props
+        const { fetchPosts, fetched } = props
         if (fetched) {
             return
         }
-        this.state = {
-            alert: null
-          };
         fetchPosts()
+        this.state = {
+            work: false
+        };
+
 
     }
+    // public componentDidMount(){
+    //   this.state = {
+    //     alert: null
+    //   };
 
-    public accionThisGoal(mensaje:string) {
-        const getAlert = () => (
-          <SweetAlert 
-            success={true}
-            title="¡Listo" 
-            onConfirm={this.hideAlert}
-          >
-            {mensaje}
-          </SweetAlert>
-        );
-    
-        this.setState({
-          alert: getAlert()
-        });
-      }
-    
-     public hideAlert=()=> {
-          //  tslint:disable-next-line: no-console
-        console.log('Oculatando...');
-        this.setState({
-          alert: null
-        });
-      }
+
+    // }
+
+    // public accionThisGoal(mensaje:string) {
+    //     const getAlert = () => (
+    //       <SweetAlert 
+    //         success={true}
+    //         title="¡Listo" 
+    //         onConfirm={this.hideAlert}
+    //       >
+    //         {mensaje}
+    //       </SweetAlert>
+    //     );
+
+    //     this.setState({
+    //       alert: getAlert()
+    //     });
+    //   }
+
+    //  public hideAlert=()=> {
+    //       //  tslint:disable-next-line: no-console
+    //     console.log('Oculatando...');
+    //     this.setState({
+    //       alert: null
+    //     });
+    //   }
     public render() {
-        const { data, loading} = this.props
-        // const {loading} = this.state
-      
+        const { data, loading } = this.props
+        const { work } = this.state
+
         //  tslint:disable-next-line: no-console
-         //       console.log("Data",data.idPanoroma)
+        console.log("Eastado work:" + work)
+
+        if (loading) {
+            return (
+
+                <Container fluid={true} className="align-content-center justify-content-center d-flex p-5">
+                    <Spinner className="mt-5 align-middle" animation="border" variant="info" />
+                </Container>
+
+            )
+
+        }
+
+        if (work) {
+            return (
+
+             
+                 <Alert variant="info" className="container">
+                     <Alert.Heading>Agegando a la lista   </Alert.Heading>
+                     <div className="d-flex container justify-content-center">
+                          <Spinner className="m-5 align-middle" animation="border" variant="warning"/> 
+                     </div>
+                 </Alert>
                 
-               
+            )
+
+        }
+
         return (
-            loading ? (
-                <Container fluid={true} className="align-content-center justify-content-center d-flex p-5"> 
-                <Spinner className="mt-5 align-middle"  animation="border" variant="primary"/>
-                </Container>) :
             <div className="d-flex flex-wrap container justify-content-center">
-                 {Object.keys(data).map(x => {
+                {Object.keys(data).map(x => {
                     const post = data[x]
                     //  tslint:disable-next-line: no-console
                     // console.log("key ",x)
-                
+
                     return <div key={x} style={{ margin: '0 auto' }}>
-                        {/* { <Post 
-                        share={this.handleShare(x)} 
-                        like={this.handleLike(x)} 
-                        image= {post.imageURL}
-                    />} */}
-                        <Panorama 
-                        setSharedClicked={this.handleShare(x)} 
-                        urlMapUbicacion={post.urlMapUbicacion} 
-                        urlImagen={post.urlImagen}
-                        nombre={post.nombre}
-                        descripcion={post.descripcion} 
-                        urlImagen1={post.urlImagen1}
-                        urlImagen2={post.urlImagen2}
-                        urlFacebook={post.urlFacebbok}
-                        urlInstagram={post.urlInstagram}
-                        urlTripAdvisor={post.urlTripAdvisor}
-                        urlWeb={post.urlWeb}
-                        calificacion={post.calificacion}
-                        exigenciaFisica={post.exigenciaFisica}
-                        valor={post.valor}
-                        porRealizar={this.handlePorRealizar(x)}
-                        realizado={this.handleRealizado(x)}
-
-
+                        <Panorama
+                            setSharedClicked={this.handleShare(x)}
+                            urlMapUbicacion={post.urlMapUbicacion}
+                            urlImagen={post.urlImagen}
+                            nombre={post.nombre}
+                            descripcion={post.descripcion}
+                            urlImagen1={post.urlImagen1}
+                            urlImagen2={post.urlImagen2}
+                            urlFacebook={post.urlFacebbok}
+                            urlInstagram={post.urlInstagram}
+                            urlTripAdvisor={post.urlTripAdvisor}
+                            urlWeb={post.urlWeb}
+                            calificacion={post.calificacion}
+                            exigenciaFisica={post.exigenciaFisica}
+                            valor={post.valor}
+                            porRealizar={this.handlePorRealizar(x)}
+                            realizado={this.handleRealizado(x)}
+                            hidenCompartir={false}
+                            hiddenRealizado={false}
+                            hiddenXRealizar={false}
                         />
-                         {this.state.alert}
 
                     </div>
+
                 })}
             </div>
+
+
         )
+
+
+
+        // return (
+        //     loading ? (
+        //         <Container fluid={true} className="align-content-center justify-content-center d-flex p-5">
+        //             <Spinner className="mt-5 align-middle" animation="border" variant="primary" />
+        //         </Container>) :
+        //         <div className="d-flex flex-wrap container justify-content-center">
+        //             {Object.keys(data).map(x => {
+        //                 const post = data[x]
+        //                 //  tslint:disable-next-line: no-console
+        //                 // console.log("key ",x)
+
+        //                 return <div key={x} style={{ margin: '0 auto' }}>
+        //                     {/* { <Post 
+        //                 share={this.handleShare(x)} 
+        //                 like={this.handleLike(x)} 
+        //                 image= {post.imageURL}
+        //             />} */}
+        //                     <Panorama
+        //                         setSharedClicked={this.handleShare(x)}
+        //                         urlMapUbicacion={post.urlMapUbicacion}
+        //                         urlImagen={post.urlImagen}
+        //                         nombre={post.nombre}
+        //                         descripcion={post.descripcion}
+        //                         urlImagen1={post.urlImagen1}
+        //                         urlImagen2={post.urlImagen2}
+        //                         urlFacebook={post.urlFacebbok}
+        //                         urlInstagram={post.urlInstagram}
+        //                         urlTripAdvisor={post.urlTripAdvisor}
+        //                         urlWeb={post.urlWeb}
+        //                         calificacion={post.calificacion}
+        //                         exigenciaFisica={post.exigenciaFisica}
+        //                         valor={post.valor}
+        //                         porRealizar={this.handlePorRealizar(x)}
+        //                         realizado={this.handleRealizado(x)}
+        //                         hidenCompartir={false}
+        //                         hiddenRealizado={false}
+        //                         hiddenXRealizar={false}
+        //                     />
+
+        //                 </div>
+
+        //             })}
+        //         </div>
+        // )
     }
     private handlePorRealizar = (id: string) => () => {
-        const {xrealizar } = this.props
-       xrealizar(id)
-       this.accionThisGoal('El panorama fue agregado a tu lista de "Por realizar".')
+        const { xrealizar } = this.props
+        this.setState({
+            work: true
+        })
+        xrealizar(id)
+         //  tslint:disable-next-line: no-console
+        console.log("Agregando a la lista de por realizar ", this.state.work)
+        setTimeout(() => {
+            // tslint:disable-next-line: no-console
+            console.log("Ya se agregó  a la lista por realizar", this.state.work)
+            this.setState({
+                work: false
+              })
+
+        }, 2000)
+       
+     //   location.href = "/app/xrealizar";         
+
     }
     private handleRealizado = (id: string) => () => {
-        const {realizado } = this.props
-       realizado(id);
-       this.accionThisGoal('El panorama fue agregado a tu lista de "Realizados". Y quitado de tu lista "Por realizar"')
-       
-   
+        const { realizado } = this.props
+        this.setState({
+            work: true
+        })
+        realizado(id);
+
+        setTimeout(() => {
+
+            this.setState({
+                work: false
+              })
+
+           // location.href = "/app/realizados";
+
+        }, 2000)
+
+        //   this.accionThisGoal('El panorama fue agregado a tu lista de "Realizados". Y quitado de tu lista "Por realizar"')
+
+
     }
 
 

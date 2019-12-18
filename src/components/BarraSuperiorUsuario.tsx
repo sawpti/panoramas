@@ -30,8 +30,9 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
               className="d-inline-block align-top"
               alt="Logo Saltos Pocolpén"
             />
-          </Navbar.Brand>
+           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link href="/app/allpanoramas"><FontAwesomeIcon icon={faQuestionCircle} /> Ayuda </Nav.Link>

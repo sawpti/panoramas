@@ -1,100 +1,125 @@
-import * as React from 'react';
-import Panorama from 'src/components/Panorama';
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
+import Usuario from 'src/components/Usuario'
+import { submit } from 'redux-form'
+import * as usersDuck from '../../ducks/Users'
+import { IState } from '../../ducks'
+import ProfileImg from '../../components/ProfileImg'
+import { Spinner, Container } from 'react-bootstrap'
+// import services from 'src/service'
+// import services from '../../service'
 
+interface IUser {
+   fetchUsers: () => void
+   handleProfileImageSubmit: (a: { profileImg: File }) => void
+   submitProfileImg: () => void
+   fetched: boolean
+   loading: boolean
+   profileImage: string
+   data: usersDuck.IDataUsers
 
-export default class Inicio extends React.Component {
+}
+class Perfil extends React.Component<IUser>{
+   constructor(props: IUser) {
+      super(props)
+      const { fetchUsers, fetched } = props
+      if (fetched) {
+         return
+      }
+      fetchUsers()
 
+   }
 
    public render() {
+      const { data, loading, submitProfileImg, handleProfileImageSubmit, profileImage } = this.props
+      // tslint:disable-next-line: no-console
+      // console.log('Usuario', Object.keys(data[0].nombre));
       return (
-         // {   <div>
-         //       <BarraSuperiorUsuario todosClicked={this.todosClicked} realizadosClicked={this.realizadoClicked} porRealziarClicked={this.porRealizadoClicked} />
-         //       <div className="container justify-content-center">
-         //          <div className="row">
-         //             <div className="col-md-12">
+         loading ? (
+            <Container fluid={true} className="align-content-center justify-content-center d-flex p-5">
+               <Spinner className="mt-5 align-middle" animation="border" variant="primary" />
+            </Container>) :
+            <div>
+               <div className="d-flex  justify-content-between container">
+               <h3>Información de tu cuenta</h3>
+                  <ProfileImg
+                     profileImage={profileImage}
+                     onSubmit={handleProfileImageSubmit}
+                     submitProfileImg={submitProfileImg} />
+                
+               </div>
 
-         //                <div className="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-         //                   <Panorama urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
-         //                </div>
-         //                <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-         //                   <Panorama urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
-         //                </div>
-         //                <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-         //                   <Panorama urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
-         //                </div>
+               {Object.keys(data).map(x => {
+                  const user = data[x]
+                  return <div key={x} style={{ margin: '10 auto' }}>
 
-         //             </div>
-         //          </div>
-         //       </div>
-         //    </div>}
+                     <Usuario
+                        ciudad={user.ciudad}
+                        comuna={user.comuna}
+                        direccion={user.direccion ? user.direccion : "No ingresada"}
+                        email={user.email}
+                        emailVerified={user.emailVerified}
+                        fono={user.fono}
+                        nombre={user.nombre}
+                       
+                     />
 
-         <div>
-
-
-
-            <div className="d-flex flex-column justify-content-center container ">
-               <h3>Araucanía Lacustre/Curarrehue</h3>
-               <h4>En esta zona tienes los siguientes panoramas por realizar:</h4>
-
-            </div>
-            <div className="d-flex flex-wrap container justify-content-center">
-               <Panorama
-                  setSharedClicked={this.setSharedClicked}
-                  urlMapUbicacion=""
-                  urlImagen="http://lorempixel.com/200/200/nature"
-                  nombre="Parque Saltos Pocolpén"
-                  descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores"
-                  urlImagen1=""
-                  urlImagen2=""
-                  valor={2000}
-                  calificacion={7}
-                  exigenciaFisica={7}
-
-               />
-               <Panorama
-                  setSharedClicked={this.setSharedClicked} urlMapUbicacion=""
-                  urlImagen1=""
-                  urlImagen2=""
-                  calificacion={7}
-                  exigenciaFisica={7}
-                  valor={2000}
-
-                  urlImagen="http://lorempixel.com/200/200/nature"
-                  nombre="Parque Saltos Pocolpén"
-                  descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
-              
-               <Panorama
-                  urlImagen1=""
-                  calificacion={7}
-                  exigenciaFisica={7}
-                  valor={2000}
-                  urlImagen2=""
-                  setSharedClicked={this.setSharedClicked} urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
-               <Panorama
-                  urlImagen1=""
-                  calificacion={7}
-                  exigenciaFisica={7}
-                  valor={2000}
-                  urlImagen2=""
-                  setSharedClicked={this.setSharedClicked} urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
-               <Panorama
-                  urlImagen1=""
-                  calificacion={7}
-                  exigenciaFisica={7}
-                  valor={2000}
-                  urlImagen2=""
-                  setSharedClicked={this.setSharedClicked} urlMapUbicacion="" urlImagen="http://lorempixel.com/200/200/nature" nombre="Parque Saltos Pocolpén" descripcion="Parque natural privado con senderos de trekking que te llevan a cascadas, caminos rurales, acantilados, reservas de bosque y miradores" />
+                  </div>
+               })}
 
             </div>
-         </div>
-
-
-
       )
    }
 
-   private setSharedClicked = () => {
-      alert(" Compartir")
+  // private setDatos = (a:string) => {
+      // const { auth } = services
+      // const u = auth.currentUser
+      // if (a==="fono"){
+      //    alert (a)
+      // }
 
+      // if (u != null) {
+
+
+      //    if (!u.emailVerified) {
+      //       u.sendEmailVerification().then(() => {
+      //          // Email sent.
+      //          // tslint:disable-next-line: no-console
+      //          console.log("Se envió corectamente el e-mail de verificacion", u)
+      //          alert(` Te hemos enviado un  correo a ${u.email}, pincha la url enviada y luego entra nuevamente a la app o dale refesh a tu nabegador`)
+      //       }).catch((error) => {
+      //          // An error happened.
+      //          // tslint:disable-next-line: no-console
+      //          console.log("Se ha producido un error al enviar el correo de verificación", error)
+      //       });
+
+      //    } else{
+      //       alert("Tu correo ya fue validado")
+      //    }
+      // }
+   
+
+
+ //  }
+}
+const mapStateToProps = (state: IState) => {
+   const { Users: { data, fetched, fetching, profileImage: tempPI } } = state
+   const profileImage = tempPI || 'https://placekitten.com/100/100'
+   const loading = fetching || !fetched
+
+   return {
+      data,
+      fetched,
+      loading,
+      profileImage
    }
 }
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) =>
+   bindActionCreators({
+      ...usersDuck,
+      submitProfileImg: () => submit('profileImg'),
+
+   }, dispatch)
+export default connect(mapStateToProps, mapDispatchToProps)(Perfil)

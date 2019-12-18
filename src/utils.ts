@@ -62,3 +62,12 @@ export const nivelEplorador = (c: number)=>{
     }
 
 }
+export const emailVerificado = (c: boolean)=>{
+
+    if (c===false) {
+        return "NO"
+    }else {
+        return "SI"
+    }
+
+}

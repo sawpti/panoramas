@@ -27,6 +27,9 @@ export interface IPanoramaProps {
   urlTripAdvisor?: string
   titulo?:string
   valor: number
+  hiddenXRealizar:boolean
+  hiddenRealizado:boolean
+  hidenCompartir:boolean
   setSharedClicked: () => void
   porRealizar?: () => void
   realizado?: () => void
@@ -146,7 +149,7 @@ function ModalPanorama(datos: IPanoramaProps) {
 
           <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Compartir en redes sociales</Tooltip>}>
             <span className="d-inline-block">
-              <div onClick={datos.setSharedClicked} >
+              <div onClick={datos.setSharedClicked}  hidden={datos.hidenCompartir}>
                 <FontAwesomeIcon icon={faShare} size="2x" color="Dodgerblue" />
                 <p className="text-info text-center small">Compartir</p>
               </div>
@@ -155,7 +158,7 @@ function ModalPanorama(datos: IPanoramaProps) {
 
           <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Agrega el panorama a tu lista "Por realizar"</Tooltip>}>
             <span className="d-inline-block">
-              <div onClick={datos.porRealizar} >
+              <div  onClick={datos.porRealizar} hidden={datos.hiddenXRealizar} >
                 <FontAwesomeIcon icon={faHiking} size="2x" color="Dodgerblue" />
                 <p className="text-info text-center small">Por realizar</p>
               </div>
@@ -164,7 +167,7 @@ function ModalPanorama(datos: IPanoramaProps) {
 
           <OverlayTrigger overlay={<Tooltip id="tooltip-disabled"> Agrega el panorama a tu lista de "Realizados"</Tooltip>}>
             <span className="d-inline-block">
-              <div onClick={datos.realizado} >
+              <div onClick={datos.realizado } hidden={datos.hiddenRealizado} >
                 <FontAwesomeIcon icon={faThumbsUp} size="2x" color="Dodgerblue" />
                 <p className="text-info text-center small">Realizado</p>
               </div>
@@ -187,7 +190,9 @@ function ModalPanorama(datos: IPanoramaProps) {
 export default class Panorama extends React.Component<IPanoramaProps> {
   public render() {
     const { descripcion, nombre, urlImagen, urlImagen1, urlImagen2, setSharedClicked, urlMapUbicacion,
-      urlFacebook, urlWeb, urlInstagram, urlTripAdvisor, calificacion, exigenciaFisica, valor , porRealizar, realizado, titulo} = this.props
+      urlFacebook, urlWeb, urlInstagram, urlTripAdvisor, calificacion, exigenciaFisica, valor , porRealizar, realizado, titulo,
+      hiddenRealizado, hiddenXRealizar, hidenCompartir
+    } = this.props
     // tslint:disable-next-line: no-console
   //   console.log(utils.eFisica(exigenciaFisica) + "=>" + exigenciaFisica)
     //   console.log("Url:" + urlWeb)
@@ -219,6 +224,9 @@ export default class Panorama extends React.Component<IPanoramaProps> {
               valor={valor}
               porRealizar={porRealizar}
               realizado={realizado}
+              hiddenRealizado={hiddenRealizado}
+              hiddenXRealizar={hiddenXRealizar}
+              hidenCompartir={hidenCompartir}
             />
           </Card.Body>
         </Card>

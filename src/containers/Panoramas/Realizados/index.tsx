@@ -7,9 +7,9 @@ import Panorama from '../../../components/Panorama'
 import { IState } from '../../../ducks'
 import * as postsDuck from '../../../ducks/PanoramasRealizados'
 import { Spinner, Container, Alert } from 'react-bootstrap'
-import SweetAlert from 'react-bootstrap-sweetalert';
+// import SweetAlert from 'react-bootstrap-sweetalert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {  faThumbsUp, faChartLine} from '@fortawesome/free-solid-svg-icons'
+import { faThumbsUp, faChartLine } from '@fortawesome/free-solid-svg-icons'
 import * as utils from '../../../utils';
 
 
@@ -25,38 +25,17 @@ interface IPanoramasRealizados {
     data: postsDuck.IDataPosts
 
 }
-interface IStatePanorama {
-    alert: any
 
-}
-class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStatePanorama>{
+class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
     constructor(props: IPanoramasRealizados) {
         super(props)
         const { fetchPosts, fetched } = props
         if (fetched) {
             return
         }
-        this.state = {
-            alert: null
-        };
+      
         fetchPosts()
     }
-    public accionThisGoal(mensaje: string) {
-        const getAlert = () => (
-            <SweetAlert
-                success={true}
-                title="¡Listo"
-                onConfirm={this.hideAlert}
-            >
-                {mensaje}
-            </SweetAlert>
-        );
-
-        this.setState({
-            alert: getAlert()
-        });
-    }
-
     public hideAlert = () => {
         //  tslint:disable-next-line: no-console
         console.log('Oculatando...');
@@ -82,14 +61,14 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStatePa
 
             return (<div className="d-flex flex-wrap container justify-content-center">
                 <Alert variant="info" className="container">
-                    <Alert.Heading>  <FontAwesomeIcon icon={faThumbsUp}  /> Tus panoramas realizados</Alert.Heading>
-                       <p>
+                    <Alert.Heading>  <FontAwesomeIcon icon={faThumbsUp} /> Tus panoramas realizados</Alert.Heading>
+                    <p>
                         Tienes {Object.keys(data).length} panoramas en esta lista
                       </p>
-                      <hr />
-                        <p className="mb-0 font-weight-bold">
+                    <hr />
+                    <p className="mb-0 font-weight-bold">
                         <code> <FontAwesomeIcon icon={faChartLine} size="2x" /> Tu nivel es  {utils.nivelEplorador(Object.keys(data).length)} </code>
-                        </p>
+                    </p>
                 </Alert>
                 {Object.keys(data).map(x => {
                     const post = data[x]
@@ -112,14 +91,15 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStatePa
                             porRealizar={this.handlePorRealizar(x)}
                             realizado={this.handleRealizado(x)}
                             titulo={"Por realizar"}
+                            hidenCompartir={false}
+                            hiddenRealizado={true}
+                            hiddenXRealizar={false}
 
                         />
 
                     </div>
                 })}
-                {this.state.alert
-
-                }
+               
             </div>)
 
 
@@ -132,7 +112,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStatePa
               </p>
                 <hr />
                 <p className="mb-0">
-                  Que tu espiritu aventurero te lleve a hermosos parajes.
+                    Que tu espiritu aventurero te lleve a hermosos parajes.
             </p>
             </Alert>)
         }
@@ -144,12 +124,22 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStatePa
     private handlePorRealizar = (id: string) => () => {
         const { xrealizar } = this.props
         xrealizar(id)
-        this.accionThisGoal('El panorama fue agregado a tu lista de "Por realizar".')
+
+        setTimeout(() => {
+          
+            location.href = "/app/xrealizar";
+            },1000)
+
     }
     private handleRealizado = (id: string) => () => {
         const { realizado } = this.props
         realizado(id)
-        this.accionThisGoal('El panorama fue agregado a tu lista de "Realizados". Y quitado de tu lista "Por realizar"')
+
+        setTimeout(() => {
+            
+            location.href = "/app/realizados";
+           }, 1000)
+
     }
 
 
