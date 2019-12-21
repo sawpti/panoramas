@@ -20,7 +20,7 @@ interface IAppProps {
 
 class App extends React.Component<IAppProps> {
   public state = {
-    loading: true,
+    loading: true
   }
   public componentDidMount() {
     const { auth, db } = service
@@ -153,20 +153,19 @@ class App extends React.Component<IAppProps> {
 
 
           {/* {  <Route exact={true} path='/' component={Login} />} */}
-
-          <div className="jumbotron justify-content-center">
-            <h4 className="display-9">App Panoramas</h4>
-            <p className="lead"> <small>Esta es una App gratuita de Parque Saltos Pocolpén para que todos los visitantes de Curarrehue disfruten al máximo.</small>
+          <hr className="my-4 bg-light" />
+          <div className="d-flex footer-copyright bg-light mt-5 justify-content-center container-fluid p-4 " >
+        
+           <p> 
+            <small>Esta es una App gratuita de Parque Saltos Pocolpén para que todos los visitantes de Curarrehue disfruten al máximo.</small>
             </p>
-            <hr className="my-4" />
-            <p>Visita nuestro parque</p>
-            <a className="btn btn-primary btn-lg" href="https://g.page/saltospocolpen?gm" target="_blank" role="button">Como llegar</a>
-
+         
           </div>
-
+          <hr className="my-4" />
 
 
         </div>
+   
 
     );
   }

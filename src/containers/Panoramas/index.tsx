@@ -8,9 +8,12 @@ import * as postsDuck from '../../ducks/Panoramas'
 import { Spinner, Container, Alert } from 'react-bootstrap'
 // import { useState } from 'react';
 // import SweetAlert from 'react-bootstrap-sweetalert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMountain, faChartLine } from '@fortawesome/free-solid-svg-icons'
 
 
 interface INewsFeedProps {
+   
     fetchPosts: () => void
     xrealizar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
     realizado: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
@@ -19,7 +22,7 @@ interface INewsFeedProps {
     fetched: boolean
     loading: boolean
     data: postsDuck.IDataPosts
-    work: boolean
+    
     
 }
 interface IStatePanorama {
@@ -30,26 +33,33 @@ interface IStatePanorama {
 
 
 class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
+     
     constructor(props: INewsFeedProps) {
         super(props)
         const { fetchPosts, fetched } = props
         if (fetched) {
+            this.state={
+                work: false
+              }
             return
         }
         fetchPosts()
-        this.state = {
+           //  tslint:disable-next-line: no-console
+         //  console.log("Work de los props:")
+           this.state={
             work: false
-        };
-
+          }
+              //  tslint:disable-next-line: no-console
+              console.log("Eastado work construcor:" + this.state.work)
 
     }
     // public componentDidMount(){
-    //   this.state = {
-    //     alert: null
-    //   };
+    //     this.state = {
+    //         work: false
+    //     };
 
 
-    // }
+   // }
 
     // public accionThisGoal(mensaje:string) {
     //     const getAlert = () => (
@@ -76,10 +86,10 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
     //   }
     public render() {
         const { data, loading } = this.props
-        const { work } = this.state
+         // location.href = "/app/allpanoramas";   
 
         //  tslint:disable-next-line: no-console
-        console.log("Eastado work:" + work)
+        console.log("Eastado work:" +this.state.work)
 
         if (loading) {
             return (
@@ -89,10 +99,11 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
                 </Container>
 
             )
+             
 
         }
 
-        if (work) {
+        if (this.state.work) {
             return (
 
              
@@ -109,6 +120,19 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
 
         return (
             <div className="d-flex flex-wrap container justify-content-center">
+
+<Alert variant="info" className="container">
+                    <Alert.Heading>  <FontAwesomeIcon icon={faMountain} /> Estos son todos los panoramas disponibles</Alert.Heading>
+                    <p>
+                        Tienes {Object.keys(data).length} panoramas disponibles en esta zona
+                      </p>
+                    <hr />
+                    
+                    <p className="mb-0 font-weight-bold">
+                        <code> <FontAwesomeIcon icon={faChartLine} size="2x" /> Tu nivel es  </code>
+                    </p>
+                </Alert>
+
                 {Object.keys(data).map(x => {
                     const post = data[x]
                     //  tslint:disable-next-line: no-console
@@ -246,12 +270,15 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
 const mapStateToProps = (state: IState) => {
     const { Posts: { data, fetched, fetching } } = state
     const loading = fetching || !fetched
+    
+    
     // cuando retornemos el estado vamos a traer solamente loading pero tambien fetched
     // porque lo estamos usando en el constructor. Y data que son los datos de los posts
     return {
         data,
         fetched,
         loading,
+        
     }
 }
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => bindActionCreators(postsDuck, dispatch)

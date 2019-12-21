@@ -33,6 +33,7 @@ export interface IPanoramaProps {
   setSharedClicked: () => void
   porRealizar?: () => void
   realizado?: () => void
+ 
 
 }
 function ModalPanorama(datos: IPanoramaProps) {
@@ -227,6 +228,7 @@ export default class Panorama extends React.Component<IPanoramaProps> {
               hiddenRealizado={hiddenRealizado}
               hiddenXRealizar={hiddenXRealizar}
               hidenCompartir={hidenCompartir}
+             
             />
           </Card.Body>
         </Card>

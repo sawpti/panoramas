@@ -138,6 +138,19 @@ export const fetchUsers = () =>
 export const login = ({ email, password }: ILogin) =>
     async (dispatch: Dispatch, getState: () => IState, { auth }: IServices) =>
         await auth.signInWithEmailAndPassword(email, password)
+        .then(()=>{
+
+            alert("Iniciaste sesión correctamente")
+
+        })
+        .catch((error)=>{
+            
+            alert(`Se ha producido un error, código:${error.code}, mensaje: ${error.message}`)
+
+
+        }
+
+        )
 
 
 

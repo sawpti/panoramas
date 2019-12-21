@@ -10,7 +10,7 @@ import ProfileImg from '../../components/ProfileImg'
 import { Spinner, Container } from 'react-bootstrap'
 // import services from 'src/service'
 // import services from '../../service'
-
+// import SweetAlert from 'react-bootstrap-sweetalert';
 interface IUser {
    fetchUsers: () => void
    handleProfileImageSubmit: (a: { profileImg: File }) => void
@@ -21,7 +21,11 @@ interface IUser {
    data: usersDuck.IDataUsers
 
 }
-class Perfil extends React.Component<IUser>{
+interface IState1 {
+   alert: React.ReactNode
+   dato:string
+ }
+class Perfil extends React.Component<IUser, IState1>{
    constructor(props: IUser) {
       super(props)
       const { fetchUsers, fetched } = props
@@ -29,10 +33,10 @@ class Perfil extends React.Component<IUser>{
          return
       }
       fetchUsers()
-
+     
    }
 
-   public render() {
+    public render() {
       const { data, loading, submitProfileImg, handleProfileImageSubmit, profileImage } = this.props
       // tslint:disable-next-line: no-console
       // console.log('Usuario', Object.keys(data[0].nombre));
@@ -54,7 +58,7 @@ class Perfil extends React.Component<IUser>{
                {Object.keys(data).map(x => {
                   const user = data[x]
                   return <div key={x} style={{ margin: '10 auto' }}>
-
+                     
                      <Usuario
                         ciudad={user.ciudad}
                         comuna={user.comuna}
@@ -63,9 +67,9 @@ class Perfil extends React.Component<IUser>{
                         emailVerified={user.emailVerified}
                         fono={user.fono}
                         nombre={user.nombre}
-                       
+                                             
                      />
-
+              
                   </div>
                })}
 
@@ -103,7 +107,11 @@ class Perfil extends React.Component<IUser>{
 
 
  //  }
+
+ 
 }
+
+
 const mapStateToProps = (state: IState) => {
    const { Users: { data, fetched, fetching, profileImage: tempPI } } = state
    const profileImage = tempPI || 'https://placekitten.com/100/100'

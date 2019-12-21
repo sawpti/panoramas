@@ -26,6 +26,8 @@ interface IPanoramasRealizados {
 
 }
 
+
+
 class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
     constructor(props: IPanoramasRealizados) {
         super(props)
@@ -124,7 +126,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
     private handlePorRealizar = (id: string) => () => {
         const { xrealizar } = this.props
         xrealizar(id)
-
+        
         setTimeout(() => {
           
             location.href = "/app/xrealizar";
