@@ -308,7 +308,8 @@ export default class Usuario extends React.Component<IUsuarioProps, IState> {
           <div className="d-flex justify-content-between">
             {nombre}  <button onClick={this.setDatos("nombre")} type="button" className="btn btn-outline-primary">Editar</button>
           </div>
-          <hr />
+
+      <hr />
 
           <p className="mb-2 font-weight-bold">
             <FontAwesomeIcon icon={faCity} size="1x" /> Ciudad

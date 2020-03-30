@@ -5,11 +5,16 @@ import { Spinner, Container } from 'react-bootstrap'
 import BarraSuperior from './components/BarraSuperiorUsuario';
 import Inicio from './containers/Inicio';
 import Register from './containers/Auth/Register'
+import RegisterPanorama from './containers/Admin/RegisterPanorama'
+
 import Login from './containers/Auth/Login';
 import Perfil from './containers/Profile/perfil';
 import AllPanoramas from './containers/Panoramas';
 import PanoramasRealizados from './containers/Panoramas/Realizados';
-import PanoramasXRealizar from './containers/Panoramas/XRealizar'
+import PanoramasXRealizar from './containers/Panoramas/XRealizar';
+import Admin from './containers/Admin/admin'
+import DetallePanorama from './containers/Admin/DetallePanorama'
+// import { IDetalleProps } from './containers/Admin/DetallePanorama'
 import service from './service'
 // import BarraSuperiorUsuario from './components/BarraSuperiorUsuario';
 // import Login from './containers/Auth/Login';
@@ -17,6 +22,7 @@ interface IAppProps {
   history: History
   loadInitialData: () => void
 }
+
 
 class App extends React.Component<IAppProps> {
   public state = {
@@ -149,26 +155,47 @@ class App extends React.Component<IAppProps> {
           <Route exact={true} path='/app/realizados' component={PanoramasRealizados} />
           <Route exact={true} path='/app/xrealizar' component={PanoramasXRealizar} />
           <Route exact={true} path='/app/perfil' component={Perfil} />
+          <Route exact={true} path='/app/admin' component={Admin} />
+          <Route exact={true} path='/app/admin/register' component={RegisterPanorama} />
+          <Route
+
+            path='/app/admin/detalle/:idPanorama/:nombre/:descripcion/:urlMapUbicacion/:urlWeb'
+
+            component={DetallePanorama}
+
+          />
+
+
+
 
 
 
           {/* {  <Route exact={true} path='/' component={Login} />} */}
           <hr className="my-4 bg-light" />
           <div className="d-flex footer-copyright bg-light mt-5 justify-content-center container-fluid p-4 " >
-        
-           <p> 
-            <small>Esta es una App gratuita de Parque Saltos Pocolpén para que todos los visitantes de Curarrehue disfruten al máximo.</small>
+
+            <p>
+              <small>Esta es una App gratuita de Parque Saltos Pocolpén para que todos los visitantes de Curarrehue disfruten al máximo.</small>
             </p>
-         
+
           </div>
           <hr className="my-4" />
 
 
         </div>
-   
+
 
     );
   }
+  // public renderDetalle = (p: IDetalleProps) => {
+
+  //   return (
+  //     <DetallePanorama idPanorama={p.idPanorama} descripcion={p.descripcion} nombre="Hola"
+  //       {...p} />
+
+  //   )
+  // }
+
 }
 
 export default App;

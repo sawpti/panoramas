@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { WrappedFieldProps } from 'redux-form';
+import {WrappedFieldProps} from 'redux-form';
 const style = {
     backgroundColor: 'white',
     border: '1px solid #ddd',
@@ -18,26 +18,25 @@ const stylesSpan = {
 
 interface IIputProps {
     placeholder?: string
-    label?: string,
-    requerid?: boolean
+    label: string,
+    
 }
 
 
-const Input: React.StatelessComponent<WrappedFieldProps & IIputProps> = (props) => {
+const Textarea: React.StatelessComponent<WrappedFieldProps &  IIputProps> =(props)=>{
 
-    const { label } = props;
-
+    const {label}=props;
+    
 
     return (
         <div>
             <span style={stylesSpan}> {label} </span>
-            <input {...props} {...props.input} style={style} />
-
+            <textarea {...props} {...props.label} style={style}/>
+          
         </div>
-
 
     )
 
 
 }
-export default Input
+export default Textarea

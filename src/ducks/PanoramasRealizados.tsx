@@ -10,11 +10,11 @@ const ERROR = 'posts/fetch-error'
 const ADD = 'posts/add' // va a ser de tipo post y accion add
 
 // creamos interfaz de Post (para compartir los post - C93)
-export interface IPost {
+export interface IPanorama {
     createdAt: firestore.Timestamp
     calificacion: number
     descripcion: string
-    destacado?: boolean
+    destacado?: string
     exigenciaFisica: number
     nomProveedor?: string
     nombre: string
@@ -24,22 +24,22 @@ export interface IPost {
     urlWeb?: string
     urlMapUbicacion: string
     urlInstagram?: string
-    urlFacebbok: string
+    urlFacebook: string
     urlTripAdvisor?: string
     valor: number
     idPanorama?: string
 }
 
 // creamos una interfaz para indicar que tipo de datos es payload
-export interface IDataPosts {
-    [key: string]: IPost
+export interface IDataPanorama {
+    [key: string]: IPanorama
 }
 
 // Definimos nuestros actions creators
 const fetchStart = () => ({
     type: START,
 })
-const fetchSuccess = (payload: IDataPosts) => ({
+const fetchSuccess = (payload: IDataPanorama) => ({
     payload,
     type: SUCCESS,
 })
@@ -47,7 +47,7 @@ const fetchError = (error: Error) => ({
     error,
     type: ERROR,
 })
-const add = (payload: IDataPosts) => ({
+const add = (payload: IDataPanorama) => ({
     payload,
     type: ADD,
 })
@@ -111,7 +111,7 @@ export const fetchPosts = () =>
             */
             const realizadosRef = db.collection('realizados')
                 .where('uid', '==', uid)
-              //  .limit(1)
+            //  .limit(1)
 
 
             const realizados = {} // Panoramas   realizados 
@@ -147,12 +147,12 @@ export const fetchPosts = () =>
                     // posts[x.id] = x.data()
 
                     // tslint:disable-next-line: no-console
-                 //   console.log('r=>'+r +'   x.id=>'+x.id, x.data());
+                    //   console.log('r=>'+r +'   x.id=>'+x.id, x.data());
 
-                 /* Si la propiedad pid coincide con el id del documento(panorama) significa que está en la lista de realizados */
-                     if (realizados[r].pid=== x.id) {
-                         posts[x.id] = x.data()
-                         return
+                    /* Si la propiedad pid coincide con el id del documento(panorama) significa que está en la lista de realizados */
+                    if (realizados[r].pid === x.id) {
+                        posts[x.id] = x.data()
+                        return
                         // // tslint:disable-next-line: no-console
                         // console.log('r=>'+r +'x.id=>'+x.id, posts[x.id]);
                     }
@@ -189,7 +189,7 @@ export const fetchPosts = () =>
 
                     exigenciaFisica: posts[x].exigencia_fisica,
                     idPanorama: x,
-                    urlFacebbok: posts[x].facebook,
+                    urlFacebook: posts[x].facebook,
                     urlImagen: keyedImages[x][0],
                     urlImagen1: keyedImages[x][1],
                     urlImagen2: keyedImages[x][2],
@@ -271,7 +271,7 @@ export const share = (id: string) =>
                 ...snap.data(), // para pasar imageURL transformamos un objeto que hace destructuring 
                 urlImagen: imageURL,
             }
-        } as IDataPosts)) // esto actualiza el post
+        } as IDataPanorama)) // esto actualiza el post
     }
 
 export const xrealizar = (id: string) =>

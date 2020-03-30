@@ -2,6 +2,9 @@ import { firestore } from 'firebase';
 import { AnyAction, Dispatch } from 'redux';
 import { IServices } from '../service';
 import * as utils from '../utils';
+import { IState } from './index'
+import noImage from '../images/unnamed.jpg';
+
 
 // Definicion de tipos para nuestras acciones
 const START = 'posts/fetch-start'
@@ -10,11 +13,17 @@ const ERROR = 'posts/fetch-error'
 const ADD = 'posts/add' // va a ser de tipo post y accion add
 
 // creamos interfaz de Post (para compartir los post - C93)
-export interface IPost {
+
+export interface ILogin {
+    email: string
+    password: string
+}
+
+export interface IPanorama {
     createdAt: firestore.Timestamp
     calificacion: number
     descripcion: string
-    destacado?: boolean
+    destacado?: string
     exigenciaFisica: number
     nomProveedor?: string
     nombre: string
@@ -24,22 +33,22 @@ export interface IPost {
     urlWeb?: string
     urlMapUbicacion: string
     urlInstagram?: string
-    urlFacebbok: string
+    urlFacebook: string
     urlTripAdvisor?: string
     valor: number
     idPanorama?: string
 }
 
 // creamos una interfaz para indicar que tipo de datos es payload
-export interface IDataPosts {
-    [key: string]: IPost
+export interface IDataPanorama {
+    [key: string]: IPanorama
 }
 
 // Definimos nuestros actions creators
 const fetchStart = () => ({
     type: START,
 })
-const fetchSuccess = (payload: IDataPosts) => ({
+const fetchSuccess = (payload: IDataPanorama) => ({
     payload,
     type: SUCCESS,
 })
@@ -47,7 +56,7 @@ const fetchError = (error: Error) => ({
     error,
     type: ERROR,
 })
-const add = (payload: IDataPosts) => ({
+const add = (payload: IDataPanorama) => ({
     payload,
     type: ADD,
 })
@@ -115,22 +124,31 @@ export const fetchPosts = () =>
             //   console.log("posts", snaps);
             const imgIds = await Promise.all(Object.keys(posts).
                 map(async x => {
-                    const ref = storage.ref(`panoramas/${x}.jpeg`)
-                    const url = await ref.getDownloadURL()
-                    const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
-                    const url1 = await ref1.getDownloadURL()
-                    const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
-                    const url2 = await ref2.getDownloadURL()
-                    return [x, url, `${x}1`, url1, `${x}2`, url2]
+                    try {
+                        const ref = storage.ref(`panoramas/${x}.jpeg`)
+
+                        const url = await ref.getDownloadURL()
+                        const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
+                        const url1 = await ref1.getDownloadURL()
+                        const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
+                        const url2 = await ref2.getDownloadURL()
+                        return [x, url, `${x}1`, url1, `${x}2`, url2]
+
+                    } catch (e) {
+                        // tslint:disable-next-line: no-console
+                        console.log("error", e)
+                        //     Si se produce un error (error 404) es porque la imagen no se encontró en el Storage y por la tanto 
+                        //    ponemos la imagen temporal 'noImage' hasta que se edite el panorama y de le agregue las imágenes
+
+                        return [x, noImage, `${x}1`, noImage, `${x}2`, noImage]
+                    }
+
                 }))
 
             // tslint:disable-next-line: no-console
-
-
             const keyedImages = {}
             // Opción 1: una clave para una arreglo que contiene las tres imagens
             imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
-
             // OPcion 2: una clave para cada imagen
             //  imgIds.forEach(x => {
             //     keyedImages[x[0]] = x[1]
@@ -138,9 +156,7 @@ export const fetchPosts = () =>
             //     keyedImages[x[4]] = x[5]
 
             // })
-
             // tslint:disable-next-line: no-console
-
             // Opción 2: Una clave para cada imagen
             // Object.keys(posts).forEach(x => posts[x] = {
             //     ...posts[x],
@@ -150,22 +166,22 @@ export const fetchPosts = () =>
             // })
 
             // Opción 1: de una clave para cada imagen
-            Object.keys(posts).forEach(x => 
-                    posts[x] = {
-                       ...posts[x],
+            Object.keys(posts).forEach(x =>
+                posts[x] = {
+                    ...posts[x],
 
-                        exigenciaFisica: posts[x].exigencia_fisica,
-                        idPanorama: x,
-                        urlFacebbok: posts[x].facebook,
-                        urlImagen: keyedImages[x][0],
-                        urlImagen1: keyedImages[x][1],
-                        urlImagen2: keyedImages[x][2],
-                        urlInstagram: posts[x].instagram,
-                        urlMapUbicacion: posts[x].url_map_ubicacion,
-                        urlTripAdvisor: posts[x].trip_advisor,
-                        urlWeb: posts[x].web,
-                    }
-              
+                    exigenciaFisica: posts[x].exigenciaFisica,
+                    idPanorama: x,
+                    urlFacebook: posts[x].urlFacebook,
+                    urlImagen: keyedImages[x][0],
+                    urlImagen1: keyedImages[x][1],
+                    urlImagen2: keyedImages[x][2],
+                    urlInstagram: posts[x].urlInstagram,
+                    urlMapUbicacion: posts[x].urlMapUbicacion,
+                    urlTripAdvisor: posts[x].urlTripAdvisor,
+                    urlWeb: posts[x].urlWeb,
+                }
+
 
             )
 
@@ -239,7 +255,7 @@ export const share = (id: string) =>
                 ...snap.data(), // para pasar imageURL transformamos un objeto que hace destructuring 
                 urlImagen: imageURL,
             }
-        } as IDataPosts)) // esto actualiza el post
+        } as IDataPanorama)) // esto actualiza el post
     }
 
 export const xrealizar = (id: string) =>
@@ -253,7 +269,7 @@ export const xrealizar = (id: string) =>
                 authorization: token
             }
         })
-       
+
     }
 export const realizado = (id: string) =>
     async (dispatch: Dispatch, getState: () => any, { auth }: IServices) => {
@@ -292,4 +308,52 @@ export const sharetemp = (id: string) =>
         const text = await result.text()
         // tslint:disable-next-line: no-console
         console.log(text)
+    }
+export const register = ({ nombre, descripcion, urlFacebook, urlMapUbicacion, urlInstagram, urlWeb, urlTripAdvisor, calificacion, valor, exigenciaFisica, destacado }: IPanorama) =>
+    async (dispatch: Dispatch, getstate: () => IState, { auth, db }: IServices) => {
+
+
+        if (auth.currentUser != null) {
+            const id = auth.currentUser.uid
+            const snaps = await db.collection('users')
+                .where('uid', '==', id)
+                .limit(1)
+                .get()
+            const users = {}
+            snaps.forEach(x => users[x.id] = x.data())
+            // Si el usuario verificó su e-mail, pregunto si este cambio se actulizó en firestore
+            if (users[id].role === "admin") {
+                //     alert("HOLA admin")
+                const doc = db.collection('panoramas').doc()
+                doc.set({
+                    calificacion,
+                    createdAt: new Date(),
+                    descripcion,
+                    destacado: destacado ? "SI" : "NO",
+                    exigenciaFisica,
+                    nombre,
+                    role: 'turista',
+                    uid: id,
+                    urlFacebook: urlFacebook ? urlFacebook : "No tiene",
+                    urlInstagram: urlInstagram ? urlInstagram : "No tiene",
+                    urlMapUbicacion: urlMapUbicacion ? urlMapUbicacion : "No tiene",
+                    urlTripAdvisor: urlTripAdvisor ? urlTripAdvisor : "No tiene",
+                    urlWeb: urlWeb ? urlWeb : "No tiene",
+                    valor: valor ? valor : 0,
+
+                }).then(() => {
+                    // tslint:disable-next-line: no-console
+                    console.log("Registro agregado");
+                    alert("Panorama registrado")
+                    location.href = "/app/admin";
+
+                }).catch((error) => {
+                    // tslint:disable-next-line: no-console
+                    console.log("Errorrrrn", error)
+                });
+
+            } else {
+                alert("No eres admin")
+            }
+        }
     }

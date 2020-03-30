@@ -9,11 +9,11 @@ import { Spinner, Container, Alert } from 'react-bootstrap'
 // import { useState } from 'react';
 // import SweetAlert from 'react-bootstrap-sweetalert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMountain, faChartLine } from '@fortawesome/free-solid-svg-icons'
+import { faMountain } from '@fortawesome/free-solid-svg-icons'
 
 
 interface INewsFeedProps {
-   
+
     fetchPosts: () => void
     xrealizar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
     realizado: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
@@ -21,9 +21,9 @@ interface INewsFeedProps {
     sharetemp: (a: string) => void
     fetched: boolean
     loading: boolean
-    data: postsDuck.IDataPosts
-    
-    
+    data: postsDuck.IDataPanorama
+
+
 }
 interface IStatePanorama {
     // alert: any
@@ -33,24 +33,24 @@ interface IStatePanorama {
 
 
 class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
-     
+
     constructor(props: INewsFeedProps) {
         super(props)
         const { fetchPosts, fetched } = props
         if (fetched) {
-            this.state={
+            this.state = {
                 work: false
-              }
+            }
             return
         }
         fetchPosts()
-           //  tslint:disable-next-line: no-console
-         //  console.log("Work de los props:")
-           this.state={
+        //  tslint:disable-next-line: no-console
+        //  console.log("Work de los props:")
+        this.state = {
             work: false
-          }
-              //  tslint:disable-next-line: no-console
-              console.log("Eastado work construcor:" + this.state.work)
+        }
+        //  tslint:disable-next-line: no-console
+        console.log("Eastado work construcor:" + this.state.work)
 
     }
     // public componentDidMount(){
@@ -59,7 +59,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
     //     };
 
 
-   // }
+    // }
 
     // public accionThisGoal(mensaje:string) {
     //     const getAlert = () => (
@@ -86,10 +86,10 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
     //   }
     public render() {
         const { data, loading } = this.props
-         // location.href = "/app/allpanoramas";   
+        // location.href = "/app/allpanoramas";   
 
         //  tslint:disable-next-line: no-console
-        console.log("Eastado work:" +this.state.work)
+        console.log("Eastado work:" + this.state.work)
 
         if (loading) {
             return (
@@ -99,21 +99,21 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
                 </Container>
 
             )
-             
+
 
         }
 
         if (this.state.work) {
             return (
 
-             
-                 <Alert variant="info" className="container">
-                     <Alert.Heading>Agegando a la lista   </Alert.Heading>
-                     <div className="d-flex container justify-content-center">
-                          <Spinner className="m-5 align-middle" animation="border" variant="warning"/> 
-                     </div>
-                 </Alert>
-                
+
+                <Alert variant="info" className="container">
+                    <Alert.Heading>Agegando a la lista   </Alert.Heading>
+                    <div className="d-flex container justify-content-center">
+                        <Spinner className="m-5 align-middle" animation="border" variant="warning" />
+                    </div>
+                </Alert>
+
             )
 
         }
@@ -121,16 +121,14 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
         return (
             <div className="d-flex flex-wrap container justify-content-center">
 
-<Alert variant="info" className="container">
+                <Alert variant="info" className="container">
                     <Alert.Heading>  <FontAwesomeIcon icon={faMountain} /> Estos son todos los panoramas disponibles</Alert.Heading>
                     <p>
                         Tienes {Object.keys(data).length} panoramas disponibles en esta zona
                       </p>
                     <hr />
-                    
-                    <p className="mb-0 font-weight-bold">
-                        <code> <FontAwesomeIcon icon={faChartLine} size="2x" /> Tu nivel es  </code>
-                    </p>
+
+
                 </Alert>
 
                 {Object.keys(data).map(x => {
@@ -144,10 +142,11 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
                             urlMapUbicacion={post.urlMapUbicacion}
                             urlImagen={post.urlImagen}
                             nombre={post.nombre}
+                            nombuton={"Más informácion"}
                             descripcion={post.descripcion}
                             urlImagen1={post.urlImagen1}
                             urlImagen2={post.urlImagen2}
-                            urlFacebook={post.urlFacebbok}
+                            urlFacebook={post.urlFacebook}
                             urlInstagram={post.urlInstagram}
                             urlTripAdvisor={post.urlTripAdvisor}
                             urlWeb={post.urlWeb}
@@ -159,6 +158,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
                             hidenCompartir={false}
                             hiddenRealizado={false}
                             hiddenXRealizar={false}
+
                         />
 
                     </div>
@@ -222,18 +222,18 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
             work: true
         })
         xrealizar(id)
-         //  tslint:disable-next-line: no-console
+        //  tslint:disable-next-line: no-console
         console.log("Agregando a la lista de por realizar ", this.state.work)
         setTimeout(() => {
             // tslint:disable-next-line: no-console
             console.log("Ya se agregó  a la lista por realizar", this.state.work)
             this.setState({
                 work: false
-              })
+            })
 
         }, 2000)
-       
-     //   location.href = "/app/xrealizar";         
+
+        //   location.href = "/app/xrealizar";         
 
     }
     private handleRealizado = (id: string) => () => {
@@ -247,9 +247,9 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
 
             this.setState({
                 work: false
-              })
+            })
 
-           // location.href = "/app/realizados";
+            // location.href = "/app/realizados";
 
         }, 2000)
 
@@ -270,15 +270,15 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
 const mapStateToProps = (state: IState) => {
     const { Posts: { data, fetched, fetching } } = state
     const loading = fetching || !fetched
-    
-    
+
+
     // cuando retornemos el estado vamos a traer solamente loading pero tambien fetched
     // porque lo estamos usando en el constructor. Y data que son los datos de los posts
     return {
         data,
         fetched,
         loading,
-        
+
     }
 }
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => bindActionCreators(postsDuck, dispatch)

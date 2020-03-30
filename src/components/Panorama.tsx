@@ -13,10 +13,11 @@ import * as utils from '../utils';
 export interface IPanoramaProps {
   calificacion: number
   descripcion: string
-  destacado?: boolean
+  destacado?: string
   exigenciaFisica: number
   nomProveedor?: string
   nombre: string
+  nombuton?: string
   urlImagen: string
   urlImagen1: string
   urlImagen2: string
@@ -25,15 +26,15 @@ export interface IPanoramaProps {
   urlInstagram?: string
   urlFacebook?: string
   urlTripAdvisor?: string
-  titulo?:string
+  titulo?: string
   valor: number
-  hiddenXRealizar:boolean
-  hiddenRealizado:boolean
-  hidenCompartir:boolean
+  hiddenXRealizar: boolean
+  hiddenRealizado: boolean
+  hidenCompartir: boolean
   setSharedClicked: () => void
   porRealizar?: () => void
   realizado?: () => void
- 
+
 
 }
 function ModalPanorama(datos: IPanoramaProps) {
@@ -44,8 +45,8 @@ function ModalPanorama(datos: IPanoramaProps) {
   return (
     <>
       <Button variant="outline-primary" onClick={handleShow}>
-        <FontAwesomeIcon icon={faInfoCircle} size="1x" /> Más información
-        </Button>
+        <FontAwesomeIcon icon={faInfoCircle} size="1x" /> {datos.nombuton}
+      </Button>
 
       <Modal
         show={show}
@@ -54,7 +55,7 @@ function ModalPanorama(datos: IPanoramaProps) {
         dialogClassName="modal-90w"
       >
         <Modal.Header closeButton={true}>
-  <Modal.Title>  {datos.nombre}: <mark> {datos.titulo}</mark></Modal.Title>
+          <Modal.Title>  {datos.nombre}: <mark> {datos.titulo}</mark></Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
@@ -115,28 +116,28 @@ function ModalPanorama(datos: IPanoramaProps) {
 
                     <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">{utils.eMensaje(datos.urlFacebook)}</Tooltip>}>
                       <span className="d-inline-block">
-                    <a href={datos.urlFacebook} target="_blank">
-                      <img src={iconFb} width="40" height="40" className="rounded bg-info" />
-                    </a>
-                    </span>
+                        <a href={datos.urlFacebook} target="_blank">
+                          <img src={iconFb} width="40" height="40" className="rounded bg-info" />
+                        </a>
+                      </span>
                     </OverlayTrigger>
 
-                    
+
                     <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">{utils.eMensaje(datos.urlInstagram)}</Tooltip>}>
                       <span className="d-inline-block">
-                    <a href={datos.urlInstagram} target="_blank">
-                      <img src={iconIn} width="40" height="40" className="rounded bg-info" />
-                    </a>
-                    </span>
+                        <a href={datos.urlInstagram} target="_blank">
+                          <img src={iconIn} width="40" height="40" className="rounded bg-info" />
+                        </a>
+                      </span>
                     </OverlayTrigger>
 
-                   
+
                     <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">{utils.eMensaje(datos.urlTripAdvisor)}</Tooltip>}>
                       <span className="d-inline-block">
-                    <a href={datos.urlTripAdvisor} target="_blank">
-                      <img src={iconTA} width="40" height="40" className="rounded bg-info" />
-                    </a>
-                    </span>
+                        <a href={datos.urlTripAdvisor} target="_blank">
+                          <img src={iconTA} width="40" height="40" className="rounded bg-info" />
+                        </a>
+                      </span>
                     </OverlayTrigger>
                   </div>
 
@@ -150,7 +151,7 @@ function ModalPanorama(datos: IPanoramaProps) {
 
           <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Compartir en redes sociales</Tooltip>}>
             <span className="d-inline-block">
-              <div onClick={datos.setSharedClicked}  hidden={datos.hidenCompartir}>
+              <div onClick={datos.setSharedClicked} hidden={datos.hidenCompartir}>
                 <FontAwesomeIcon icon={faShare} size="2x" color="Dodgerblue" />
                 <p className="text-info text-center small">Compartir</p>
               </div>
@@ -159,7 +160,7 @@ function ModalPanorama(datos: IPanoramaProps) {
 
           <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Agrega el panorama a tu lista "Por realizar"</Tooltip>}>
             <span className="d-inline-block">
-              <div  onClick={datos.porRealizar} hidden={datos.hiddenXRealizar} >
+              <div onClick={datos.porRealizar} hidden={datos.hiddenXRealizar} >
                 <FontAwesomeIcon icon={faHiking} size="2x" color="Dodgerblue" />
                 <p className="text-info text-center small">Por realizar</p>
               </div>
@@ -168,7 +169,7 @@ function ModalPanorama(datos: IPanoramaProps) {
 
           <OverlayTrigger overlay={<Tooltip id="tooltip-disabled"> Agrega el panorama a tu lista de "Realizados"</Tooltip>}>
             <span className="d-inline-block">
-              <div onClick={datos.realizado } hidden={datos.hiddenRealizado} >
+              <div onClick={datos.realizado} hidden={datos.hiddenRealizado} >
                 <FontAwesomeIcon icon={faThumbsUp} size="2x" color="Dodgerblue" />
                 <p className="text-info text-center small">Realizado</p>
               </div>
@@ -191,11 +192,12 @@ function ModalPanorama(datos: IPanoramaProps) {
 export default class Panorama extends React.Component<IPanoramaProps> {
   public render() {
     const { descripcion, nombre, urlImagen, urlImagen1, urlImagen2, setSharedClicked, urlMapUbicacion,
-      urlFacebook, urlWeb, urlInstagram, urlTripAdvisor, calificacion, exigenciaFisica, valor , porRealizar, realizado, titulo,
-      hiddenRealizado, hiddenXRealizar, hidenCompartir
+      urlFacebook, urlWeb, urlInstagram, urlTripAdvisor, calificacion, exigenciaFisica, valor, porRealizar, realizado, titulo,
+      hiddenRealizado, hiddenXRealizar, hidenCompartir, nombuton
     } = this.props
+    const descripcionCorta = descripcion.substring(0, 150)
     // tslint:disable-next-line: no-console
-  //   console.log(utils.eFisica(exigenciaFisica) + "=>" + exigenciaFisica)
+    //   console.log(utils.eFisica(exigenciaFisica) + "=>" + exigenciaFisica)
     //   console.log("Url:" + urlWeb)
     return (
       <div>
@@ -204,12 +206,13 @@ export default class Panorama extends React.Component<IPanoramaProps> {
           <Card.Body>
             <Card.Title>{nombre}</Card.Title>
             <Card.Text>
-              {descripcion}
+              {`${descripcionCorta}...`}
             </Card.Text>
             {/* { <Button variant="primary">  <FontAwesomeIcon icon={faInfoCircle} size="1x"/> Más información</Button>} */}
             <ModalPanorama
               setSharedClicked={setSharedClicked}
               nombre={nombre}
+              nombuton={nombuton}
               descripcion={descripcion}
               urlImagen={urlImagen}
               urlImagen1={urlImagen1}
@@ -228,7 +231,8 @@ export default class Panorama extends React.Component<IPanoramaProps> {
               hiddenRealizado={hiddenRealizado}
               hiddenXRealizar={hiddenXRealizar}
               hidenCompartir={hidenCompartir}
-             
+
+
             />
           </Card.Body>
         </Card>

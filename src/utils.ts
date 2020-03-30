@@ -9,64 +9,65 @@ export const download = (url: string) => new Promise((resolve, reject) => {
 })
 
 
-export const calificacion = (c: number)=>{
+export const calificacion = (c: number) => {
 
-    if (c<=2.3) {
+    if (c <= 2.3) {
         return "Regular"
-    }else if (c>2.3 && c<4.6){
+    } else if (c > 2.3 && c < 4.6) {
         return "Bueno"
-    }else if (c>4.6 && c<=7){
+    } else if (c > 4.6 && c <= 7) {
         return "Excelente"
     }
-     else{
+    else {
         return "No determinada"
     }
 
 }
 
-export const eFisica = (c: number)=>{
-
-    if (c<=2.3) {
+export const eFisica = (c: number) => {
+    if (c === 1) {
+        return "Mínima"
+    } else if (c > 1 && c <= 2.3) {
         return "Baja"
-    }else if (c>2.3 && c<4.6){
+    } else if (c > 2.3 && c < 4.6) {
         return "Media"
-    }else if (c>4.6 && c<=7){
+    } else if (c > 4.6 && c <= 7) {
         return "Alta"
     } else {
         return "No determinada"
     }
 
 }
-export const eMensaje = (c:any)=>{
+export const eMensaje = (c: any) => {
 
-    if (c===null) {
+    if (c === null) {
         return "El panorama no tiene esta información"
-    }else if (c===undefined){
+    } else if (c === undefined) {
         return "El panorama no tiene esta información"
     } else {
         return c
     }
-    
+
 
 }
-export const nivelEplorador = (c: number)=>{
+export const nivelEplorador = (c: number) => {
 
-    if (c<=9) {
+    if (c <= 9) {
         return "Principiante"
-    }else if (c>9 && c<=20){
+    } else if (c > 9 && c <= 20) {
         return "Explorador"
-    }else if (c>20 && c<=50){
+    } else if (c > 20 && c <= 50) {
         return "Guia Local"
     } else {
         return "Experto"
     }
 
 }
-export const emailVerificado = (c: boolean)=>{
+export const emailVerificado = (c: boolean) => {
 
-    if (c===false) {
+    if (c === false) {
         return "NO"
-    }else {
+    } else {
         return "SI"
     }
 

@@ -22,7 +22,7 @@ interface IPanoramasRealizados {
     sharetemp: (a: string) => void
     fetched: boolean
     loading: boolean
-    data: postsDuck.IDataPosts
+    data: postsDuck.IDataPanorama
 
 }
 
@@ -83,7 +83,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
                             descripcion={post.descripcion}
                             urlImagen1={post.urlImagen1}
                             urlImagen2={post.urlImagen2}
-                            urlFacebook={post.urlFacebbok}
+                            urlFacebook={post.urlFacebook}
                             urlInstagram={post.urlInstagram}
                             urlTripAdvisor={post.urlTripAdvisor}
                             urlWeb={post.urlWeb}
@@ -93,6 +93,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
                             porRealizar={this.handlePorRealizar(x)}
                             realizado={this.handleRealizado(x)}
                             titulo={"Por realizar"}
+                            nombuton={"Más informácion"}
                             hidenCompartir={false}
                             hiddenRealizado={true}
                             hiddenXRealizar={false}
