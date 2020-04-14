@@ -17,11 +17,16 @@ class RegisterPanorama extends React.Component<IRegisterProps>{
         const { register } = this.props
         return (
             <Container center={true} >
-                <Card style={{ background: 'rgba(214, 213, 213, 0.5)' }}>
+                <Card style={
+                    {
+                        background: 'rgba(214, 213, 213, 0.5)',
+
+                    }
+                }>
                     <Card.Body className="pt-0">
-                        <Card.Title>Registrarse</Card.Title>
+                        <Card.Title>Registro de panoramas</Card.Title>
                         <Card.Text>
-                            Ingresa los datos solicitados para registrarte. Los marcados con (*) son obligatorios.
+                            Ingresa la información solicitada. Los marcados con (*) son obligatorios.
                         </Card.Text>
                         <RegisterForm onSubmit={register} />
                     </Card.Body>

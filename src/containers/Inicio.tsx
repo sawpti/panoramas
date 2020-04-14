@@ -103,9 +103,7 @@ export default class Inicio extends React.Component<any, IState> {
               <Jumbotron>
                 <h2 style={{
                   color: '#5a9216'
-                }} > <FontAwesomeIcon icon={faHiking} size="3x" style={{
-                  color: 'blue'
-                }} />  Regístrate en nuestra App y conoce los panoramas más importantes de Curarrehue y Pucón.¡Anímate, es gratis!</h2>
+                }} > <FontAwesomeIcon icon={faHiking} size="3x" color="green" />  Regístrate en nuestra App y conoce los panoramas de  NATURALEZA Y AVENTURA más importantes de Curarrehue y Pucón.¡Anímate, es gratis!</h2>
                 <></>
                 <h4 style={{
                   color: '#bc5100'
@@ -117,7 +115,7 @@ export default class Inicio extends React.Component<any, IState> {
               </Jumbotron>
 
             </div>
-          {/* {  <div style={{
+            {/* {  <div style={{
               display: 'flex',
               flexDirection: 'column',
             }}>
@@ -135,23 +133,23 @@ export default class Inicio extends React.Component<any, IState> {
             </div>} */}
 
 
-            <div  style={{
+            <div style={{
               display: 'flex',
               flexDirection: 'column',
               marginBottom: '10px',
               marginTop: '5px'
             }}>
-              <Button variant="success" 
-                className="d-block justify-content-between align-items-start" 
+              <Button variant="success"
+                className="d-block justify-content-between align-items-start"
                 size='sm'>
-                <FontAwesomeIcon 
-                icon={faEnvelope} 
-                size="2x" />  <Link  className=" display-5 text-white" to='/register'>Registrarse con correo</Link></Button>
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  size="2x" />  <Link className=" display-5 text-white" to='/register'>Registrarse con correo</Link></Button>
             </div >
             <div className="d-flex justify-content-center">
-            O inicia sesión si ya estás registrado
+              O inicia sesión si ya estás registrado
             </div>
-           
+
             <div >
               <Button variant="info" size="sm" block={true} onClick={this.setInicioClicked} className=" display-5 text-white" >
                 <FontAwesomeIcon icon={faUser} size="2x" /> Iniciar sesión</Button>
@@ -166,8 +164,8 @@ export default class Inicio extends React.Component<any, IState> {
       return (
         <div className="p-4">
           <BarraSuperior setInicioClicked={this.setInicioClicked} setRegistroClicked={this.setRegistroClicked} />
-          <Login setRegistroClicked={this.setRegistroClicked}/>
-       
+          <Login setRegistroClicked={this.setRegistroClicked} />
+
         </div>
       )
     }

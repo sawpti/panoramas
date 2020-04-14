@@ -8,7 +8,7 @@ import Panorama from '../../components/PanoramaEdit'
 import * as postsDuck from '../../ducks/Panoramas'
 import { IState } from '../../ducks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMountain, faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons'
+import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import EditarPanorama from '../../components/EditarPanorama';
 
 interface IAdmin {
@@ -20,6 +20,9 @@ interface IAdmin {
   data: postsDuck.IDataPanorama
 }
 interface IStateAdmin {
+  lat?: number
+  lng?: number
+  direccion?: string
   calificacion?: number
   exigenciaFisica?: number
   idPanorama?: string
@@ -30,6 +33,8 @@ interface IStateAdmin {
   mEditar: boolean
   nombre?: string
   urlImagen?: string
+  urlImagen1?: string
+  urlImagen2?: string
   urlInstagram?: string
   urlFacebook?: string
   urlTripAdvisor?: string
@@ -122,13 +127,15 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
           <div className="d-flex flex-wrap container justify-content-center">
 
             <Alert variant="info" className="container">
-              <Alert.Heading>  <FontAwesomeIcon icon={faMountain} /> Estos son todos los panoramas disponibles</Alert.Heading>
+              <Alert.Heading>  <FontAwesomeIcon icon={faMountain} /> Panoramas </Alert.Heading>
               <p>
+                Para agregar un nuevo panorama usa el botón <FontAwesomeIcon icon={faPlusCircle} /> y para editar usa el botón "Editar panorama"
 
-                Tienes {Object.keys(data).length} panoramas disponibles en esta zona
+               Existen {Object.keys(data).length} panoramas disponibles en esta zona.
                       </p>
               <hr />
-              <div className="container d-flex justify-content-lg-end"> <Button href="/app/admin/register"> Agregar un panorama</Button> </div>
+              <div className="container d-flex justify-content-lg-end">
+                <Button variant="outline-primary" href="/app/admin/register"> <FontAwesomeIcon size="2x" icon={faPlusCircle} /> </Button> </div>
 
             </Alert>
 
@@ -162,7 +169,12 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                           post.exigenciaFisica,
                           post.valor,
                           post.destacado || "NO",
-                          post.urlImagen
+                          post.urlImagen,
+                          post.urlImagen1,
+                          post.urlImagen2,
+                          post.lat,
+                          post.lng,
+                          post.direccion || ""
 
 
                         )
@@ -186,9 +198,19 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
         return (
           <div className="container">
-            <Button variant="outline-primary"
-              onClick={this.volver}
-            > <FontAwesomeIcon icon={faArrowAltCircleLeft} /> Regresar</Button>
+            <a id="arriba" />
+
+            <div className="d-flex justify-content-lg-between">
+              <Button variant="outline-primary"
+                onClick={this.volver}
+              > <FontAwesomeIcon icon={faArrowAltCircleLeft} /> Regresar</Button>
+              <Button variant="outline-primary"
+                onClick={this.actualizar}
+              > <FontAwesomeIcon icon={faRetweet} /> Actualizar</Button>
+
+
+            </div>
+
             <hr />
 
             <EditarPanorama
@@ -196,7 +218,6 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
               nombre={this.state.nombre || ""}
               descripcion={this.state.descripcion || ""}
               urlWeb={this.state.urlWeb}
-              urlMapUbicacion={this.state.urlMapUbicacion}
               urlFacebook={this.state.urlFacebook}
               urlInstagram={this.state.urlInstagram}
               urlTripAdvisor={this.state.urlTripAdvisor}
@@ -205,7 +226,28 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
               valor={this.state.valor}
               destacado={this.state.destacado}
               urlImagen={this.state.urlImagen}
+              urlImagen1={this.state.urlImagen1}
+              urlImagen2={this.state.urlImagen2}
+              lat={this.state.lat || 0}
+              lng={this.state.lng || 0}
+              direccion={this.state.direccion || "No ingresada"}
+
             />
+            <hr />
+            <div className="d-flex justify-content-lg-between">
+              <Button variant="outline-primary"
+                onClick={this.volver}
+              > <FontAwesomeIcon icon={faArrowAltCircleLeft} /> Regresar</Button>
+              <Button variant="outline-primary"
+                onClick={this.actualizar}>
+                <FontAwesomeIcon icon={faRetweet} /> Actualizar</Button>
+
+              <Button variant="outline-primary">
+                <FontAwesomeIcon icon={faArrowAltCircleUp} /><a href="#arriba" title="Ir Arriba"> Ir arriba</a> </Button>
+
+
+
+            </div>
           </div>
         )
       }
@@ -223,23 +265,30 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
   public onEditar = (idP: string, nom: string, des: string, urlMap: string,
     urlW: string, urlF: string, urlI: string, urlT: string, cali: number, eF: number,
-    v: number, d: string, urlIma: string) => () => {
+    v: number, d: string, urlIma: string, urlIma1: string, urlIma2: string, lt: number, ln: number, dic: string) => () => {
 
       this.setState({
         calificacion: cali,
         descripcion: des,
         destacado: d,
+        direccion: dic,
         exigenciaFisica: eF,
         idPanorama: idP,
+        lat: lt,
+        lng: ln,
         mEditar: true,
         nombre: nom,
         urlFacebook: urlF,
         urlImagen: urlIma,
+        urlImagen1: urlIma1,
+        urlImagen2: urlIma2,
         urlInstagram: urlI,
         urlMapUbicacion: urlMap,
         urlTripAdvisor: urlT,
         urlWeb: urlW,
         valor: v
+
+
       })
 
     }
@@ -249,6 +298,11 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
       mEditar: false
     })
     // location.href = "/app/admin" // Se utliza esta opción para actualizar la página
+
+  }
+  public actualizar = () => {
+
+    location.href = "/app/admin" // Se utliza esta opción para actualizar la página
 
   }
 

@@ -11,7 +11,11 @@ const START = 'posts/fetch-start'
 const SUCCESS = 'posts/fetch-success'
 const ERROR = 'posts/fetch-error'
 const ADD = 'posts/add' // va a ser de tipo post y accion add
-
+const SET_PANORAMA_IMAGE = 'panoramas/set-panorama-image'
+export const setPanoramaImage = (payload: string) => ({
+    payload,
+    type: SET_PANORAMA_IMAGE,
+})
 // creamos interfaz de Post (para compartir los post - C93)
 
 export interface ILogin {
@@ -37,6 +41,9 @@ export interface IPanorama {
     urlTripAdvisor?: string
     valor: number
     idPanorama?: string
+    lat: number,
+    lng: number,
+    direccion: string
 }
 
 // creamos una interfaz para indicar que tipo de datos es payload
@@ -71,6 +78,12 @@ const initialState = {
 
 export default function reducer(state = initialState, action: AnyAction) {
     switch (action.type) {
+        case SET_PANORAMA_IMAGE: {
+            return {
+                ...state,
+                panoramaImage: action.payload
+            }
+        }
         case START:
             return {
                 ...state,
@@ -124,14 +137,17 @@ export const fetchPosts = () =>
             //   console.log("posts", snaps);
             const imgIds = await Promise.all(Object.keys(posts).
                 map(async x => {
+                    let url
+                    let url2
+                    let url1
                     try {
                         const ref = storage.ref(`panoramas/${x}.jpeg`)
 
-                        const url = await ref.getDownloadURL()
+                        url = await ref.getDownloadURL()
                         const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
-                        const url1 = await ref1.getDownloadURL()
+                        url1 = await ref1.getDownloadURL()
                         const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
-                        const url2 = await ref2.getDownloadURL()
+                        url2 = await ref2.getDownloadURL()
                         return [x, url, `${x}1`, url1, `${x}2`, url2]
 
                     } catch (e) {
@@ -140,8 +156,14 @@ export const fetchPosts = () =>
                         //     Si se produce un error (error 404) es porque la imagen no se encontró en el Storage y por la tanto 
                         //    ponemos la imagen temporal 'noImage' hasta que se edite el panorama y de le agregue las imágenes
 
-                        return [x, noImage, `${x}1`, noImage, `${x}2`, noImage]
+
+                        return [x, url ? url : noImage, `${x}1`, url1 ? url1 : noImage, `${x}2`, url2 ? url2 : noImage]
                     }
+
+
+
+
+
 
                 }))
 
@@ -168,7 +190,8 @@ export const fetchPosts = () =>
             // Opción 1: de una clave para cada imagen
             Object.keys(posts).forEach(x =>
                 posts[x] = {
-                    ...posts[x],
+                    ...posts[x], // estos son los campos que se llaman igual en la bd como en la interface
+
 
                     exigenciaFisica: posts[x].exigenciaFisica,
                     idPanorama: x,
@@ -177,13 +200,236 @@ export const fetchPosts = () =>
                     urlImagen1: keyedImages[x][1],
                     urlImagen2: keyedImages[x][2],
                     urlInstagram: posts[x].urlInstagram,
-                    urlMapUbicacion: posts[x].urlMapUbicacion,
+                    // urlMapUbicacion: posts[x].urlMapUbicacion,
                     urlTripAdvisor: posts[x].urlTripAdvisor,
                     urlWeb: posts[x].urlWeb,
                 }
 
 
             )
+
+            // tslint:disable-next-line: no-console
+            //   console.log(posts)
+            dispatch(fetchSuccess(posts))
+        } catch (e) {
+            // tslint:disable-next-line: no-console
+            console.log(e)
+            dispatch(fetchError(e))
+
+        }
+    }
+
+
+export const fetchPanoramasRealizados = () =>
+    async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
+
+        dispatch(fetchStart())
+
+        try {
+
+            const uid = auth.currentUser ? auth.currentUser.uid : undefined
+            const snaps = await db.collection('panoramas').get()
+            /* 
+            Del listado de panoramas realizados obtengo todos objetos que contengan el uid del usuario actual
+            */
+            const realizadosRef = db.collection('realizados')
+                .where('uid', '==', uid)
+            //  .limit(1)
+
+
+            const realizados = {} // Panoramas   realizados 
+
+            /**  */
+            await realizadosRef.get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // tslint:disable-next-line: no-console
+                        console.log('Consulta vacía');
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        // tslint:disable-next-line: no-console
+                        realizados[doc.id] = doc.data()
+                        //   console.log(doc.id, '=>', doc.data());
+                    });
+                })
+                .catch(err => {
+                    // tslint:disable-next-line: no-console
+                    console.log('Error getting documents', err);
+                });
+
+
+            const posts = {} // Panoramas 
+            snaps.forEach((x) => {
+
+                Object.keys(realizados).forEach(r => {
+                    /**
+                     * r= id del objeto (documentos) sacado de la consulta
+                     * realizados[r].pid= es la pripiedad pid del objeto (documentos)
+                     */
+                    // posts[x.id] = x.data()
+
+                    // tslint:disable-next-line: no-console
+                    //   console.log('r=>'+r +'   x.id=>'+x.id, x.data());
+
+                    /* Si la propiedad pid coincide con el id del documento(panorama) significa que está en la lista de realizados */
+                    if (realizados[r].pid === x.id) {
+                        posts[x.id] = x.data()
+                        return
+                        // // tslint:disable-next-line: no-console
+                        // console.log('r=>'+r +'x.id=>'+x.id, posts[x.id]);
+                    }
+
+                })
+
+            })
+            // tslint:disable-next-line: no-console
+            console.log('Panoramas realizados', realizados);
+
+            const imgIds = await Promise.all(Object.keys(posts).
+                map(async x => {
+                    const ref = storage.ref(`panoramas/${x}.jpeg`)
+                    const url = await ref.getDownloadURL()
+                    const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
+                    const url1 = await ref1.getDownloadURL()
+                    const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
+                    const url2 = await ref2.getDownloadURL()
+                    return [x, url, `${x}1`, url1, `${x}2`, url2]
+                }))
+
+            // tslint:disable-next-line: no-console
+
+
+            const keyedImages = {}
+            // Opción 1: una clave para una arreglo que contiene las tres imagens
+            imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
+
+            Object.keys(posts).forEach(x => {
+
+                posts[x] = {
+
+                    ...posts[x],
+
+                    exigenciaFisica: posts[x].exigencia_fisica,
+                    idPanorama: x,
+                    urlFacebook: posts[x].urlFacebook,
+                    urlImagen: keyedImages[x][0],
+                    urlImagen1: keyedImages[x][1],
+                    urlImagen2: keyedImages[x][2],
+                    urlInstagram: posts[x].instagram,
+                    // urlMapUbicacion: posts[x].url_map_ubicacion,
+                    urlTripAdvisor: posts[x].trip_advisor,
+                    urlWeb: posts[x].urlWeb,
+                }
+                // tslint:disable-next-line: no-console
+                // console.log("post Realizados", posts[x])
+
+            })
+
+            // tslint:disable-next-line: no-console
+            //   console.log(posts)
+            dispatch(fetchSuccess(posts))
+        } catch (e) {
+            // tslint:disable-next-line: no-console
+            console.log(e)
+            dispatch(fetchError(e))
+
+        }
+    }
+
+export const fetchPanoramasPorRealizar = () =>
+    async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
+
+        dispatch(fetchStart())
+
+        try {
+
+            const uid = auth.currentUser ? auth.currentUser.uid : undefined
+            const snaps = await db.collection('panoramas').get()
+            const xrealizarRef = db.collection('xrealizar')
+                .where('uid', '==', uid)
+            const realizados = {} // Panoramas   realizados 
+            let vacio = false
+
+            await xrealizarRef.get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // tslint:disable-next-line: no-console
+                        console.log('Consulta vacía');
+                        vacio = true
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        // tslint:disable-next-line: no-console
+                        realizados[doc.id] = doc.data()
+                        //   console.log(doc.id, '=>', doc.data());
+                    });
+                })
+                .catch(err => {
+                    // tslint:disable-next-line: no-console
+                    console.log('Error getting documents', err);
+                });
+
+
+            const posts = {} // Panoramas 
+            snaps.forEach((x) => {
+
+                Object.keys(realizados).forEach(r => {
+                    if (realizados[r].pid === x.id) {
+                        posts[x.id] = x.data()
+                        return
+
+                    }
+
+                })
+
+            })
+
+            {
+                // tslint:disable-next-line: no-console
+                console.log('Panoramas por realizar', realizados);
+
+            }
+
+
+            const imgIds = await Promise.all(Object.keys(posts).
+                map(async x => {
+                    const ref = storage.ref(`panoramas/${x}.jpeg`)
+                    const url = await ref.getDownloadURL()
+                    const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
+                    const url1 = await ref1.getDownloadURL()
+                    const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
+                    const url2 = await ref2.getDownloadURL()
+                    return [x, url, `${x}1`, url1, `${x}2`, url2]
+                }))
+
+            // tslint:disable-next-line: no-console
+
+
+            const keyedImages = {}
+            // Opción 1: una clave para una arreglo que contiene las tres imagens
+            imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
+
+            Object.keys(posts).forEach(x => {
+
+                posts[x] = {
+
+                    ...posts[x],
+
+                    exigenciaFisica: posts[x].exigencia_fisica,
+                    idPanorama: x,
+                    urlFacebook: posts[x].urlFacebook,
+                    urlImagen: keyedImages[x][0],
+                    urlImagen1: keyedImages[x][1],
+                    urlImagen2: keyedImages[x][2],
+                    urlInstagram: posts[x].instagram,
+                    // urlMapUbicacion: posts[x].url_map_ubicacion,
+                    urlTripAdvisor: posts[x].trip_advisor,
+                    urlWeb: posts[x].urlWeb,
+                    vacio
+                }
+
+            })
 
             // tslint:disable-next-line: no-console
             //   console.log(posts)
@@ -309,7 +555,7 @@ export const sharetemp = (id: string) =>
         // tslint:disable-next-line: no-console
         console.log(text)
     }
-export const register = ({ nombre, descripcion, urlFacebook, urlMapUbicacion, urlInstagram, urlWeb, urlTripAdvisor, calificacion, valor, exigenciaFisica, destacado }: IPanorama) =>
+export const register = ({ nombre, descripcion, urlFacebook, urlInstagram, urlWeb, urlTripAdvisor, calificacion, valor, exigenciaFisica, destacado }: IPanorama) =>
     async (dispatch: Dispatch, getstate: () => IState, { auth, db }: IServices) => {
 
 
@@ -332,11 +578,10 @@ export const register = ({ nombre, descripcion, urlFacebook, urlMapUbicacion, ur
                     destacado: destacado ? "SI" : "NO",
                     exigenciaFisica,
                     nombre,
-                    role: 'turista',
                     uid: id,
                     urlFacebook: urlFacebook ? urlFacebook : "No tiene",
                     urlInstagram: urlInstagram ? urlInstagram : "No tiene",
-                    urlMapUbicacion: urlMapUbicacion ? urlMapUbicacion : "No tiene",
+                    // urlMapUbicacion: urlMapUbicacion ? urlMapUbicacion : "No tiene",
                     urlTripAdvisor: urlTripAdvisor ? urlTripAdvisor : "No tiene",
                     urlWeb: urlWeb ? urlWeb : "No tiene",
                     valor: valor ? valor : 0,
@@ -356,4 +601,46 @@ export const register = ({ nombre, descripcion, urlFacebook, urlMapUbicacion, ur
                 alert("No eres admin")
             }
         }
+    }
+export const loadPanoramaInitialData = (idPanorama: string) =>
+    async (dispatch: Dispatch, getState: () => IState, { storage, auth }: IServices) => {
+        // // tslint:disable-next-line: no-console
+        //  console.log('object -------------------')
+        // console.log(`Auth CurrentUser ${auth.currentUser}`)
+        //  console.log('CurrentUser', auth.currentUser)
+        if (!auth.currentUser) {
+            // console.log('CurrentUser', auth.currentUser)
+            return
+        }
+
+        const storageRef = storage.ref()
+        const imageRef = storageRef
+            .child('panoramas')
+            .child(`${idPanorama}.jpeg`)
+
+        const url = await imageRef.getDownloadURL()
+        // tslint:disable-next-line:no-console
+        // console.log(`url loaderUser ${url}`)
+
+        dispatch(setPanoramaImage(url))
+    }
+export const handlePanoramaImageSubmit = (payload: { profileImg: File }, idPanorama: string) =>
+    async (dispatch: Dispatch, getState: () => IState, { auth, storage }: IServices) => {
+        // tslint:disable-next-line:no-console
+        //   console.log("payload",payload) // es me muestra el objeto
+        if (!auth.currentUser) {
+            return
+        }
+        const storageRef = storage.ref()
+        // tslint:disable-next-line:no-console
+        console.log("payload.file", payload.profileImg) // esto
+        const response = await storageRef
+            .child(`panoramas`)
+            .child(`${idPanorama}.jpeg`)
+            .put(payload.profileImg)
+        // console.log("payload.file", payload.profileImg)
+        const url = await response.ref.getDownloadURL()
+        // tslint:disable-next-line:no-console
+        console.log(`url Imagen:  ${url}`)
+        dispatch(setPanoramaImage(url))
     }

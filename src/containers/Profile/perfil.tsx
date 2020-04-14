@@ -24,8 +24,8 @@ interface IUser {
 }
 interface IState1 {
    alert: React.ReactNode
-   dato:string
- }
+   dato: string
+}
 class Perfil extends React.Component<IUser, IState1>{
    constructor(props: IUser) {
       super(props)
@@ -34,10 +34,10 @@ class Perfil extends React.Component<IUser, IState1>{
          return
       }
       fetchUsers()
-     
+
    }
 
-    public render() {
+   public render() {
       const { data, loading, submitProfileImg, handleProfileImageSubmit, profileImage } = this.props
       // tslint:disable-next-line: no-console
       // console.log('Usuario', Object.keys(data[0].nombre));
@@ -48,18 +48,18 @@ class Perfil extends React.Component<IUser, IState1>{
             </Container>) :
             <div>
                <div className="d-flex  justify-content-between container">
-               <h3>Información de tu cuenta</h3>
+                  <h3>Información de tu cuenta</h3>
                   <ProfileImg
                      profileImage={profileImage}
                      onSubmit={handleProfileImageSubmit}
                      submitProfileImg={submitProfileImg} />
-                
+
                </div>
 
                {Object.keys(data).map(x => {
                   const user = data[x]
                   return <div key={x} style={{ margin: '10 auto' }}>
-                     
+
                      <Usuario
                         ciudad={user.ciudad}
                         comuna={user.comuna}
@@ -68,9 +68,9 @@ class Perfil extends React.Component<IUser, IState1>{
                         emailVerified={user.emailVerified}
                         fono={user.fono}
                         nombre={user.nombre}
-                                             
+
                      />
-              
+
                   </div>
                })}
 
@@ -78,44 +78,44 @@ class Perfil extends React.Component<IUser, IState1>{
       )
    }
 
-  // private setDatos = (a:string) => {
-      // const { auth } = services
-      // const u = auth.currentUser
-      // if (a==="fono"){
-      //    alert (a)
-      // }
+   // private setDatos = (a:string) => {
+   // const { auth } = services
+   // const u = auth.currentUser
+   // if (a==="fono"){
+   //    alert (a)
+   // }
 
-      // if (u != null) {
-
-
-      //    if (!u.emailVerified) {
-      //       u.sendEmailVerification().then(() => {
-      //          // Email sent.
-      //          // tslint:disable-next-line: no-console
-      //          console.log("Se envió corectamente el e-mail de verificacion", u)
-      //          alert(` Te hemos enviado un  correo a ${u.email}, pincha la url enviada y luego entra nuevamente a la app o dale refesh a tu nabegador`)
-      //       }).catch((error) => {
-      //          // An error happened.
-      //          // tslint:disable-next-line: no-console
-      //          console.log("Se ha producido un error al enviar el correo de verificación", error)
-      //       });
-
-      //    } else{
-      //       alert("Tu correo ya fue validado")
-      //    }
-      // }
-   
+   // if (u != null) {
 
 
- //  }
+   //    if (!u.emailVerified) {
+   //       u.sendEmailVerification().then(() => {
+   //          // Email sent.
+   //          // tslint:disable-next-line: no-console
+   //          console.log("Se envió corectamente el e-mail de verificacion", u)
+   //          alert(` Te hemos enviado un  correo a ${u.email}, pincha la url enviada y luego entra nuevamente a la app o dale refesh a tu nabegador`)
+   //       }).catch((error) => {
+   //          // An error happened.
+   //          // tslint:disable-next-line: no-console
+   //          console.log("Se ha producido un error al enviar el correo de verificación", error)
+   //       });
 
- 
+   //    } else{
+   //       alert("Tu correo ya fue validado")
+   //    }
+   // }
+
+
+
+   //  }
+
+
 }
 
 
 const mapStateToProps = (state: IState) => {
    const { Users: { data, fetched, fetching, profileImage: tempPI } } = state
-   const profileImage = tempPI || 'https://placekitten.com/100/100'
+   const profileImage = tempPI || 'http://lorempixel.com/200/200/nature'
    const loading = fetching || !fetched
 
    return {

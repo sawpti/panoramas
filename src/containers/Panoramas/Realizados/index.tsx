@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import Panorama from '../../../components/Panorama'
 import { IState } from '../../../ducks'
-import * as postsDuck from '../../../ducks/PanoramasRealizados'
+import * as postsDuck from '../../../ducks/Panoramas'
 import { Spinner, Container, Alert } from 'react-bootstrap'
 // import SweetAlert from 'react-bootstrap-sweetalert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,7 +15,7 @@ import * as utils from '../../../utils';
 
 
 interface IPanoramasRealizados {
-    fetchPosts: () => void
+    fetchPanoramasRealizados: () => void
     xrealizar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
     realizado: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
     share: (a: string) => void // vamos a necesitar la referencia del panorama  al que le damos share
@@ -31,12 +31,12 @@ interface IPanoramasRealizados {
 class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
     constructor(props: IPanoramasRealizados) {
         super(props)
-        const { fetchPosts, fetched } = props
+        const { fetchPanoramasRealizados, fetched } = props
         if (fetched) {
             return
         }
-      
-        fetchPosts()
+
+        fetchPanoramasRealizados()
     }
     public hideAlert = () => {
         //  tslint:disable-next-line: no-console
@@ -51,6 +51,8 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
         //  const {auth, db} = service   
         //   const uid = auth.currentUser ? auth.currentUser.uid : undefined
         // const {loading} = this.state
+        // tslint:disable-next-line: no-console
+        console.log("Data", data)
 
         if (loading) {
 
@@ -77,7 +79,6 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
                     return <div key={x} style={{ margin: '0 auto' }}>
                         <Panorama
                             setSharedClicked={this.handleShare(x)}
-                            urlMapUbicacion={post.urlMapUbicacion}
                             urlImagen={post.urlImagen}
                             nombre={post.nombre}
                             descripcion={post.descripcion}
@@ -92,17 +93,20 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
                             valor={post.valor}
                             porRealizar={this.handlePorRealizar(x)}
                             realizado={this.handleRealizado(x)}
-                            titulo={"Por realizar"}
+                            titulo={"Realizado"}
                             nombuton={"Más informácion"}
                             hidenCompartir={false}
                             hiddenRealizado={true}
                             hiddenXRealizar={false}
+                            lat={post.lat}
+                            lng={post.lng}
+                            direccion={post.direccion}
 
                         />
 
                     </div>
                 })}
-               
+
             </div>)
 
 
@@ -127,11 +131,11 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
     private handlePorRealizar = (id: string) => () => {
         const { xrealizar } = this.props
         xrealizar(id)
-        
+
         setTimeout(() => {
-          
+
             location.href = "/app/xrealizar";
-            },1000)
+        }, 1000)
 
     }
     private handleRealizado = (id: string) => () => {
@@ -139,9 +143,9 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
         realizado(id)
 
         setTimeout(() => {
-            
+
             location.href = "/app/realizados";
-           }, 1000)
+        }, 1000)
 
     }
 

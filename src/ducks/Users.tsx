@@ -138,19 +138,19 @@ export const fetchUsers = () =>
 export const login = ({ email, password }: ILogin) =>
     async (dispatch: Dispatch, getState: () => IState, { auth }: IServices) =>
         await auth.signInWithEmailAndPassword(email, password)
-        .then(()=>{
+            .then(() => {
 
-            alert("Iniciaste sesión correctamente")
+                alert("Iniciaste sesión correctamente")
 
-        })
-        .catch((error)=>{
-            
-            alert(`Se ha producido un error, código:${error.code}, mensaje: ${error.message}`)
+            })
+            .catch((error) => {
+
+                alert(`Se ha producido un error, código:${error.code}, mensaje: ${error.message}`)
 
 
-        }
+            }
 
-        )
+            )
 
 
 
@@ -279,13 +279,13 @@ export const update = ({ email, nombre, ciudad, fono, comuna, direccion }: IUser
 
                 user.updateEmail(email).then(() => {
                     // Update successful.
-                      // tslint:disable-next-line: no-console
-                      console.log("Correo electrónico actualizado");
-                }).catch( (error) =>{
+                    // tslint:disable-next-line: no-console
+                    console.log("Correo electrónico actualizado");
+                }).catch((error) => {
                     // An error happened.
                 });
-              
-            // Como el e-mail fue cambiado, envio al usurio la url de validaqción al nuevo correo
+
+                // Como el e-mail fue cambiado, envio al usurio la url de validaqción al nuevo correo
                 user.sendEmailVerification().then(() => {
                     // Email sent.
                     // tslint:disable-next-line: no-console
@@ -297,7 +297,7 @@ export const update = ({ email, nombre, ciudad, fono, comuna, direccion }: IUser
                 });
 
             }
- 
+
             // Actualizo la base de datos firestone
             const doc = db.collection('users').doc(id)
             // Almaceno el registro en la colección "users"
@@ -308,7 +308,7 @@ export const update = ({ email, nombre, ciudad, fono, comuna, direccion }: IUser
                 email,
                 emailVerified: user ? user.emailVerified : undefined,
                 fono,
-                lastUpdate: new Date(),  
+                lastUpdate: new Date(),
                 nombre,
                 role: 'turista',
                 uid: id

@@ -139,7 +139,6 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
                     return <div key={x} style={{ margin: '0 auto' }}>
                         <Panorama
                             setSharedClicked={this.handleShare(x)}
-                            urlMapUbicacion={post.urlMapUbicacion}
                             urlImagen={post.urlImagen}
                             nombre={post.nombre}
                             nombuton={"Más informácion"}
@@ -158,6 +157,9 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama>{
                             hidenCompartir={false}
                             hiddenRealizado={false}
                             hiddenXRealizar={false}
+                            lat={post.lat}
+                            lng={post.lng}
+                            direccion={post.direccion}
 
                         />
 

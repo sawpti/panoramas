@@ -4,7 +4,8 @@ export { default as Users } from "./Users";
 export { default as Posts } from "./Panoramas";
 export interface IState {
   Posts: {
-    profileImage?: string;
+    // Panoramas
+    //  panoramaImage?: string;
     data: IDataPanorama;
     fetched: boolean;
     fetching: boolean;

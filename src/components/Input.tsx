@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { WrappedFieldProps } from 'redux-form';
-const style = {
-    backgroundColor: 'white',
-    border: '1px solid #ddd',
-    borderRadius: '5px',
-    marginBottom: '10px',
-    padding: '10px 15px',
-    width: 'calc(100% - 30px)',
+// const style = {
+//     backgroundColor: 'white',
+//     border: '1px solid #ddd',
+//     borderRadius: '5px',
+//     marginBottom: '10px',
+//     padding: '10px 15px',
+//     width: 'calc(100% - 30px)',
 
-};
+// };
 const stylesSpan = {
     color: '777',
     fontSize: '10px',
@@ -31,7 +31,7 @@ const Input: React.StatelessComponent<WrappedFieldProps & IIputProps> = (props) 
     return (
         <div>
             <span style={stylesSpan}> {label} </span>
-            <input {...props} {...props.input} style={style} />
+            <input className="form-control" {...props} {...props.input} />
 
         </div>
 

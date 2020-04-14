@@ -4395,3 +4395,356 @@
 [debug] [2020-03-30T14:34:21.515Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
 [debug] [2020-03-30T14:34:22.095Z] firebase-admin has been stubbed.
 [info] i  functions: HTTP trigger initialized at http://localhost:5000/app-panoramas/us-central1/api
+[debug] [2020-03-31T17:02:07.446Z] ----------------------------------------------------------------------
+[debug] [2020-03-31T17:02:07.452Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2020-03-31T17:02:07.452Z] CLI Version:   7.0.2
+[debug] [2020-03-31T17:02:07.453Z] Platform:      linux
+[debug] [2020-03-31T17:02:07.453Z] Node Version:  v8.16.0
+[debug] [2020-03-31T17:02:07.453Z] Time:          Tue Mar 31 2020 14:02:07 GMT-0300 (-03)
+[debug] [2020-03-31T17:02:07.453Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-03-31T17:02:07.508Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-31T17:02:07.508Z] > authorizing via signed-in user
+[debug] [2020-03-31T17:02:07.508Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2020-03-31T17:02:07.511Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-03-31T17:02:07.511Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-03-31T17:02:07.651Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-31T17:02:07.722Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2020-03-31T17:02:08.804Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-31T17:02:08.808Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2020-03-31T17:02:09.901Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2020-03-31T17:02:09.909Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2020-03-31T17:02:10.190Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2020-03-31T17:02:10.519Z] Functions runtime initialized.
+[debug] [2020-03-31T17:02:10.520Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-03-31T17:02:10.976Z] firebase-admin has been stubbed.
+[info] i  functions: HTTP trigger initialized at http://localhost:5000/app-panoramas/us-central1/api
+[debug] [2020-04-01T13:48:27.948Z] ----------------------------------------------------------------------
+[debug] [2020-04-01T13:48:27.950Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2020-04-01T13:48:27.950Z] CLI Version:   7.0.2
+[debug] [2020-04-01T13:48:27.950Z] Platform:      linux
+[debug] [2020-04-01T13:48:27.950Z] Node Version:  v8.16.0
+[debug] [2020-04-01T13:48:27.950Z] Time:          Wed Apr 01 2020 10:48:27 GMT-0300 (-03)
+[debug] [2020-04-01T13:48:27.950Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-04-01T13:48:27.997Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-01T13:48:27.998Z] > authorizing via signed-in user
+[debug] [2020-04-01T13:48:27.998Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2020-04-01T13:48:28.003Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-04-01T13:48:28.004Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-04-01T13:48:28.142Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-01T13:48:28.251Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2020-04-01T13:48:29.386Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-01T13:48:29.390Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2020-04-01T13:48:30.440Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2020-04-01T13:48:30.461Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2020-04-01T13:48:30.744Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2020-04-01T13:48:31.053Z] Functions runtime initialized.
+[debug] [2020-04-01T13:48:31.054Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T13:48:31.504Z] firebase-admin has been stubbed.
+[info] i  functions: HTTP trigger initialized at http://localhost:5000/app-panoramas/us-central1/api
+[debug] [2020-04-01T14:23:14.007Z] Accepted request GET /app-panoramas/us-central1/app/holder.js/171x180 --> app
+[debug] [2020-04-01T14:23:14.263Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T14:23:14.264Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T14:23:14.315Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:23.910Z] Accepted request GET /app-panoramas/us-central1/app/allpanoramas --> app
+[debug] [2020-04-01T20:09:24.229Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:24.230Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:24.282Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:26.545Z] Accepted request GET /app-panoramas/us-central1/app/allpanor --> app
+[debug] [2020-04-01T20:09:26.885Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:26.886Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:26.944Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:27.240Z] Accepted request GET /app-panoramas/us-central1/app/allpa --> app
+[debug] [2020-04-01T20:09:27.495Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:27.496Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:27.550Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:27.915Z] Accepted request GET /app-panoramas/us-central1/app/allp --> app
+[debug] [2020-04-01T20:09:28.281Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:28.282Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:28.334Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:30.362Z] Accepted request GET /app-panoramas/us-central1/app/ad --> app
+[debug] [2020-04-01T20:09:30.615Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:30.616Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:30.670Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:32.184Z] Accepted request GET /app-panoramas/us-central1/app/admin --> app
+[debug] [2020-04-01T20:09:32.531Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:32.533Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:32.592Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:42.976Z] Accepted request GET /app-panoramas/us-central1/app/Admin --> app
+[debug] [2020-04-01T20:09:43.265Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:43.266Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:43.320Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:45.409Z] Accepted request GET /app-panoramas/us-central1/app/ --> app
+[debug] [2020-04-01T20:09:45.747Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:45.748Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:45.803Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:47.833Z] Accepted request GET /app-panoramas/us-central1/app/ad --> app
+[debug] [2020-04-01T20:09:48.221Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:48.222Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:48.275Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:09:50.234Z] Accepted request GET /app-panoramas/us-central1/app/admin --> app
+[debug] [2020-04-01T20:09:50.583Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "app"
+[debug] [2020-04-01T20:09:50.583Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:09:50.636Z] firebase-admin has been stubbed.
+[warn] ⚠  Could not find trigger "app" in your functions directory.
+[warn] ⚠  Your function was killed because it raised an unhandled error.
+[debug] [2020-04-01T20:47:51.832Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/1HTNnBo7XKKE5lZ6Xhfw/realizado --> api
+[debug] [2020-04-01T20:47:52.156Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-01T20:47:52.157Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:47:52.214Z] firebase-admin has been stubbed.
+[debug] [2020-04-01T20:47:52.360Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-01T20:47:52.360Z] 
+[debug] [2020-04-01T20:47:52.360Z] Running api in mode HTTPS
+[debug] [2020-04-01T20:47:52.368Z] {"socketPath":"/tmp/firebase_emulator_invocation_24450.sock"}
+[debug] [2020-04-01T20:47:52.370Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_24450.sock"}
+[debug] [2020-04-01T20:47:52.386Z] Ephemeral server used!
+[debug] [2020-04-01T20:47:52.387Z] Bodyundefined
+[debug] [2020-04-01T20:47:52.399Z] Ephemeral server survived.
+[info] >  Info interesados { uid: 'dQzqluBxp3RWflGvzDk9ktL4H9E3',
+[info] >    createdAt: Timestamp { _seconds: 1585338746, _nanoseconds: 672000000 },
+[info] >    pid: '1HTNnBo7XKKE5lZ6Xhfw',
+[info] >    ciudadOrigen: 'PUCON',
+[info] >    email: 'saltos@pocolpen.cl',
+[info] >    nombreUsuario: 'Hugo Martínez Lagos' }
+[info] i  functions: Finished "api" in ~3s
+[debug] [2020-04-01T20:48:04.013Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/4EplXqXRRg6whm3XrjMl/realizado --> api
+[debug] [2020-04-01T20:48:04.333Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-01T20:48:04.334Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:48:04.390Z] firebase-admin has been stubbed.
+[debug] [2020-04-01T20:48:04.569Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-01T20:48:04.569Z] 
+[debug] [2020-04-01T20:48:04.569Z] Running api in mode HTTPS
+[debug] [2020-04-01T20:48:04.578Z] {"socketPath":"/tmp/firebase_emulator_invocation_24462.sock"}
+[debug] [2020-04-01T20:48:04.578Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_24462.sock"}
+[debug] [2020-04-01T20:48:04.598Z] Ephemeral server used!
+[debug] [2020-04-01T20:48:04.598Z] Bodyundefined
+[debug] [2020-04-01T20:48:04.613Z] Ephemeral server survived.
+[info] >  Info interesados undefined
+[info] i  functions: Finished "api" in ~2s
+[debug] [2020-04-01T20:48:16.058Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/A23wxGXfEGIKW80ErKPz/realizado --> api
+[debug] [2020-04-01T20:48:16.521Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-01T20:48:16.522Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-01T20:48:16.591Z] firebase-admin has been stubbed.
+[debug] [2020-04-01T20:48:16.740Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-01T20:48:16.740Z] 
+[debug] [2020-04-01T20:48:16.740Z] Running api in mode HTTPS
+[debug] [2020-04-01T20:48:16.746Z] {"socketPath":"/tmp/firebase_emulator_invocation_24476.sock"}
+[debug] [2020-04-01T20:48:16.746Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_24476.sock"}
+[debug] [2020-04-01T20:48:16.763Z] Ephemeral server used!
+[debug] [2020-04-01T20:48:16.764Z] Bodyundefined
+[debug] [2020-04-01T20:48:16.776Z] Ephemeral server survived.
+[info] >  Info interesados undefined
+[info] i  functions: Finished "api" in ~1s
+[debug] [2020-04-09T12:40:08.117Z] ----------------------------------------------------------------------
+[debug] [2020-04-09T12:40:08.120Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2020-04-09T12:40:08.120Z] CLI Version:   7.0.2
+[debug] [2020-04-09T12:40:08.120Z] Platform:      linux
+[debug] [2020-04-09T12:40:08.120Z] Node Version:  v8.16.0
+[debug] [2020-04-09T12:40:08.120Z] Time:          Thu Apr 09 2020 08:40:08 GMT-0400 (-04)
+[debug] [2020-04-09T12:40:08.120Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-04-09T12:40:08.169Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-09T12:40:08.169Z] > authorizing via signed-in user
+[debug] [2020-04-09T12:40:08.170Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2020-04-09T12:40:08.174Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-04-09T12:40:08.175Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-04-09T12:40:08.332Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-09T12:40:09.087Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2020-04-09T12:40:10.262Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-09T12:40:10.266Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2020-04-09T12:40:11.311Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2020-04-09T12:40:11.320Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2020-04-09T12:40:11.599Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2020-04-09T12:40:12.098Z] Functions runtime initialized.
+[debug] [2020-04-09T12:40:12.098Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-09T12:40:13.274Z] firebase-admin has been stubbed.
+[info] i  functions: HTTP trigger initialized at http://localhost:5000/app-panoramas/us-central1/api
+[debug] [2020-04-14T16:11:25.630Z] ----------------------------------------------------------------------
+[debug] [2020-04-14T16:11:25.636Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2020-04-14T16:11:25.637Z] CLI Version:   7.0.2
+[debug] [2020-04-14T16:11:25.637Z] Platform:      linux
+[debug] [2020-04-14T16:11:25.637Z] Node Version:  v8.16.0
+[debug] [2020-04-14T16:11:25.637Z] Time:          Tue Apr 14 2020 12:11:25 GMT-0400 (-04)
+[debug] [2020-04-14T16:11:25.637Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-04-14T16:11:25.682Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-14T16:11:25.682Z] > authorizing via signed-in user
+[debug] [2020-04-14T16:11:25.683Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2020-04-14T16:11:25.686Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-04-14T16:11:25.687Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-04-14T16:11:25.844Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-14T16:11:25.946Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2020-04-14T16:11:27.061Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-14T16:11:27.065Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2020-04-14T16:11:28.181Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2020-04-14T16:11:28.190Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2020-04-14T16:11:28.513Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2020-04-14T16:11:28.801Z] Functions runtime initialized.
+[debug] [2020-04-14T16:11:28.801Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-14T16:11:29.243Z] firebase-admin has been stubbed.
+[info] i  functions: HTTP trigger initialized at http://localhost:5000/app-panoramas/us-central1/api
+[debug] [2020-04-14T16:11:37.081Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/4EplXqXRRg6whm3XrjMl/xrealizar --> api
+[debug] [2020-04-14T16:11:37.307Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-14T16:11:37.309Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-14T16:11:37.363Z] firebase-admin has been stubbed.
+[debug] [2020-04-14T16:11:37.504Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-14T16:11:37.505Z] 
+[debug] [2020-04-14T16:11:37.505Z] Running api in mode HTTPS
+[debug] [2020-04-14T16:11:37.511Z] {"socketPath":"/tmp/firebase_emulator_invocation_12164.sock"}
+[debug] [2020-04-14T16:11:37.513Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_12164.sock"}
+[debug] [2020-04-14T16:11:37.528Z] Ephemeral server used!
+[debug] [2020-04-14T16:11:37.529Z] Bodyundefined
+[debug] [2020-04-14T16:11:37.540Z] Ephemeral server survived.
+[info] i  functions: Finished "api" in ~2s
+[debug] [2020-04-14T16:13:35.345Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/gHS4hHjuTBwO2aO5bCcQ/realizado --> api
+[debug] [2020-04-14T16:13:35.719Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-14T16:13:35.720Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-14T16:13:35.772Z] firebase-admin has been stubbed.
+[debug] [2020-04-14T16:13:35.902Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-14T16:13:35.902Z] 
+[debug] [2020-04-14T16:13:35.902Z] Running api in mode HTTPS
+[debug] [2020-04-14T16:13:35.908Z] {"socketPath":"/tmp/firebase_emulator_invocation_12332.sock"}
+[debug] [2020-04-14T16:13:35.909Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_12332.sock"}
+[debug] [2020-04-14T16:13:35.924Z] Ephemeral server used!
+[debug] [2020-04-14T16:13:35.925Z] Bodyundefined
+[debug] [2020-04-14T16:13:35.937Z] Ephemeral server survived.
+[info] >  Info interesados { email: 'info@glampingpod.cl',
+[info] >    nombreUsuario: 'Glamping Pods SPA',
+[info] >    uid: 'B88LOJuGl1WEm91UrKm6rlRTBUI2',
+[info] >    createdAt: Timestamp { _seconds: 1577474657, _nanoseconds: 39000000 },
+[info] >    pid: 'gHS4hHjuTBwO2aO5bCcQ',
+[info] >    ciudadOrigen: 'Pucón' }
+[info] i  functions: Finished "api" in ~2s
+[debug] [2020-04-14T16:13:51.355Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/78E01F7kM8XwRYIuVkcS/realizado --> api
+[debug] [2020-04-14T16:13:51.664Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-14T16:13:51.665Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-14T16:13:51.718Z] firebase-admin has been stubbed.
+[debug] [2020-04-14T16:13:51.853Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-14T16:13:51.853Z] 
+[debug] [2020-04-14T16:13:51.853Z] Running api in mode HTTPS
+[debug] [2020-04-14T16:13:51.859Z] {"socketPath":"/tmp/firebase_emulator_invocation_12345.sock"}
+[debug] [2020-04-14T16:13:51.860Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_12345.sock"}
+[debug] [2020-04-14T16:13:51.876Z] Ephemeral server used!
+[debug] [2020-04-14T16:13:51.877Z] Bodyundefined
+[debug] [2020-04-14T16:13:51.888Z] Ephemeral server survived.
+[info] >  Info interesados { email: 'info@glampingpod.cl',
+[info] >    nombreUsuario: 'Glamping Pods SPA',
+[info] >    uid: 'B88LOJuGl1WEm91UrKm6rlRTBUI2',
+[info] >    createdAt: Timestamp { _seconds: 1576899754, _nanoseconds: 148000000 },
+[info] >    pid: '78E01F7kM8XwRYIuVkcS',
+[info] >    ciudadOrigen: 'Pucón' }
+[info] i  functions: Finished "api" in ~2s
+[debug] [2020-04-14T16:16:34.117Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/LLa5OnpJ8KxvGDPCXbEu/xrealizar --> api
+[debug] [2020-04-14T16:16:34.454Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-14T16:16:34.456Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-14T16:16:34.507Z] firebase-admin has been stubbed.
+[debug] [2020-04-14T16:16:34.639Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-14T16:16:34.639Z] 
+[debug] [2020-04-14T16:16:34.639Z] Running api in mode HTTPS
+[debug] [2020-04-14T16:16:34.645Z] {"socketPath":"/tmp/firebase_emulator_invocation_12508.sock"}
+[debug] [2020-04-14T16:16:34.646Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_12508.sock"}
+[debug] [2020-04-14T16:16:34.663Z] Ephemeral server used!
+[debug] [2020-04-14T16:16:34.663Z] Bodyundefined
+[debug] [2020-04-14T16:16:34.674Z] Ephemeral server survived.
+[info] i  functions: Finished "api" in ~2s
+[debug] [2020-04-14T17:55:14.728Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/WFX8sVTXeny9wvG8GtFJ/xrealizar --> api
+[debug] [2020-04-14T17:55:15.064Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-14T17:55:15.065Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-14T17:55:15.121Z] firebase-admin has been stubbed.
+[debug] [2020-04-14T17:55:15.261Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-14T17:55:15.261Z] 
+[debug] [2020-04-14T17:55:15.261Z] Running api in mode HTTPS
+[debug] [2020-04-14T17:55:15.269Z] {"socketPath":"/tmp/firebase_emulator_invocation_18293.sock"}
+[debug] [2020-04-14T17:55:15.270Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_18293.sock"}
+[debug] [2020-04-14T17:55:15.289Z] Ephemeral server used!
+[debug] [2020-04-14T17:55:15.291Z] Bodyundefined
+[debug] [2020-04-14T17:55:15.303Z] Ephemeral server survived.
+[info] i  functions: Finished "api" in ~1s
+[debug] [2020-04-14T19:09:06.052Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/WFX8sVTXeny9wvG8GtFJ/realizado --> api
+[debug] [2020-04-14T19:09:06.450Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-14T19:09:06.450Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-14T19:09:06.507Z] firebase-admin has been stubbed.
+[debug] [2020-04-14T19:09:06.660Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-14T19:09:06.660Z] 
+[debug] [2020-04-14T19:09:06.660Z] Running api in mode HTTPS
+[debug] [2020-04-14T19:09:06.667Z] {"socketPath":"/tmp/firebase_emulator_invocation_20739.sock"}
+[debug] [2020-04-14T19:09:06.668Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_20739.sock"}
+[debug] [2020-04-14T19:09:06.684Z] Ephemeral server used!
+[debug] [2020-04-14T19:09:06.685Z] Bodyundefined
+[debug] [2020-04-14T19:09:06.697Z] Ephemeral server survived.
+[info] >  Info interesados { email: 'saltos@pocolpen.cl',
+[info] >    nombreUsuario: 'Hugo Martínez Lagos',
+[info] >    uid: 'dQzqluBxp3RWflGvzDk9ktL4H9E3',
+[info] >    createdAt: Timestamp { _seconds: 1586886916, _nanoseconds: 528000000 },
+[info] >    pid: 'WFX8sVTXeny9wvG8GtFJ',
+[info] >    ciudadOrigen: 'PUCON' }
+[info] i  functions: Finished "api" in ~2s

@@ -68,7 +68,6 @@ class App extends React.Component<IAppProps> {
             emailVerified: u.emailVerified
           })
 
-
         }
 
         // tslint:disable-next-line: no-console
