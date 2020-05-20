@@ -6,9 +6,11 @@ import { IState } from './index'
 import noImage from '../images/unnamed.jpg';
 
 
+
 // Definicion de tipos para nuestras acciones
 const START = 'posts/fetch-start'
 const SUCCESS = 'posts/fetch-success'
+const SUCCESS1 = 'posts/fetch-success1'
 const ERROR = 'posts/fetch-error'
 const ADD = 'posts/add' // va a ser de tipo post y accion add
 const SET_PANORAMA_IMAGE = 'panoramas/set-panorama-image'
@@ -47,9 +49,18 @@ export interface IPanorama {
 }
 
 // creamos una interfaz para indicar que tipo de datos es payload
+
 export interface IDataPanorama {
     [key: string]: IPanorama
+
 }
+export interface IDataFirebase {
+    arrayP: IDataPanorama
+    valorInicial: any
+    valorFinal: any
+
+}
+
 
 // Definimos nuestros actions creators
 const fetchStart = () => ({
@@ -59,6 +70,13 @@ const fetchSuccess = (payload: IDataPanorama) => ({
     payload,
     type: SUCCESS,
 })
+const fetchSuccess1 = (payload: IDataFirebase) => ({
+    payload,
+    type: SUCCESS1,
+})
+
+
+
 const fetchError = (error: Error) => ({
     error,
     type: ERROR,
@@ -72,6 +90,7 @@ const add = (payload: IDataPanorama) => ({
 
 const initialState = {
     data: {},
+    data1: {},
     fetched: false,
     fetching: false,
 }
@@ -97,6 +116,13 @@ export default function reducer(state = initialState, action: AnyAction) {
                 fetched: true,
                 fetching: false,
             }
+        case SUCCESS1:
+            return {
+                ...state,
+                data1: action.payload,
+                fetched: true,
+                fetching: false,
+            }
 
         case ERROR:
             return {
@@ -118,7 +144,7 @@ export default function reducer(state = initialState, action: AnyAction) {
     // return state
 }
 
-
+// Todos los panoramas
 export const fetchPosts = () =>
     async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
 
@@ -219,6 +245,324 @@ export const fetchPosts = () =>
         }
     }
 
+// Panoramas por comuna
+export const fetchFindPanoramasByComuna = async (paginaSize: number, panoramaInicial: any, comuna: string) =>
+    async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
+
+        dispatch(fetchStart())
+
+        try {
+            let panoramas = db.collection("panoramas")
+                .where('comuna', '==', comuna)
+                .orderBy("calificacion", "desc")
+                .limit(paginaSize)
+
+            if (panoramaInicial !== null) {
+                panoramas = db.collection("panoramas")
+                    .where('comuna', '==', comuna)
+                    .orderBy("calificacion", "desc")
+                    .startAfter(panoramaInicial)
+                    .limit(paginaSize)
+
+                if (comuna.trim() !== "") {
+
+                    panoramas = db.collection("panoramas")
+                        .orderBy("calificacion", "desc")
+                        .where("keyword", "array-contains", comuna.toLocaleUpperCase())
+                        .startAfter(panoramaInicial)
+                        .limit(paginaSize)
+                }
+            }
+
+            const snapshot = await panoramas.get()
+
+            /* Opción 1 */
+
+            const arrayPanoramas = {}
+            snapshot.forEach((x) => (arrayPanoramas[x.id] = x.data()));
+
+
+            /* Opción 2 */
+            // const arrayPanoramas = snapshot.docs.map(doc => {
+            //     const data = doc.data()
+            //     const idPanorama = doc.id
+            //     return { idPanorama, ...data }
+            // })
+
+
+            const imgIds = await Promise.all(
+                Object.keys(arrayPanoramas).map(async (x) => {
+                    let url;
+                    let url2;
+                    let url1;
+                    try {
+                        const ref = storage.ref(`panoramas/${x}.jpeg`);
+
+                        url = await ref.getDownloadURL();
+                        const ref1 = storage.ref(`panoramas/${x}1.jpeg`);
+                        url1 = await ref1.getDownloadURL();
+                        const ref2 = storage.ref(`panoramas/${x}2.jpeg`);
+                        url2 = await ref2.getDownloadURL();
+                        return [x, url, `${x}1`, url1, `${x}2`, url2];
+                    } catch (e) {
+                        // tslint:disable-next-line: no-console
+                        console.log("error", e);
+                        return [
+                            x,
+                            url ? url : noImage,
+                            `${x}1`,
+                            url1 ? url1 : noImage,
+                            `${x}2`,
+                            url2 ? url2 : noImage,
+                        ];
+                    }
+                })
+            );
+
+            const keyedImages = {};
+            // Opción 1: una clave para una arreglo que contiene las tres imagens
+            imgIds.forEach((x) => (keyedImages[x[0]] = [x[1], x[3], x[5]]));
+            // Opción 1: de una clave para cada imagen
+            Object.keys(arrayPanoramas).forEach(
+                (x) =>
+                    (arrayPanoramas[x] = {
+                        ...arrayPanoramas[x], // estos son los campos que se llaman igual en la bd como en la interface
+                        exigenciaFisica: arrayPanoramas[x].exigenciaFisica,
+                        idPanorama: x,
+                        urlFacebook: arrayPanoramas[x].urlFacebook,
+                        urlImagen: keyedImages[x][0],
+                        urlImagen1: keyedImages[x][1],
+                        urlImagen2: keyedImages[x][2],
+                        urlInstagram: arrayPanoramas[x].urlInstagram,
+                        urlTripAdvisor: arrayPanoramas[x].urlTripAdvisor,
+                        urlWeb: arrayPanoramas[x].urlWeb,
+                    })
+
+            )
+
+            // tslint:disable-next-line: no-console
+            //   console.log("Array panoramas sdasd: ", arrayPanoramas);
+            const inicialValor = snapshot.docs[0]
+            // tslint:disable-next-line: no-console
+            console.log("Valor inicial duck : ", inicialValor);
+            const finalValor = snapshot.docs[snapshot.docs.length - 1]
+            // tslint:disable-next-line: no-console
+            console.log("Panoramas ducks: ", arrayPanoramas)
+
+            const res = {
+                arrayP: arrayPanoramas,
+                valorFinal: finalValor,
+                valorInicial: inicialValor,
+            }
+
+
+            dispatch(fetchSuccess1(res))
+        } catch (e) {
+            // tslint:disable-next-line: no-console
+            console.log(e)
+            dispatch(fetchError(e))
+
+        }
+    }
+// Panoramas por comuna
+export const fetchFindPanoramaComuna = (comuna: string, limitConsulta: number) =>
+    async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
+
+        dispatch(fetchStart())
+        const p = {} // Panoramas 
+        try {
+
+            // https://github.com/firebase/snippets-node/blob/d769695bd1159103e7c877849ccaccab3db37039/firestore/main/index.js#L925-L950
+            const first = db.collection('panoramas')
+                .where('comuna', '==', comuna)
+                .orderBy('calificacion', 'desc')
+                .limit(limitConsulta)
+
+
+            const paginate = first.get()
+                .then(async (sn) => {
+                    // ...
+
+                    // Get the last document
+                    const last = sn.docs[sn.docs.length - 1];
+
+                    // Construct a new query starting at this document.
+                    // Note: this will not have the desired effect if multiple
+                    // cities have the exact same population value.
+                    // cities have the exact same population value.
+                    // let next = db.collection('cities')
+                    //     .orderBy('population')
+                    //     .startAfter(last.data().population)
+                    //     .limit(3);
+
+                    const next = db.collection('panoramas')
+                        .where('comuna', '==', comuna)
+                        .orderBy('calificacion', 'desc')
+                        .startAfter(last.data().calificacion)
+                        .limit(5)
+
+                    // Use the query for pagination
+                    // [START_EXCLUDE]
+
+                    await next.get().then((snapshot) => {
+
+                        snapshot.forEach(x => p[x.id] = x.data())
+
+
+                    });
+                    // tslint:disable-next-line: no-console
+                    console.log('DataNext:', p);
+
+                    // [END_EXCLUDE]
+                });
+            // [END cursor_paginate]
+            // tslint:disable-next-line: no-console
+            console.log('data 2:', p)
+            // tslint:disable-next-line: no-console
+            console.log('Paginate:', paginate)
+
+
+
+            const snaps = await db.collection('panoramas')
+                .where('comuna', '==', comuna)
+                .orderBy('calificacion', 'desc')
+                .limit(limitConsulta)
+                .get()
+
+            const posts = {} // Panoramas 
+            snaps.forEach(x => posts[x.id] = x.data())
+            // tslint:disable-next-line: no-console
+            //   console.log("posts", snaps);
+            const imgIds = await Promise.all(Object.keys(posts).
+                map(async x => {
+                    let url
+                    let url2
+                    let url1
+                    try {
+                        const ref = storage.ref(`panoramas/${x}.jpeg`)
+
+                        url = await ref.getDownloadURL()
+                        const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
+                        url1 = await ref1.getDownloadURL()
+                        const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
+                        url2 = await ref2.getDownloadURL()
+                        return [x, url, `${x}1`, url1, `${x}2`, url2]
+
+                    } catch (e) {
+                        // tslint:disable-next-line: no-console
+                        console.log("error", e)
+                        return [x, url ? url : noImage, `${x}1`, url1 ? url1 : noImage, `${x}2`, url2 ? url2 : noImage]
+                    }
+                }))
+
+            const keyedImages = {}
+            // Opción 1: una clave para una arreglo que contiene las tres imagens
+            imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
+            // Opción 1: de una clave para cada imagen
+            Object.keys(posts).forEach(x =>
+                posts[x] = {
+                    ...posts[x], // estos son los campos que se llaman igual en la bd como en la interface
+                    exigenciaFisica: posts[x].exigenciaFisica,
+                    idPanorama: x,
+                    urlFacebook: posts[x].urlFacebook,
+                    urlImagen: keyedImages[x][0],
+                    urlImagen1: keyedImages[x][1],
+                    urlImagen2: keyedImages[x][2],
+                    urlInstagram: posts[x].urlInstagram,
+                    urlTripAdvisor: posts[x].urlTripAdvisor,
+                    urlWeb: posts[x].urlWeb,
+                }
+
+
+            )
+
+            // tslint:disable-next-line: no-console
+            console.log("Data anted de envir el duck: ", {
+                posts,
+                valorFinal: 1,
+                valorInicial: 0,
+            })
+
+
+            dispatch(fetchSuccess(posts))
+        } catch (e) {
+            // tslint:disable-next-line: no-console
+            console.log(e)
+            dispatch(fetchError(e))
+
+        }
+    }
+
+
+// Panoramas por  usuario
+export const fetchFindPanoramaUsuario = (uid: string) =>
+    async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
+
+        dispatch(fetchStart())
+
+        try {
+
+            const snaps = await db.collection('panoramas')
+                .where('uid', '==', uid)
+                .orderBy('calificacion', 'desc')
+                .get()
+
+            const posts = {} // Panoramas 
+            snaps.forEach(x => posts[x.id] = x.data())
+            // tslint:disable-next-line: no-console
+            //   console.log("posts", snaps);
+            const imgIds = await Promise.all(Object.keys(posts).
+                map(async x => {
+                    let url
+                    let url2
+                    let url1
+                    try {
+                        const ref = storage.ref(`panoramas/${x}.jpeg`)
+
+                        url = await ref.getDownloadURL()
+                        const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
+                        url1 = await ref1.getDownloadURL()
+                        const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
+                        url2 = await ref2.getDownloadURL()
+                        return [x, url, `${x}1`, url1, `${x}2`, url2]
+
+                    } catch (e) {
+                        // tslint:disable-next-line: no-console
+                        console.log("error", e)
+                        return [x, url ? url : noImage, `${x}1`, url1 ? url1 : noImage, `${x}2`, url2 ? url2 : noImage]
+                    }
+                }))
+            const keyedImages = {}
+            // Opción 1: una clave para una arreglo que contiene las tres imagens
+            imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
+            // Opción 1: de una clave para cada imagen
+            Object.keys(posts).forEach(x =>
+                posts[x] = {
+                    ...posts[x], // estos son los campos que se llaman igual en la bd como en la interface
+                    exigenciaFisica: posts[x].exigenciaFisica,
+                    idPanorama: x,
+                    urlFacebook: posts[x].urlFacebook,
+                    urlImagen: keyedImages[x][0],
+                    urlImagen1: keyedImages[x][1],
+                    urlImagen2: keyedImages[x][2],
+                    urlInstagram: posts[x].urlInstagram,
+                    urlTripAdvisor: posts[x].urlTripAdvisor,
+                    urlWeb: posts[x].urlWeb,
+                }
+
+
+            )
+
+            // tslint:disable-next-line: no-console
+            //   console.log(posts)
+            dispatch(fetchSuccess(posts))
+        } catch (e) {
+            // tslint:disable-next-line: no-console
+            console.log(e)
+            dispatch(fetchError(e))
+
+        }
+    }
 
 export const fetchPanoramasRealizados = () =>
     async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
@@ -234,6 +578,7 @@ export const fetchPanoramasRealizados = () =>
             */
             const realizadosRef = db.collection('realizados')
                 .where('uid', '==', uid)
+
             //  .limit(1)
 
 

@@ -48,11 +48,12 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar>{
         } else if (Object.keys(data).length > 0) {
 
             return (<div className="d-flex flex-wrap container justify-content-center">
-                <Alert variant="info" className="container">
+                <Alert variant="light" className="container">
                     <Alert.Heading><FontAwesomeIcon icon={faHiking} /> Tus panoramas Por realizar</Alert.Heading>
-                    <p>
+
+                    <div className="d-flex pl-5">
                         Tienes {Object.keys(data).length} panoramas agregados a tu lista como pendiente de realizar.
-                      </p>
+                      </div>
                     <hr />
                     <p className="mb-0">
                         Esperamos pronto los puedas concretar. Recuerda equiparte adecuadamente y calcular bien los tiempos

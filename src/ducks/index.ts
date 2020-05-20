@@ -1,4 +1,4 @@
-import { IDataPanorama } from "./Panoramas";
+import { IDataPanorama, IDataFirebase } from "./Panoramas";
 import { IDataUsers } from "./Users";
 export { default as Users } from "./Users";
 export { default as Posts } from "./Panoramas";
@@ -7,6 +7,7 @@ export interface IState {
     // Panoramas
     //  panoramaImage?: string;
     data: IDataPanorama;
+    data1: IDataFirebase;
     fetched: boolean;
     fetching: boolean;
     alert: boolean;

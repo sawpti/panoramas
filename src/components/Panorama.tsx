@@ -1,5 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
+import BeautyStars from "beauty-stars";
+
+
+
 import {
   Card,
   Button,
@@ -27,6 +31,8 @@ import iconIn from "../images/iconinstagram.png";
 import iconWeb from "../images/iweb.png";
 import iconTA from "../images/tripAdvisor.png";
 import * as utils from "../utils";
+
+
 
 export interface IPanoramaProps {
   calificacion: number;
@@ -81,7 +87,7 @@ function ModalPanorama(datos: IPanoramaProps) {
         <Modal.Header closeButton={true}>
           <Modal.Title>
             {" "}
-            {datos.nombre}: <mark> {datos.titulo}/{datos.direccion}</mark>
+            {datos.nombre}: <small> {datos.titulo}/{datos.direccion}</small>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -112,10 +118,13 @@ function ModalPanorama(datos: IPanoramaProps) {
                 <div>
                   <h4>Indicadores</h4>
                   <code>
-                    <ProgressBar
-                      variant="warning"
-                      now={datos.calificacion}
-                      max={7}
+
+                    <BeautyStars
+                      value={datos.calificacion}
+                      inactiveColor="#e0e0e0"
+                      size="26px"
+                      editable={false}
+                    //  onChange={value => this.setState({ value })}
                     />
                     <h6>
                       {" "}
@@ -257,11 +266,14 @@ function ModalPanorama(datos: IPanoramaProps) {
               </Tooltip>
             }
           >
+
             <span className="d-inline-block">
+
               <div
                 onClick={datos.setSharedClicked}
                 hidden={datos.hidenCompartir}
               >
+
                 <FontAwesomeIcon icon={faShare} size="2x" color="Dodgerblue" />
                 <p className="text-info text-center small">Compartir</p>
               </div>
@@ -361,6 +373,16 @@ export default class Panorama extends React.Component<IPanoramaProps> {
           <Card.Body>
             <Card.Title>{nombre}</Card.Title>
             <Card.Text>{`${descripcionCorta}...`}</Card.Text>
+            <div className="pb-3">
+              <BeautyStars
+                value={calificacion}
+                size="26px"
+                inactiveColor="#e0e0e0"
+              //  onChange={value => this.setState({ value })}
+              />
+            </div>
+
+
             {/* { <Button variant="primary">  <FontAwesomeIcon icon={faInfoCircle} size="1x"/> Más información</Button>} */}
             <ModalPanorama
               setSharedClicked={setSharedClicked}

@@ -30,8 +30,8 @@ class RegisterFormPanorama extends React.Component<InjectedFormProps<{ email: st
                 <Field label='Url Facebook' placeholder=' url' name='urlFacebook' type='url' maxLength="150" component={Input} />
                 <Field label='Url TripAdvisor' placeholder=' url' name='urlTripAdvisor' type='url' maxLength="150" component={Input} />
                 <Field label='Precio(*)' name='valor' type='number' min="1" max="500000" required={true} component={Input} />
-                <Field label='Calificación' name='calificacion' type='number' min="1" max="7" component={Input} />
-                <Field label='Exigencia física' name='exigenciaFisica' type='number' min="1" max="7" component={Input} />
+                <Field label='Calificación ( 1 al 5)' name='calificacion' type='number' min="1" max="5" component={Input} />
+                <Field label='Exigencia física(1 al 5)' name='exigenciaFisica' type='number' min="1" max="5" component={Input} />
                 <Field label='Destacado' name='destacado' type='checkbox' value="false" component={Input} />
                 <Button block={true}>Enviar</Button>
                 <Center>

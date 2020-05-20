@@ -64,11 +64,11 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
 
 
             return (<div className="d-flex flex-wrap container justify-content-center">
-                <Alert variant="info" className="container">
+                <Alert variant="light" className="container">
                     <Alert.Heading>  <FontAwesomeIcon icon={faThumbsUp} /> Tus panoramas realizados</Alert.Heading>
-                    <p>
+                    <div className="d-flex pl-5">
                         Tienes {Object.keys(data).length} panoramas en esta lista
-                      </p>
+                      </div>
                     <hr />
                     <p className="mb-0 font-weight-bold">
                         <code> <FontAwesomeIcon icon={faChartLine} size="2x" /> Tu nivel es  {utils.nivelEplorador(Object.keys(data).length)} </code>

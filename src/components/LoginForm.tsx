@@ -10,7 +10,7 @@ class LoginForm extends React.Component<InjectedFormProps<{ email: string }>>{
   public render() {
     const { handleSubmit } = this.props
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="bg-transparent">
         <Field label='Correo' placeholder='Correo' name='email' type='email' component={Input} />
         <Field label='Contraseña' placeholder='Contraseña' name='password' type='password' component={Input} />
         <div className="p-1">

@@ -61,6 +61,7 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
 
     }
   }
+
   public render() {
 
     const { loading, rol } = this.state
@@ -95,10 +96,9 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
                   <Nav.Link href="#acercada"><FontAwesomeIcon icon={faInfoCircle} /> Acerca de..</Nav.Link>
                 </Nav>
                 <Nav>
-
+                  <Nav.Link href="/app/allpanoramas"><FontAwesomeIcon icon={faMountain} size="1x" /> Todos los panoramas </Nav.Link>
                   <Nav.Link href="/app/xrealizar"><FontAwesomeIcon icon={faHiking} size="1x" /> Panoramas por realizar </Nav.Link>
                   <Nav.Link href="/app/realizados"><FontAwesomeIcon icon={faThumbsUp} size="1x" /> Panoramas realizados </Nav.Link>
-                  <Nav.Link href="/app/allpanoramas"><FontAwesomeIcon icon={faMountain} size="1x" /> Todos los panoramas </Nav.Link>
                   <Nav.Link href="/app/perfil"><FontAwesomeIcon icon={faUser} size="1x" /> Perfil </Nav.Link>
                   <Nav.Link href="/app/admin"><FontAwesomeIcon icon={faUserLock} size="1x" /> Admin </Nav.Link>
                   <Nav.Link onClick={this.closeSesion} ><FontAwesomeIcon icon={faSignOutAlt} size="1x" /> Cerrar sesión </Nav.Link>
@@ -131,10 +131,9 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
                 <Nav.Link href="#acercada"><FontAwesomeIcon icon={faInfoCircle} /> Acerca de..</Nav.Link>
               </Nav>
               <Nav>
-
+                <Nav.Link href="/app/allpanoramas"><FontAwesomeIcon icon={faMountain} size="1x" /> Todos los panoramas </Nav.Link>
                 <Nav.Link href="/app/xrealizar"><FontAwesomeIcon icon={faHiking} size="1x" /> Panoramas por realizar </Nav.Link>
                 <Nav.Link href="/app/realizados"><FontAwesomeIcon icon={faThumbsUp} size="1x" /> Panoramas realizados </Nav.Link>
-                <Nav.Link href="/app/allpanoramas"><FontAwesomeIcon icon={faMountain} size="1x" /> Todos los panoramas </Nav.Link>
                 <Nav.Link href="/app/perfil"><FontAwesomeIcon icon={faUser} size="1x" /> Perfil </Nav.Link>
                 <Nav.Link onClick={this.closeSesion} ><FontAwesomeIcon icon={faSignOutAlt} size="1x" /> Cerrar sesión </Nav.Link>
 

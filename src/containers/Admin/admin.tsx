@@ -12,7 +12,7 @@ import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlus
 import EditarPanorama from '../../components/EditarPanorama';
 
 interface IAdmin {
-  fetchPosts: () => void
+  fetchFindPanoramaUsuario: (uid: string) => void
   editar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
   guardar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
   fetched: boolean
@@ -30,6 +30,7 @@ interface IStateAdmin {
   destacado?: string
   loading1: boolean
   rol: string
+  uid: string
   mEditar: boolean
   nombre?: string
   urlImagen?: string
@@ -57,15 +58,17 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
   constructor(props: IAdmin) {
     super(props)
-    const { fetchPosts, fetched } = props
+    const { fetched } = props
     if (fetched) {
       return
     }
-    fetchPosts()
+
+
     this.state = {
       loading1: true,
       mEditar: false,
-      rol: "turista"
+      rol: "turista",
+      uid: ""
 
     };
 
@@ -87,11 +90,13 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
       // Si el usuario verificó su e-mail, pregunto si este cambio se actulizó en firestore
       if (users[u.uid].role === "admin") {
         this.setState({
-          rol: "admin"
+          rol: "admin",
+          uid: u.uid
 
         })
 
       }
+      this.props.fetchFindPanoramaUsuario(this.state.uid)
       this.setState({
         loading1: false
       })
@@ -131,7 +136,7 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
               <p>
                 Para agregar un nuevo panorama usa el botón <FontAwesomeIcon icon={faPlusCircle} /> y para editar usa el botón "Editar panorama"
 
-               Existen {Object.keys(data).length} panoramas disponibles en esta zona.
+               Tienes {Object.keys(data).length} panoramas bajo tu administración.
                       </p>
               <hr />
               <div className="container d-flex justify-content-lg-end">

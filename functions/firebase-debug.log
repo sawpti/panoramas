@@ -4748,3 +4748,127 @@
 [info] >    pid: 'WFX8sVTXeny9wvG8GtFJ',
 [info] >    ciudadOrigen: 'PUCON' }
 [info] i  functions: Finished "api" in ~2s
+[debug] [2020-04-15T19:16:15.641Z] ----------------------------------------------------------------------
+[debug] [2020-04-15T19:16:15.645Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2020-04-15T19:16:15.645Z] CLI Version:   7.0.2
+[debug] [2020-04-15T19:16:15.645Z] Platform:      linux
+[debug] [2020-04-15T19:16:15.645Z] Node Version:  v8.16.0
+[debug] [2020-04-15T19:16:15.645Z] Time:          Wed Apr 15 2020 15:16:15 GMT-0400 (-04)
+[debug] [2020-04-15T19:16:15.646Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-04-15T19:16:15.685Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-15T19:16:15.685Z] > authorizing via signed-in user
+[debug] [2020-04-15T19:16:15.686Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2020-04-15T19:16:15.688Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-04-15T19:16:15.689Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-04-15T19:16:15.823Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-15T19:16:15.987Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2020-04-15T19:16:17.045Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-15T19:16:17.048Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2020-04-15T19:16:18.162Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2020-04-15T19:16:18.176Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2020-04-15T19:16:18.456Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2020-04-15T19:16:18.788Z] Functions runtime initialized.
+[debug] [2020-04-15T19:16:18.789Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-15T19:16:19.276Z] firebase-admin has been stubbed.
+[info] i  functions: HTTP trigger initialized at http://localhost:5000/app-panoramas/us-central1/api
+[debug] [2020-04-15T19:19:29.119Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/4EplXqXRRg6whm3XrjMl/xrealizar --> api
+[debug] [2020-04-15T19:19:29.388Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-15T19:19:29.390Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-15T19:19:29.448Z] firebase-admin has been stubbed.
+[debug] [2020-04-15T19:19:29.592Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-15T19:19:29.592Z] 
+[debug] [2020-04-15T19:19:29.592Z] Running api in mode HTTPS
+[debug] [2020-04-15T19:19:29.599Z] {"socketPath":"/tmp/firebase_emulator_invocation_25399.sock"}
+[debug] [2020-04-15T19:19:29.601Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_25399.sock"}
+[debug] [2020-04-15T19:19:29.616Z] Ephemeral server used!
+[debug] [2020-04-15T19:19:29.617Z] Bodyundefined
+[debug] [2020-04-15T19:19:29.629Z] Ephemeral server survived.
+[info] i  functions: Finished "api" in ~3s
+[debug] [2020-04-23T21:52:28.804Z] ----------------------------------------------------------------------
+[debug] [2020-04-23T21:52:28.807Z] Command:       /usr/local/bin/node /home/hugomartinez/.yarn/bin/firebase serve --only functions
+[debug] [2020-04-23T21:52:28.808Z] CLI Version:   7.0.2
+[debug] [2020-04-23T21:52:28.808Z] Platform:      linux
+[debug] [2020-04-23T21:52:28.808Z] Node Version:  v8.16.0
+[debug] [2020-04-23T21:52:28.808Z] Time:          Thu Apr 23 2020 17:52:28 GMT-0400 (-04)
+[debug] [2020-04-23T21:52:28.808Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2020-04-23T21:52:28.866Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-23T21:52:28.866Z] > authorizing via signed-in user
+[debug] [2020-04-23T21:52:28.867Z] [iam] checking project app-panoramas for permissions ["firebase.projects.get"]
+[debug] [2020-04-23T21:52:28.871Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-04-23T21:52:28.872Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-04-23T21:52:29.019Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-23T21:52:29.085Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas:testIamPermissions  
+
+[debug] [2020-04-23T21:52:30.182Z] <<< HTTP RESPONSE 200
+[debug] [2020-04-23T21:52:30.185Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/app-panoramas  
+ 
+[debug] [2020-04-23T21:52:31.214Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Using node@8 from host.
+[debug] [2020-04-23T21:52:31.224Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/604781351481:getServerAppConfig  
+ 
+[debug] [2020-04-23T21:52:31.530Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: Emulator started at http://localhost:5000
+[info] i  functions: Watching "/home/hugomartinez/Proyectos/AppPanoramas/Dev/panoramas/functions" for Cloud Functions...
+[debug] [2020-04-23T21:52:31.800Z] Functions runtime initialized.
+[debug] [2020-04-23T21:52:31.800Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-23T21:52:32.241Z] firebase-admin has been stubbed.
+[info] i  functions: HTTP trigger initialized at http://localhost:5000/app-panoramas/us-central1/api
+[debug] [2020-04-23T21:53:10.205Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/gHS4hHjuTBwO2aO5bCcQ/xrealizar --> api
+[debug] [2020-04-23T21:53:10.463Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-23T21:53:10.464Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-23T21:53:10.523Z] firebase-admin has been stubbed.
+[debug] [2020-04-23T21:53:10.659Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-23T21:53:10.659Z] 
+[debug] [2020-04-23T21:53:10.659Z] Running api in mode HTTPS
+[debug] [2020-04-23T21:53:10.667Z] {"socketPath":"/tmp/firebase_emulator_invocation_27292.sock"}
+[debug] [2020-04-23T21:53:10.670Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_27292.sock"}
+[debug] [2020-04-23T21:53:10.688Z] Ephemeral server used!
+[debug] [2020-04-23T21:53:10.688Z] Bodyundefined
+[debug] [2020-04-23T21:53:10.700Z] Ephemeral server survived.
+[info] i  functions: Finished "api" in ~3s
+[debug] [2020-04-23T21:53:33.401Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/A23wxGXfEGIKW80ErKPz/xrealizar --> api
+[debug] [2020-04-23T21:53:33.761Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-23T21:53:33.761Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-23T21:53:33.815Z] firebase-admin has been stubbed.
+[debug] [2020-04-23T21:53:33.947Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-23T21:53:33.947Z] 
+[debug] [2020-04-23T21:53:33.947Z] Running api in mode HTTPS
+[debug] [2020-04-23T21:53:33.953Z] {"socketPath":"/tmp/firebase_emulator_invocation_27329.sock"}
+[debug] [2020-04-23T21:53:33.954Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_27329.sock"}
+[debug] [2020-04-23T21:53:33.969Z] Ephemeral server used!
+[debug] [2020-04-23T21:53:33.970Z] Bodyundefined
+[debug] [2020-04-23T21:53:33.981Z] Ephemeral server survived.
+[info] i  functions: Finished "api" in ~2s
+[debug] [2020-04-23T21:53:51.937Z] Accepted request GET /app-panoramas/us-central1/api/panoramas/4EplXqXRRg6whm3XrjMl/realizado --> api
+[debug] [2020-04-23T21:53:52.235Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "api"
+[debug] [2020-04-23T21:53:52.236Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2020-04-23T21:53:52.296Z] firebase-admin has been stubbed.
+[debug] [2020-04-23T21:53:52.438Z] Trigger "api" has been found, beginning invocation!
+[debug] [2020-04-23T21:53:52.438Z] 
+[debug] [2020-04-23T21:53:52.438Z] Running api in mode HTTPS
+[debug] [2020-04-23T21:53:52.444Z] {"socketPath":"/tmp/firebase_emulator_invocation_27375.sock"}
+[debug] [2020-04-23T21:53:52.445Z] [functions] Runtime ready! Sending request! {"socketPath":"/tmp/firebase_emulator_invocation_27375.sock"}
+[debug] [2020-04-23T21:53:52.462Z] Ephemeral server used!
+[debug] [2020-04-23T21:53:52.463Z] Bodyundefined
+[debug] [2020-04-23T21:53:52.475Z] Ephemeral server survived.
+[info] >  Info interesados { ciudadOrigen: 'PUCON',
+[info] >    email: 'saltos@pocolpen.cl',
+[info] >    nombreUsuario: 'Hugo Martínez Lagos',
+[info] >    uid: 'dQzqluBxp3RWflGvzDk9ktL4H9E3',
+[info] >    createdAt: Timestamp { _seconds: 1586978372, _nanoseconds: 738000000 },
+[info] >    pid: '4EplXqXRRg6whm3XrjMl' }
+[info] i  functions: Finished "api" in ~2s

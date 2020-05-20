@@ -1,6 +1,7 @@
 import * as React from "react";
 // import React, { useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faEdit,
   faSave,
@@ -357,7 +358,7 @@ export default class EditarPanorama extends React.Component<
 
     // tslint:disable-next-line: no-console
     console.log(
-      `Latitud: ${this.state.lat}/ Longitud: ${this.state.lng} <br/> Dirección: ${this.state.direccion}`
+       `Latitud: ${this.state.lat}/ Longitud: ${this.state.lng} <br/> Dirección: ${this.state.direccion}`
     );
     // // tslint:disable-next-line: no-console
     // console.log(this.props.match.params.idPanorama); // Prints 'abc'
@@ -544,7 +545,7 @@ export default class EditarPanorama extends React.Component<
 
           <hr />
           <p className="mb-2 font-weight-bold">
-            <FontAwesomeIcon icon={faEdit} size="1x" /> Calificación ( 1 a 7)
+            <FontAwesomeIcon icon={faEdit} size="1x" /> Calificación ( 1 a 5)
           </p>
           <div className="d-flex justify-content-between">
             <input
@@ -552,7 +553,7 @@ export default class EditarPanorama extends React.Component<
               onChange={this.updateInputValue}
               type="number"
               min="1"
-              max="7"
+              max="5"
               name="calificacion"
               id="calificacion"
               className="form-control"
@@ -569,7 +570,7 @@ export default class EditarPanorama extends React.Component<
           <hr />
           <p className="mb-2 font-weight-bold">
             <FontAwesomeIcon icon={faEdit} size="1x" /> Exigencia Física ( 1 a
-            7)
+            5)
           </p>
           <div className="d-flex justify-content-between">
             <input
@@ -577,7 +578,7 @@ export default class EditarPanorama extends React.Component<
               onChange={this.updateInputValue}
               type="number"
               min="1"
-              max="7"
+              max="5"
               name="exigenciaFisica"
               id="exigenciaFisica"
               className="form-control"

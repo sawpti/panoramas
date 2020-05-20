@@ -16,6 +16,8 @@ import Admin from './containers/Admin/admin'
 import DetallePanorama from './containers/Admin/DetallePanorama'
 // import { IDetalleProps } from './containers/Admin/DetallePanorama'
 import service from './service'
+import Footer from './components/Footer';
+import './index.css'
 // import BarraSuperiorUsuario from './components/BarraSuperiorUsuario';
 // import Login from './containers/Auth/Login';
 interface IAppProps {
@@ -47,6 +49,7 @@ class App extends React.Component<IAppProps> {
         if (/\app\/./.test(location.pathname)) {
           const { history } = this.props
           history.push('/')
+          // history.push('/app/allpanoramas')
         }
       }
 
@@ -169,16 +172,9 @@ class App extends React.Component<IAppProps> {
 
 
 
-          {/* {  <Route exact={true} path='/' component={Login} />} */}
-          <hr className="my-4 bg-light" />
-          <div className="d-flex footer-copyright bg-light mt-5 justify-content-center container-fluid p-4 " >
+          {/* {  <Route exact={true} path='/' component={Login} />}   <hr className="my-4 bg-light" /> */}
 
-            <p>
-              <small>Esta es una App gratuita de Parque Saltos Pocolpén para que todos los visitantes de Curarrehue disfruten al máximo.</small>
-            </p>
-
-          </div>
-          <hr className="my-4" />
+          <Footer />
 
 
         </div>
