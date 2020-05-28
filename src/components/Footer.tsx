@@ -11,14 +11,11 @@ export default class Footer extends Component {
     public render() {
         return (
             <Col className="d-flex footer-copyright flex-wrap container-fluid bg-secondary  justify-content-center ">
-
-                <p style={{
-                    color: '#e0e0e0'
-                }} className="pt-5" >App Panoramas, una App gratuita para que todos los visitantes de Pucón y Curarrehue disfruten al máximo.</p>
-
-
-
-
+                <Row className="d-flex container  justify-content-center">
+                    <p style={{
+                        color: '#e0e0e0'
+                    }} className="pt-5" >App Panoramas, una App gratuita para que todos los visitantes de Pucón y Curarrehue disfruten al máximo.</p>
+                </Row>
                 <Row className="d-flex container  justify-content-center">
 
                     <b style={{
@@ -27,8 +24,7 @@ export default class Footer extends Component {
 
                 </Row>
 
-
-                <Row className="d-flex container  justify-content-center pb-5">
+                <Row className="d-flex container-fluid  justify-content-center pb-5">
                     <div>
                         <a href="https://www.glampingpod.cl/" target="_blank">
                             <img src={logoGlamping} alt="Glamping Podd Via" width="200px" className="rounded" />

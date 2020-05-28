@@ -600,7 +600,7 @@ export const fetchPanoramasRealizados = () =>
                 })
                 .catch(err => {
                     // tslint:disable-next-line: no-console
-                    console.log('Error getting documents', err);
+                    console.log('Error', err.message);
                 });
 
 
@@ -712,7 +712,7 @@ export const fetchPanoramasPorRealizar = () =>
                 })
                 .catch(err => {
                     // tslint:disable-next-line: no-console
-                    console.log('Error getting documents', err);
+                    console.log('Error', err.message);
                 });
 
 
@@ -821,6 +821,10 @@ export const share = (id: string) =>
             return
         }
         const token = await auth.currentUser.getIdToken()
+        // tslint:disable-next-line:no-console
+        console.log("token", token)
+        // tslint:disable-next-line:no-console
+        console.log("ID", id)
         // tslint:disable-next-line: no-console
         // console.log("Token Autorización: "+ token)
         const result = await fetch(`/api/posts/${id}/share`, {
@@ -854,12 +858,24 @@ export const xrealizar = (id: string) =>
         if (!auth.currentUser) {
             return
         }
-        const token = await auth.currentUser.getIdToken()
-        await fetch(`/api/panoramas/${id}/xrealizar`, {
-            headers: {
-                authorization: token
-            }
-        })
+        try {
+            const token = await auth.currentUser.getIdToken()
+            // tslint:disable-next-line:no-console
+            console.log("token", token)
+            // tslint:disable-next-line:no-console
+            console.log("ID", id)
+            await fetch(`/api/panoramas/${id}/xrealizar`, {
+                headers: {
+                    authorization: token
+                }
+            })
+
+        } catch (error) {
+
+            // tslint:disable-next-line:no-console
+            console.log("Error:", error)
+        }
+
 
     }
 export const realizado = (id: string) =>
@@ -867,12 +883,20 @@ export const realizado = (id: string) =>
         if (!auth.currentUser) {
             return
         }
-        const token = await auth.currentUser.getIdToken()
-        await fetch(`/api/panoramas/${id}/realizado`, {
-            headers: {
-                authorization: token
-            }
-        })
+        try {
+            const token = await auth.currentUser.getIdToken()
+            await fetch(`/api/panoramas/${id}/realizado`, {
+                headers: {
+                    authorization: token
+                }
+            })
+
+        } catch (error) {
+
+            // tslint:disable-next-line:no-console
+            console.log("Error:", error)
+        }
+
 
     }
 

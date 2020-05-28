@@ -39,27 +39,47 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
 
     if (u != null) {
 
-      const snaps = await db.collection('users')
-        .where('uid', '==', u.uid)
-        .limit(1)
-        .get()
-      const users = {}
-      snaps.forEach(x => users[x.id] = x.data())
-      // Si el usuario verificó su e-mail, pregunto si este cambio se actulizó en firestore
-      if (users[u.uid].role === "admin") {
-        this.setState({
-          rol: "admin"
+      try {
+        const snaps = await db.collection('users')
+          .where('uid', '==', u.uid)
+          .limit(1)
+          .get()
+        const users = {}
+        snaps.forEach(x => users[x.id] = x.data())
+        if (users[u.uid].role === "admin") {
 
-        })
+          // tslint:disable-next-line: no-console
+          console.log("Rol: admin");
+          this.setState({
+            rol: "admin"
+
+          })
+
+        } else {
+          this.setState({
+            rol: "turista"
+          })
+          //   return
+        }
+
+
+      } catch (error) {
+        // tslint:disable-next-line: no-console
+        console.log("Error: ", error.message);
+
 
       }
-      this.setState({
-        loading: false
-      })
 
-
-
+    } else {
+      alert("Debes iniciar sesión")
     }
+
+    this.setState({
+      loading: false,
+
+    })
+
+
   }
 
   public render() {
@@ -69,7 +89,7 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
     if (loading) {
       return (
 
-        <div className="div"> cargando</div>
+        <div className="div"> Cargando</div>
       )
 
     } else {
@@ -109,41 +129,44 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
             </Navbar>
           </div>
         )
+      } else {
+        return (
+
+          <div>
+            <Navbar collapseOnSelect={true} expand="lg" bg="light" variant="light">
+              <Navbar.Brand href="#home">
+                <img
+                  src={logo}
+                  width="70"
+                  height="70"
+                  className="d-inline-block align-top"
+                  alt="Logo Saltos Pocolpén"
+                />
+              </Navbar.Brand>
+              <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
+              <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="mr-auto">
+                  <Nav.Link href="/app/allpanoramas"><FontAwesomeIcon icon={faQuestionCircle} /> Ayuda </Nav.Link>
+                  <Nav.Link href="#acercada"><FontAwesomeIcon icon={faInfoCircle} /> Acerca de..</Nav.Link>
+                </Nav>
+                <Nav>
+                  <Nav.Link href="/app/allpanoramas"><FontAwesomeIcon icon={faMountain} size="1x" /> Todos los panoramas </Nav.Link>
+                  <Nav.Link href="/app/xrealizar"><FontAwesomeIcon icon={faHiking} size="1x" /> Panoramas por realizar </Nav.Link>
+                  <Nav.Link href="/app/realizados"><FontAwesomeIcon icon={faThumbsUp} size="1x" /> Panoramas realizados </Nav.Link>
+                  <Nav.Link href="/app/perfil"><FontAwesomeIcon icon={faUser} size="1x" /> Perfil </Nav.Link>
+                  <Nav.Link onClick={this.closeSesion} ><FontAwesomeIcon icon={faSignOutAlt} size="1x" /> Cerrar sesión </Nav.Link>
+
+
+                </Nav>
+              </Navbar.Collapse>
+            </Navbar>
+          </div>
+
+        )
+
       }
-      return (
 
-        <div>
-          <Navbar collapseOnSelect={true} expand="lg" bg="light" variant="light">
-            <Navbar.Brand href="#home">
-              <img
-                src={logo}
-                width="70"
-                height="70"
-                className="d-inline-block align-top"
-                alt="Logo Saltos Pocolpén"
-              />
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-
-            <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="mr-auto">
-                <Nav.Link href="/app/allpanoramas"><FontAwesomeIcon icon={faQuestionCircle} /> Ayuda </Nav.Link>
-                <Nav.Link href="#acercada"><FontAwesomeIcon icon={faInfoCircle} /> Acerca de..</Nav.Link>
-              </Nav>
-              <Nav>
-                <Nav.Link href="/app/allpanoramas"><FontAwesomeIcon icon={faMountain} size="1x" /> Todos los panoramas </Nav.Link>
-                <Nav.Link href="/app/xrealizar"><FontAwesomeIcon icon={faHiking} size="1x" /> Panoramas por realizar </Nav.Link>
-                <Nav.Link href="/app/realizados"><FontAwesomeIcon icon={faThumbsUp} size="1x" /> Panoramas realizados </Nav.Link>
-                <Nav.Link href="/app/perfil"><FontAwesomeIcon icon={faUser} size="1x" /> Perfil </Nav.Link>
-                <Nav.Link onClick={this.closeSesion} ><FontAwesomeIcon icon={faSignOutAlt} size="1x" /> Cerrar sesión </Nav.Link>
-
-
-              </Nav>
-            </Navbar.Collapse>
-          </Navbar>
-        </div>
-
-      )
     }
 
 

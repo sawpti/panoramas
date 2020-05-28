@@ -384,7 +384,7 @@ export default class Usuario extends React.Component<IUsuarioProps, IState> {
         })
         break;
 
-        break;
+      
       case "ciudad":
 
         this.setState({
@@ -492,7 +492,7 @@ export default class Usuario extends React.Component<IUsuarioProps, IState> {
               this.setState({
                 alert: (
                   <SweetAlert info={true} title="¡Información!" onConfirm={this.hideAlert1}>
-                    Te hemos enviado un  correo a ${u.email}, pincha la url enviada y luego entra nuevamente a la app o dale refesh a tu navegador
+                    Te hemos enviado un  correo a {u.email}, pincha la url enviada y luego entra nuevamente a la app o dale refesh a tu navegador
                   </SweetAlert>
                 )
               });

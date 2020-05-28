@@ -23,6 +23,7 @@ import s8 from '../images/portada/08.jpeg'
 import BarraSuperior from '../components/BarraSuperiorInicio';
 import Login from './Auth/Login';
 import { numeroAleatorioNoRepetido } from '../utils';
+// import services from 'src/service';
 // import Button from '../components/Button';
 // const responseGoogle = (response: any) => {
 //   // tslint:disable-next-line:no-console
@@ -54,6 +55,7 @@ const arrayAlerario = numeroAleatorioNoRepetido(arrayImagensPortada.length, 3)
 interface IState {
   loading: boolean,
   ui: string
+
 }
 
 
@@ -61,8 +63,13 @@ export default class Inicio extends React.Component<any, IState> {
 
   constructor(props: any) {
     super(props);
-    this.state = { loading: false, ui: "Registro" };
+
+    this.state = {
+      loading: false,
+      ui: "Registro",
+    };
   };
+
 
   public render() {
     const { ui } = this.state
@@ -137,14 +144,15 @@ export default class Inicio extends React.Component<any, IState> {
 
               <Card.Body className="bg-light">
                 <Card.Title> <FontAwesomeIcon icon={faHiking} size="4x" color="#689f38" /> Naturaleza y Aventura para toda la familia</Card.Title>
+                <Card.Img variant="top" src={s1} />
                 <Card.Text style={{
                   color: '#34515e'
                 }} >
                   <hr className="my-3" />
-                  <h6 >  Regístrate y conoce los panoramas de  NATURALEZA Y AVENTURA más importantes de Curarrehue y Pucón¡Anímate, es gratis!</h6>
+                  <h6 >  Regístrate y conoce los panoramas de <b>NATURALEZA Y AVENTURA</b>  más importantes de Curarrehue y Pucón <b>¡Anímate, es GRATIS!</b> </h6>
                   <></>
                   <h6> Te entregamos información precisa de cada actividad: Atractivos turísticos, senderos, excursiones, miradores y sitios de interés.</h6>
-                  <h6>Solo publicamos información validada en terreno por nuestros propio personal especializado.</h6>
+                  <h6>Solo publicamos información validada en terreno por nuestros personal especializado.</h6>
                   <br />
                   <br />
                   <Button
@@ -154,7 +162,7 @@ export default class Inicio extends React.Component<any, IState> {
                   ><FontAwesomeIcon icon={faHiking} />  Registrarse</Button>
 
                 </Card.Text>
-                <Card.Img variant="top" src={s1} />
+
               </Card.Body>
             </Card>
 
@@ -163,20 +171,18 @@ export default class Inicio extends React.Component<any, IState> {
 
               <Card.Body className="bg-light">
                 <Card.Title> <FontAwesomeIcon icon={faMountain} size="4x" color="#689f38" /> Montañas, lagos, ríos, cascadas y bosque nativo</Card.Title>
+                <Card.Img variant="top" src={s2} />
                 <Card.Text style={{
                   color: '#34515e'
                 }} >
                   <hr className="my-3" />
-                  <h6> Conoce los mejores panoramas outdoors de cada lugar, solo o junto a tu familia. Existen opciones para todos intereses, arma tu excursión autoguiada con información actualizada.</h6>
+                  <h6> Conoce los mejores panoramas outdoors de cada lugar, solo o junto a tu familia. Existen opciones para todos los intereses, arma tu excursión autoguiada con información actualizada.</h6>
                   <></>
                   <h6> Bosques, lagos, lagunas, ríos, cascadas, miradores, senderos y grandes extensiones bosques esperan ser conocidos y fotografiados.</h6>
                   <h6>Una cosa piden estos paisajes: Cuidarlos y respetar las normas de cada lugar que visites. La naturaleza no debe notar que estuviste ahí.</h6>
                   <br />
 
                 </Card.Text>
-                <hr className="my-3" />
-
-                <Card.Img variant="top" src={s2} />
               </Card.Body>
             </Card>
             <Card style={{ width: '22rem' }}>
@@ -184,6 +190,7 @@ export default class Inicio extends React.Component<any, IState> {
               <Card.Body className="bg-light">
 
                 <Card.Title>   <FontAwesomeIcon icon={faUserFriends} size="4x" color="#689f38" /> Bienvenido a la aventura en la naturaleza</Card.Title>
+                <Card.Img variant="top" src={s5} />
                 <Card.Text style={{
                   color: '#607d8b'
                 }} >
@@ -193,7 +200,7 @@ export default class Inicio extends React.Component<any, IState> {
                   <Login setRegistroClicked={this.onClickRegistro} />
 
                 </Card.Text>
-                <Card.Img variant="top" src={s5} />
+
               </Card.Body>
             </Card>
 
@@ -227,9 +234,6 @@ export default class Inicio extends React.Component<any, IState> {
             </Card>
 
           </div>
-
-
-
 
 
         </div>

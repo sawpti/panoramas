@@ -13,7 +13,7 @@ import AllPanoramas from './containers/Panoramas';
 import PanoramasRealizados from './containers/Panoramas/Realizados';
 import PanoramasXRealizar from './containers/Panoramas/XRealizar';
 import Admin from './containers/Admin/admin'
-import DetallePanorama from './containers/Admin/DetallePanorama'
+// import DetallePanorama from './containers/Admin/DetallePanorama'
 // import { IDetalleProps } from './containers/Admin/DetallePanorama'
 import service from './service'
 import Footer from './components/Footer';
@@ -31,7 +31,7 @@ class App extends React.Component<IAppProps> {
     loading: true
   }
   public componentDidMount() {
-    const { auth, db } = service
+    const { auth } = service
 
     auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -51,86 +51,6 @@ class App extends React.Component<IAppProps> {
           history.push('/')
           // history.push('/app/allpanoramas')
         }
-      }
-
-      const u = auth.currentUser
-
-      if (u != null) {
-
-        const snaps = await db.collection('users')
-          .where('uid', '==', u.uid)
-          .limit(1)
-          .get()
-        const users = {}
-        snaps.forEach(x => users[x.id] = x.data())
-        // Si el usuario verificó su e-mail, pregunto si este cambio se actulizó en firestore
-        if (u.emailVerified === true && users[u.uid].emailVerified === false) {
-          const doc = db.collection('users').doc(u.uid)
-          // Actulizo la propiedad  emailVerified 
-          doc.update({
-            emailVerified: u.emailVerified
-          })
-
-        }
-
-        // tslint:disable-next-line: no-console
-        console.log("e-mail Vericado:", u.emailVerified)
-
-        // db.collection('realizados').where('uid', '==', u.uid)
-        //   .onSnapshot(querySnapshot => {
-        //     querySnapshot.docChanges().forEach(change => {
-        //       if (change.type === 'added') {
-        //         this.setState({
-        //           loading: true,
-        //         })
-        //         // tslint:disable-next-line: no-console
-        //         console.log('New Panorama realizado: ', change.doc.data());
-
-        //         this.setState({
-        //           loading: false,
-        //         })
-        //       }
-        //       if (change.type === 'modified') {
-        //         // tslint:disable-next-line: no-console
-        //         console.log('Modified Panorama realizado: ', change.doc.data());
-        //       }
-        //       if (change.type === 'removed') {
-        //         // tslint:disable-next-line: no-console
-        //         console.log('Removed Panorama realizado: ', change.doc.data());
-        //       }
-        //     });
-        //   });
-
-
-        //   db.collection('xrealizar').where('uid', '==', u.uid)
-        //   .onSnapshot(querySnapshot => {
-        //     querySnapshot.docChanges().forEach(change => {
-        //       if (change.type === 'added') {
-        //         this.setState({
-        //           loading: true,
-        //         })
-        //         // tslint:disable-next-line: no-console
-        //         console.log('New Panorama por realizar: ', change.doc.data());
-
-        //         this.setState({
-        //           loading: false,
-        //         })
-        //       }
-        //       if (change.type === 'modified') {
-        //         // tslint:disable-next-line: no-console
-        //         console.log('Modified Panorama por realizar: ', change.doc.data());
-        //       }
-        //       if (change.type === 'removed') {
-        //         // tslint:disable-next-line: no-console
-        //         console.log('Removed Panorama por realoizar: ', change.doc.data());
-        //       }
-        //     });
-        //   });
-
-
-
-
-
       }
 
       this.setState({
@@ -159,13 +79,13 @@ class App extends React.Component<IAppProps> {
           <Route exact={true} path='/app/perfil' component={Perfil} />
           <Route exact={true} path='/app/admin' component={Admin} />
           <Route exact={true} path='/app/admin/register' component={RegisterPanorama} />
-          <Route
+          {/* {  <Route
 
             path='/app/admin/detalle/:idPanorama/:nombre/:descripcion/:urlMapUbicacion/:urlWeb'
 
             component={DetallePanorama}
 
-          />
+          />} */}
 
 
 

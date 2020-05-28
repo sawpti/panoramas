@@ -129,7 +129,7 @@ export const fetchUsers = () =>
             dispatch(fetchSuccess(users))
         } catch (e) {
             // tslint:disable-next-line: no-console
-            console.log(e)
+            console.log("Error", e)
             dispatch(fetchError(e))
 
         }
@@ -140,11 +140,13 @@ export const login = ({ email, password }: ILogin) =>
         await auth.signInWithEmailAndPassword(email, password)
             .then(() => {
 
-                alert("Iniciaste sesión correctamente")
+                // tslint:disable-next-line: no-console
+                console.log("Inicio sesión ok")
 
             })
             .catch((error) => {
 
+                // tslint:disable-next-line: no-console
                 alert(`Se ha producido un error, código:${error.code}, mensaje: ${error.message}`)
 
 

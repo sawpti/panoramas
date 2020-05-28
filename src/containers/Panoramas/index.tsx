@@ -5,6 +5,9 @@ import { ThunkDispatch } from "redux-thunk";
 import Panorama from "../../components/Panorama";
 import { IState } from "../../ducks";
 import * as postsDuck from "../../ducks/Panoramas";
+import SweetAlert from "react-bootstrap-sweetalert";
+import services from 'src/service';
+
 // import noImage from '../../images/unnamed.jpg';
 
 import {
@@ -28,18 +31,13 @@ import usePlacesAutocomplete, {
 } from "use-places-autocomplete";
 // import Geocode from 'react-geocode'
 import useOnclickOutside from "react-cool-onclickoutside";
-import services from 'src/service';
-
-
-
-
 
 
 interface INewsFeedProps {
     // fetchPosts: () => void
     fetchFindPanoramaComuna: (comuna: string, limite: number) => void
     fetchFindPanoramasByComuna: (paginaSize: number, panoramaInicial: any, comuna: string) => void
-    xrealizar: (a: string) => void; // Referencia del panorama que vamos a a gregar a la lista  "Por realizar"
+    xrealizar: (a: string) => any; // Referencia del panorama que vamos a a gregar a la lista  "Por realizar"
     realizado: (a: string) => void; // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
     share: (a: string) => void; // vamos a necesitar la referencia del panorama  al que le damos share
     sharetemp: (a: string) => void;
@@ -61,6 +59,7 @@ interface IStatePanorama {
     cargando: boolean
     totalPanoramas: number
     totalPaginas: number
+    alert: React.ReactNode
 
 
 }
@@ -76,11 +75,12 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         super(props);
         this.state = {
             activePage: 1,
+            alert: null,
             cargando: true,
             comuna: "Curarrehue",
             listPanoramas: {},
             paginaActual: 0,
-            paginaSize: 3, // panoramas por página
+            paginaSize: 10, // panoramas por página
             paginas: [],
             panoramaInicial: null,
             totalPaginas: 0,
@@ -90,16 +90,43 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
     }
 
+    public onAlert = (irA: string, ruta: string) => {
+        // tslint:disable-next-line: no-console
+        //  console.log(`value ${value} otro: ${value.length}`);
+        this.setState({
+            alert: (
+                <SweetAlert
+                    success={true}
+                    // customIcon={logo}
+                    title="¡Listo!"
+                    showCancel={true}
+                    showCloseButton={true}
+                    confirmBtnText="Sí"
+                    cancelBtnText="No"
+                    onCancel={this.hideAlert}
+                    onConfirm={this.onClickRegistro(ruta)}>
+                    El panorama  ha sido agregado a tu lista de {irA} ¿Deseas revisarla ahora?
+                </SweetAlert>
+            ),
+        });
+    };
+    public hideAlert = () => {
+        this.setState({
+            alert: null,
+        });
+        // location.href = "/app/admin"
+    };
+    public onClickRegistro = (ruta: string) => () => {
+        // location.href = '/register'
+        location.href = `/app/${ruta}`
+
+    }
+
 
     public obtenerData = (paginaSize: number, panoramaInicial: any, comuna: string) => {
         const { db, storage } = services
         let res: IRespuesta
-
-
-
-
         return new Promise(async (resolve, eject) => {
-
             let panoramas = db.collection("panoramas")
                 .where('comuna', '==', comuna)
                 .orderBy("calificacion", "desc")
@@ -383,48 +410,55 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
 
     }
-
-
-
     // Did Mount.
     public async componentDidMount() {
-        const { db } = services
-        const { paginaSize, panoramaInicial, comuna, paginas } = this.state
-        await db.collection("panoramas")
-            .where('comuna', '==', comuna)
-            .get().then(snp => {
-                // tslint:disable-next-line: no-console
-                console.log("Todos los panoramas", snp.docs.length)
-                // tslint:disable-next-line: no-console
-                console.log("Total página", snp.docs.length / paginaSize)
+        const { auth, db } = services
 
-                this.setState(
-                    {
-                        totalPaginas: Math.ceil(snp.docs.length / paginaSize),
-                        totalPanoramas: snp.docs.length
-                    }
-                )
+        const u = auth.currentUser
+        //   const uid= u?u.uid:"usuario no existe"
+
+        if (u != null) {
+            const { paginaSize, panoramaInicial, comuna, paginas } = this.state
+            await db.collection("panoramas")
+                .where('comuna', '==', comuna)
+                .get().then(snp => {
+                    // tslint:disable-next-line: no-console
+                    console.log("Todos los panoramas", snp.docs.length)
+                    // tslint:disable-next-line: no-console
+                    console.log("Total página", snp.docs.length / paginaSize)
+
+                    this.setState(
+                        {
+                            totalPaginas: Math.ceil(snp.docs.length / paginaSize),
+                            totalPanoramas: snp.docs.length
+                        }
+                    )
 
 
+                })
+
+            this.obtenerData(paginaSize, panoramaInicial, comuna).then((res: IRespuesta) => {
+                //  tslint:disable-next-line: no-console
+                console.log("Data Firebase en componentDidMount[res]", res.arrayP);
+
+                const pagina = {
+                    finalValor: res.valorFinal,
+                    inicialValor: res.valorInicial
+                }
+                paginas.push(pagina)
+                this.setState({
+                    cargando: false,
+                    listPanoramas: res.arrayP,
+                    paginas,
+
+                })
             })
-
-        this.obtenerData(paginaSize, panoramaInicial, comuna).then((res: IRespuesta) => {
-            //  tslint:disable-next-line: no-console
-            console.log("Data Firebase en componentDidMount[res]", res.arrayP);
-
-            const pagina = {
-                finalValor: res.valorFinal,
-                inicialValor: res.valorInicial
-            }
-            paginas.push(pagina)
-            this.setState({
-                cargando: false,
-                listPanoramas: res.arrayP,
-                paginas,
-
-            })
-        })
+        }
     }
+
+
+
+
 
     // Did Update.
     public componentDidUpdate(prevProps: INewsFeedProps, prevState: IStatePanorama) {
@@ -659,7 +693,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         if (this.state.work) {
             return (
                 <Alert variant="info" className="container">
-                    <Alert.Heading> ... </Alert.Heading>
+                    <Alert.Heading className="d-flex container justify-content-center" > Procesando... </Alert.Heading>
                     <div className="d-flex container justify-content-center">
                         <Spinner
                             className="m-5 align-middle"
@@ -674,10 +708,14 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         return (
             <div className="d-flex flex-wrap container justify-content-center">
                 <Alert variant="light" className="container">
-                    <Alert.Heading className="justify-content-lg-center">
-                        {" "}
-                        <FontAwesomeIcon icon={faMountain} /> Panoramas de Aventura y
-            Naturaleza{" "}
+                    <Alert.Heading className="justify-content-lg-center" >
+                        <div style={{
+                            color: "#689f38"
+                        }}>
+                            <FontAwesomeIcon icon={faMountain} color="#689f38" /> Panoramas de Aventura y
+            Naturaleza
+                     </div>
+
                     </Alert.Heading>
                     <hr />
                     <div className="justify-content-lg-center pl-5">
@@ -751,6 +789,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                         <Pagination.Next />
                         <Pagination.Last />
                     </Pagination>} */}
+                    {this.state.alert}
                 </div>
             </div>
         );
@@ -765,41 +804,124 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
     // private next = () => {
     //     alert("Hola")
     // }
-    private handlePorRealizar = (id: string) => () => {
-        const { xrealizar } = this.props;
+
+
+    private handlePorRealizar = (panoramaId: string) => async () => {
+        const { auth, db } = services
+        const u = auth.currentUser
         this.setState({
             work: true,
         });
-        xrealizar(id);
-        //  tslint:disable-next-line: no-console
-        console.log("Agregando a la lista de por realizar ", this.state.work);
-        setTimeout(() => {
-            // tslint:disable-next-line: no-console
-            console.log("Ya se agregó  a la lista por realizar", this.state.work);
-            this.setState({
-                work: false,
-            });
-        }, 2000);
+        if (u != null) {
+            try {
+                // Buscamos el post en cuestion
+                const snap = await db.collection('users').doc(u.uid).get()
+                const post = snap.data()
+                if (post != null) {
+                    await db.collection('xrealizar').doc(`${panoramaId}_${u.uid}`).set({
+                        // ...post,
+                        ciudadOrigen: post.ciudad,
+                        createdAt: new Date(),
+                        email: post.email,
+                        nombreUsuario: post.nombre,
+                        pid: panoramaId,
+                        uid: u.uid
+                    })
+                    const sn = await db.collection('realizados').doc(`${panoramaId}_${u.uid}`).get()
+                    const xrealizar = sn.data()
+                    if (xrealizar !== undefined) {
+                        await db.collection('realizados').doc(`${panoramaId}_${u.uid}`).delete()
+                    }
+                }
+            } catch (error) {
+                alert(error.message)
+            }
+
+        }
+        this.setState({
+            work: false,
+        });
+        // `app/xrealizar
+        this.onAlert("Por Realizar", "xrealizar")
+        // const { xrealizar } = this.props;
+        // this.setState({
+        //     work: true,
+        // });
+        // xrealizar(id);
+        // //  tslint:disable-next-line: no-console
+        // console.log("Agregando a la lista de por realizar ", this.state.work);
+        // setTimeout(() => {
+        //     // tslint:disable-next-line: no-console
+        //     console.log("Ya se agregó  a la lista por realizar", this.state.work);
+        //     this.setState({
+        //         work: false,
+        //     });
+        // }, 2000);
 
         //   location.href = "/app/xrealizar";
     };
-    private handleRealizado = (id: string) => () => {
-        const { realizado } = this.props;
+
+    private handleRealizado = (panoramaId: string) => async () => {
+        const { auth, db } = services
+        const u = auth.currentUser
         this.setState({
             work: true,
         });
-        realizado(id);
+        if (u != null) {
+            try {
+                // Buscamos el post en cuestion
+                const snap = await db.collection('users').doc(u.uid).get()
+                const post = snap.data()
+                if (post != null) {
+                    await db.collection('realizados').doc(`${panoramaId}_${u.uid}`).set({
+                        // ...post,
+                        ciudadOrigen: post.ciudad,
+                        createdAt: new Date(),
+                        email: post.email,
+                        nombreUsuario: post.nombre,
+                        pid: panoramaId,
+                        uid: u.uid
+                    })
+                    const sn = await db.collection('xrealizar').doc(`${panoramaId}_${u.uid}`).get()
+                    const xrealizar = sn.data()
+                    if (xrealizar !== undefined) {
+                        await db.collection('xrealizar').doc(`${panoramaId}_${u.uid}`).delete()
+                    }
+                }
+            } catch (error) {
+                alert(error.message)
+            }
 
-        setTimeout(() => {
-            this.setState({
-                work: false,
-            });
+        }
+        this.setState({
+            work: false,
+        });
+        this.onAlert("Realizados", "realizados")
 
-            // location.href = "/app/realizados";
-        }, 2000);
-
-        //   this.accionThisGoal('El panorama fue agregado a tu lista de "Realizados". Y quitado de tu lista "Por realizar"')
     };
+
+
+
+    // private handleRealizado = (id: string) => () => {
+    //     const { realizado } = this.props;
+    //     this.setState({
+    //         work: true,
+    //     });
+    //     realizado(id);
+
+    //     setTimeout(() => {
+    //         this.setState({
+    //             work: false,
+    //         });
+
+    //         // location.href = "/app/realizados";
+    //     }, 2000);
+
+    //     //   this.accionThisGoal('El panorama fue agregado a tu lista de "Realizados". Y quitado de tu lista "Por realizar"')
+    // };
+
+
+
 
     private handleShare = (id: string) => () => {
         // const { share} = this.props

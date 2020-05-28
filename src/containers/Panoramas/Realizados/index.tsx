@@ -11,6 +11,8 @@ import { Spinner, Container, Alert } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faChartLine } from '@fortawesome/free-solid-svg-icons'
 import * as utils from '../../../utils';
+import SweetAlert from "react-bootstrap-sweetalert";
+import services from 'src/service';
 
 
 
@@ -25,27 +27,61 @@ interface IPanoramasRealizados {
     data: postsDuck.IDataPanorama
 
 }
+interface IStateRealizados {
+    alert: React.ReactNode
+    work: boolean
+}
 
 
 
-class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
+
+class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRealizados>{
     constructor(props: IPanoramasRealizados) {
         super(props)
         const { fetchPanoramasRealizados, fetched } = props
+        this.state = {
+            alert: null,
+            work: false
+        }
         if (fetched) {
             return
         }
 
         fetchPanoramasRealizados()
     }
-    public hideAlert = () => {
-        //  tslint:disable-next-line: no-console
-        console.log('Oculatando...');
+
+    public onAlert = (irA: string, ruta: string) => {
+        // tslint:disable-next-line: no-console
+        //  console.log(`value ${value} otro: ${value.length}`);
         this.setState({
-            alert: null
+            alert: (
+                <SweetAlert
+                    success={true}
+                    // customIcon={logo}
+                    title="¡Listo!"
+                    showCancel={true}
+                    showCloseButton={true}
+                    confirmBtnText="Sí"
+                    cancelBtnText="No"
+                    onCancel={this.hideAlert}
+                    onConfirm={this.onClickRegistro(ruta)}>
+                    El panorama  ha sido agregado a tu lista de {irA} ¿Deseas revisarla ahora?
+                </SweetAlert>
+            ),
         });
+    };
+    public hideAlert = () => {
+        this.setState({
+            alert: null,
+        });
+        // location.href = "/app/admin"
+    };
+    public onClickRegistro = (ruta: string) => () => {
+        // location.href = '/register'
+        location.href = `/app/${ruta}`
+
     }
-    // handleLike recibe un id y retorna una funcion. Esto nos permite 
+
     public render() {
         const { data, loading } = this.props
         //  const {auth, db} = service   
@@ -53,6 +89,20 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
         // const {loading} = this.state
         // tslint:disable-next-line: no-console
         console.log("Data", data)
+        if (this.state.work) {
+            return (
+                <Alert variant="info" className="container">
+                    <Alert.Heading className="d-flex container justify-content-center" > Procesando... </Alert.Heading>
+                    <div className="d-flex container justify-content-center">
+                        <Spinner
+                            className="m-5 align-middle"
+                            animation="border"
+                            variant="warning"
+                        />
+                    </div>
+                </Alert>
+            );
+        }
 
         if (loading) {
 
@@ -65,7 +115,13 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
 
             return (<div className="d-flex flex-wrap container justify-content-center">
                 <Alert variant="light" className="container">
-                    <Alert.Heading>  <FontAwesomeIcon icon={faThumbsUp} /> Tus panoramas realizados</Alert.Heading>
+                    <Alert.Heading>
+                        <div style={{
+                            color: "#689f38"
+                        }}>
+                            <FontAwesomeIcon icon={faThumbsUp} /> Tus panoramas realizados
+                        </div>
+                    </Alert.Heading>
                     <div className="d-flex pl-5">
                         Tienes {Object.keys(data).length} panoramas en esta lista
                       </div>
@@ -106,48 +162,122 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados>{
 
                     </div>
                 })}
-
+                {this.state.alert}
             </div>)
-
-
 
         } else {
             return (<Alert variant="info" className="container">
-                <Alert.Heading>¡Hola!, nada por acá</Alert.Heading>
+                <Alert.Heading>¡Hola! Nada por acá</Alert.Heading>
                 <p>
                     No tienes panoramas en tu lista de  "Realizados". Cada vez que concretes un panorama, márcalo como "Realizado" para que aparezca acá.
               </p>
                 <hr />
                 <p className="mb-0">
-                    Que tu espiritu aventurero te lleve a hermosos parajes.
+                    Sigue explorando y conociendo nuevos lugares. Y que la naturaleza no note que estuviste ahí.
             </p>
             </Alert>)
         }
 
-
-
-
     }
-    private handlePorRealizar = (id: string) => () => {
-        const { xrealizar } = this.props
-        xrealizar(id)
 
-        setTimeout(() => {
+    private handlePorRealizar = (panoramaId: string) => async () => {
+        const { auth, db } = services
+        const u = auth.currentUser
+        this.setState({
+            work: true,
+        });
+        if (u != null) {
+            try {
+                // Buscamos el post en cuestion
+                const snap = await db.collection('users').doc(u.uid).get()
+                const post = snap.data()
+                if (post != null) {
+                    await db.collection('xrealizar').doc(`${panoramaId}_${u.uid}`).set({
+                        // ...post,
+                        ciudadOrigen: post.ciudad,
+                        createdAt: new Date(),
+                        email: post.email,
+                        nombreUsuario: post.nombre,
+                        pid: panoramaId,
+                        uid: u.uid
+                    })
+                    const sn = await db.collection('realizados').doc(`${panoramaId}_${u.uid}`).get()
+                    const xrealizar = sn.data()
+                    if (xrealizar !== undefined) {
+                        await db.collection('realizados').doc(`${panoramaId}_${u.uid}`).delete()
+                    }
+                }
+            } catch (error) {
+                alert(error.message)
+            }
 
-            location.href = "/app/xrealizar";
-        }, 1000)
+        }
+        this.setState({
+            work: false,
+        });
+        // `app/xrealizar
+        this.onAlert("Por Realizar", "xrealizar")
 
-    }
-    private handleRealizado = (id: string) => () => {
-        const { realizado } = this.props
-        realizado(id)
+    };
 
-        setTimeout(() => {
+    private handleRealizado = (panoramaId: string) => async () => {
+        const { auth, db } = services
+        const u = auth.currentUser
+        this.setState({
+            work: true,
+        });
+        if (u != null) {
+            try {
+                // Buscamos el post en cuestion
+                const snap = await db.collection('users').doc(u.uid).get()
+                const post = snap.data()
+                if (post != null) {
+                    await db.collection('realizados').doc(`${panoramaId}_${u.uid}`).set({
+                        // ...post,
+                        ciudadOrigen: post.ciudad,
+                        createdAt: new Date(),
+                        email: post.email,
+                        nombreUsuario: post.nombre,
+                        pid: panoramaId,
+                        uid: u.uid
+                    })
+                    const sn = await db.collection('xrealizar').doc(`${panoramaId}_${u.uid}`).get()
+                    const xrealizar = sn.data()
+                    if (xrealizar !== undefined) {
+                        await db.collection('xrealizar').doc(`${panoramaId}_${u.uid}`).delete()
+                    }
+                }
+            } catch (error) {
+                alert(error.message)
+            }
 
-            location.href = "/app/realizados";
-        }, 1000)
+        }
+        this.setState({
+            work: false,
+        });
+        this.onAlert("Realizados", "realizados")
 
-    }
+    };
+    // private handlePorRealizar = (id: string) => () => {
+    //     const { xrealizar } = this.props
+    //     xrealizar(id)
+
+    //     setTimeout(() => {
+
+    //         location.href = "/app/xrealizar";
+    //     }, 1000)
+
+    // }
+    // private handleRealizado = (id: string) => () => {
+    //     const { realizado } = this.props
+    //     realizado(id)
+
+    //     setTimeout(() => {
+
+    //         location.href = "/app/realizados";
+    //     }, 1000)
+
+    // }
 
 
     private handleShare = (id: string) => () => {

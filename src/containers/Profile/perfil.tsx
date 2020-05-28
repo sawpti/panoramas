@@ -8,6 +8,7 @@ import * as usersDuck from '../../ducks/Users'
 import { IState } from '../../ducks'
 import ProfileImg from '../../components/ProfileImg'
 import { Spinner, Container } from 'react-bootstrap'
+import services from 'src/service'
 
 // import services from 'src/service'
 // import services from '../../service'
@@ -23,8 +24,9 @@ interface IUser {
 
 }
 interface IState1 {
-   alert: React.ReactNode
-   dato: string
+   alert?: React.ReactNode
+   dato?: string
+   eVerificado: boolean
 }
 class Perfil extends React.Component<IUser, IState1>{
    constructor(props: IUser) {
@@ -33,9 +35,37 @@ class Perfil extends React.Component<IUser, IState1>{
       if (fetched) {
          return
       }
+      this.state = {
+         eVerificado: false
+      }
+
       fetchUsers()
 
    }
+
+   public async componentDidMount() {
+      const { auth } = services
+      const u = auth.currentUser
+
+      if (u != null) {
+
+         if (u.emailVerified) {
+            this.setState({
+               eVerificado: true
+            })
+         }
+      } else {
+         this.setState({
+            eVerificado: false
+         })
+
+
+      }
+
+
+
+   }
+
 
    public render() {
       const { data, loading, submitProfileImg, handleProfileImageSubmit, profileImage } = this.props
@@ -65,7 +95,7 @@ class Perfil extends React.Component<IUser, IState1>{
                         comuna={user.comuna}
                         direccion={user.direccion ? user.direccion : "No ingresada"}
                         email={user.email}
-                        emailVerified={user.emailVerified}
+                        emailVerified={this.state.eVerificado}
                         fono={user.fono}
                         nombre={user.nombre}
 
