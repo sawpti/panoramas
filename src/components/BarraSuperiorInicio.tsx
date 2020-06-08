@@ -60,14 +60,20 @@ export default class BarraSuperior extends React.Component<IBarraSUperiorInicioP
     return (
       <div>
         <Navbar collapseOnSelect={true} expand="lg" bg="light" variant="light">
-          <Navbar.Brand href="#home">
-            <img
-              src={logo}
-              width="70"
-              height="70"
-              className="d-inline-block align-top"
-              alt="Logo Saltos Pocolpén"
-            />
+          <Navbar.Brand className="align-text-top" href="/">
+            <div >
+              <img
+                src={logo}
+                width="70"
+                height="70"
+                className="d-inline-block align-top"
+                alt="Logo Saltos Pocolpén"
+
+              />
+
+            </div>
+
+
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
@@ -76,8 +82,8 @@ export default class BarraSuperior extends React.Component<IBarraSUperiorInicioP
               <Nav.Link href="#acercada"><FontAwesomeIcon icon={faInfoCircle} /> Acerca de..</Nav.Link>
             </Nav>
             <Nav>
-              <Nav.Link onClick={this.onReceiveInput}><FontAwesomeIcon icon={faMountain} size="1x" /> Todos los panoramas </Nav.Link>
-              <Nav.Link href="/register"><FontAwesomeIcon icon={faHiking} /> Registrarse</Nav.Link>
+              <Nav.Link onClick={this.onReceiveInput}><FontAwesomeIcon icon={faMountain} size="1x" color="#689f38" /> Todos los panoramas </Nav.Link>
+              <Nav.Link href="/register"><FontAwesomeIcon icon={faHiking} color="#689f38" /> Registrarse</Nav.Link>
               <Button variant="outline-success" onClick={setInicioClicked} >
                 <FontAwesomeIcon icon={faUser} />  Iniciar sesión</Button>
             </Nav>

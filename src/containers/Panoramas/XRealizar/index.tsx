@@ -5,12 +5,16 @@ import { ThunkDispatch } from 'redux-thunk';
 import Panorama from '../../../components/Panorama'
 import { IState } from '../../../ducks'
 import * as postsDuck from '../../../ducks/Panoramas'
-import { Spinner, Container, Alert } from 'react-bootstrap'
+import { Spinner, Container, Alert, Button } from 'react-bootstrap'
 // import SweetAlert from 'react-bootstrap-sweetalert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHiking } from '@fortawesome/free-solid-svg-icons'
+import { faHeart, faCheckCircle, faBan } from '@fortawesome/free-solid-svg-icons';
 import SweetAlert from "react-bootstrap-sweetalert";
 import services from 'src/service';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+
 
 interface IPanoramasxRealizar {
     fetchPanoramasPorRealizar: () => void
@@ -24,6 +28,10 @@ interface IPanoramasxRealizar {
 
 }
 interface IStatePorRealizr{
+    fechaInicial:Date
+    idPanorama:string
+    mensajeAccion:string
+    uiobtenerFecha:boolean
     alert: React.ReactNode
     work:boolean
 }
@@ -34,7 +42,11 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
         const { fetchPanoramasPorRealizar, fetched } = props
         this.state={
             alert:null,
-            work:false
+            fechaInicial: new Date(),
+            idPanorama:"",
+            mensajeAccion:"",
+            uiobtenerFecha:false,
+            work:false,
         }
         if (fetched) {
             return
@@ -43,31 +55,65 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
         fetchPanoramasPorRealizar()
     }
 
-    public onAlert = (irA: string, ruta: string) => {
+   /**
+    *  Cambia el estado para poder obter la fecha que el usuario ingresará
+    */
+    public uiObterFecha=(idPanorama:string, mensajeAccion: string)=>()=>{
+        this.setState({
+            idPanorama,
+            mensajeAccion,
+            uiobtenerFecha:true
+
+        })
+    }
+    public cancelAdd=()=>{
+        this.setState({
+            uiobtenerFecha: false
+        });
+
+    }
+    public handleChangeDate =( date:any)=>{
+        this.setState({
+            fechaInicial: date
+        });
+    };
+    
+  
+/**
+ * @param
+ * @param ruta:Lugar a dónde direcionará luego de realizada la acción
+ * @param lista: Lista donde fue agregado el panorama
+ */
+    public onAlertOk = (lista: string, ruta: string) => {
         // tslint:disable-next-line: no-console
         //  console.log(`value ${value} otro: ${value.length}`);
         this.setState({
             alert: (
                 <SweetAlert
-                    success={true}
-                    // customIcon={logo}
-                    title="¡Listo!"
+                     success={true}
+                   // customIcon={logo}
+                    title="Listo"
                     showCancel={true}
                     showCloseButton={true}
                     confirmBtnText="Sí"
                     cancelBtnText="No"
                     onCancel={this.hideAlert}
                     onConfirm={this.onClickRegistro(ruta)}>
-                    El panorama  ha sido agregado a tu lista de {irA} ¿Deseas revisarla ahora?
+                    El panorama  ha sido agregado a tu lista de {lista} ¿Deseas revisarla ahora?
                 </SweetAlert>
             ),
         });
     };
+
+
+
+
+
     public hideAlert = () => {
         this.setState({
             alert: null,
         });
-        // location.href = "/app/admin"
+     location.href = "/app/xrealizar"
     };
     public onClickRegistro = (ruta: string) => () => {
         // location.href = '/register'
@@ -78,14 +124,38 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
     // handleLike recibe un id y retorna una funcion. Esto nos permite 
     public render() {
         const { data, loading } = this.props
+        const {work, uiobtenerFecha, idPanorama, mensajeAccion}= this.state
 
         //  tslint:disable-next-line: no-console
-        console.log("data", Object.keys(data).length);
-        //  console.log('Oculatando...');
-        if (this.state.work) {
+       //  console.log("data", Object.keys(data).length);
+
+        //  tslint:disable-next-line: no-console
+       //  console.log("Fecha: "+this.state.fechaInicial);
+
+
+        if (uiobtenerFecha) {
             return (
                 <Alert variant="info" className="container">
-                    <Alert.Heading className="d-flex container justify-content-center" > Procesando... </Alert.Heading>
+                    <Alert.Heading className="d-flex   container justify-content-center" >¿Cuándo {mensajeAccion}? Selecciona una fecha. </Alert.Heading>
+                    <div className="d-flex flex-wrap container justify-content-center">
+                        <DatePicker
+                            selected={this.state.fechaInicial}
+                            onChange={this.handleChangeDate}
+                        />  <Button variant="outline-primary" onClick={this.handleRealizado(idPanorama)} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
+                        <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
+                        {this.state.alert}
+                    </div>
+                </Alert>
+            );
+        }
+
+
+
+
+        if (work) {
+            return (
+                <Alert variant="info" className="container">
+                    <Alert.Heading className="d-flex container justify-content-center" > Procesando </Alert.Heading>
                     <div className="d-flex container justify-content-center">
                         <Spinner
                             className="m-5 align-middle"
@@ -96,6 +166,8 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                 </Alert>
             );
         }
+
+
         if (loading) {
 
             return (<Container fluid={true} className="align-content-center justify-content-center d-flex p-5">
@@ -110,20 +182,20 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                         <div style={{
                             color: "#689f38"
                         }}>
-                            <FontAwesomeIcon icon={faHiking} /> Tus panoramas Por realizar
+                            <FontAwesomeIcon icon={faHeart} /> Tus panoramas deseados
                         </div>
 
                       
                     </Alert.Heading>
 
                     <div className="d-flex pl-5">
-                        Tienes {Object.keys(data).length} panoramas agregados a tu lista como pendiente de realizar.
+                        Tienes {Object.keys(data).length} panoramas agregados a tu lista  de deseados pendientes de realizar.
                       </div>
                     <hr />
-                    <p className="mb-0">
-                        Esperamos pronto los puedas concretar. Recuerda equiparte adecuadamente y calcular bien los tiempos
+                       <p className="mb-0">
+                        Esperamos pronto puedas cumplir tus deseos. Recuerda equiparte adecuadamente y calcular bien los tiempos.
                         </p>
-
+                   
                 </Alert>
                 {Object.keys(data).map(x => {
                     const post = data[x]
@@ -144,7 +216,7 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                             exigenciaFisica={post.exigenciaFisica}
                             valor={post.valor}
                             porRealizar={this.handlePorRealizar(x)}
-                            realizado={this.handleRealizado(x)}
+                            realizado={this.uiObterFecha(x, "realizaste el panorama")}
                             titulo={"Por realizar"}
                             hidenCompartir={false}
                             hiddenRealizado={false}
@@ -166,25 +238,49 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
 
         } else {
             return (<Alert variant="info" className="container">
-                <Alert.Heading>¡Hola! Nada por acá</Alert.Heading>
+                <Alert.Heading>¡Hola! Nada por acá.</Alert.Heading>
                 <p>
-                   Por ahora no tienes panoramas agregados a esta lista. Aquí econtrarás los panoramas que marques "Por realizar".
+                   Por ahora no tienes panoramas agregados a esta lista. Aquí econtrarás los panoramas que marques  como "Deseados".
                    
             </p>
                 <hr />
                 <p className="mb-0">
-                    Sigue explorando panoramas y márcalos según tu interés.
+                    Sigue explorando panoramas y etiquétalos según tu interés.
             </p>
             </Alert>)
         }
 
 
     }
+
+    // public setDatos = () => () => {
+      
+    //             this.setState({
+    //                 alert: (
+    //                     <SweetAlert
+    //                         input={true}
+    //                         showCancel={true}
+    //                         cancelBtnBsStyle="default"
+    //                         defaultValue={this.props.fono}
+    //                         title="Actualiza tu teléfono"
+    //                         //  placeholder="Write something"
+    //                         onConfirm={this.onClick("fono")}
+    //                         onCancel={this.hideAlert1}
+    //                     >
+    //                         Ingresa tu nuevo número de teléfono. Para más de uno, separalos por una coma.
+    //                     </SweetAlert>
+    //                 )
+    //             })
+            
+            
+    //     }
     private handlePorRealizar = (panoramaId: string) => async () => {
         const { auth, db } = services
         const u = auth.currentUser
         this.setState({
+        
             work: true,
+
         });
         if (u != null) {
             try {
@@ -216,7 +312,7 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
             work: false,
         });
         // `app/xrealizar
-        this.onAlert("Por Realizar", "xrealizar")
+        this.onAlertOk("Deseados", "xrealizar")
         // const { xrealizar } = this.props;
         // this.setState({
         //     work: true,
@@ -238,7 +334,9 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
     private handleRealizado = (panoramaId: string) => async () => {
         const { auth, db } = services
         const u = auth.currentUser
+      
         this.setState({
+            uiobtenerFecha: false,
             work: true,
         });
         if (u != null) {
@@ -252,6 +350,7 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                         ciudadOrigen: post.ciudad,
                         createdAt: new Date(),
                         email: post.email,
+                        fechaRealizado:this.state.fechaInicial,
                         nombreUsuario: post.nombre,
                         pid: panoramaId,
                         uid: u.uid
@@ -270,7 +369,7 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
         this.setState({
             work: false,
         });
-        this.onAlert("Realizados", "realizados")
+        this.onAlertOk("Realizados", "realizados")
 
     };
 

@@ -6,13 +6,15 @@ import { ThunkDispatch } from 'redux-thunk';
 import Panorama from '../../../components/Panorama'
 import { IState } from '../../../ducks'
 import * as postsDuck from '../../../ducks/Panoramas'
-import { Spinner, Container, Alert } from 'react-bootstrap'
+import { Spinner, Container, Alert, Button } from 'react-bootstrap'
 // import SweetAlert from 'react-bootstrap-sweetalert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp, faChartLine } from '@fortawesome/free-solid-svg-icons'
+import { faChartLine, faHiking, faCheckCircle, faBan } from '@fortawesome/free-solid-svg-icons';
 import * as utils from '../../../utils';
 import SweetAlert from "react-bootstrap-sweetalert";
 import services from 'src/service';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 
 
@@ -28,6 +30,10 @@ interface IPanoramasRealizados {
 
 }
 interface IStateRealizados {
+    fechaInicial: Date
+    idPanorama: string
+    mensajeAccion: string
+    uiobtenerFecha: boolean
     alert: React.ReactNode
     work: boolean
 }
@@ -41,7 +47,11 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
         const { fetchPanoramasRealizados, fetched } = props
         this.state = {
             alert: null,
-            work: false
+            fechaInicial: new Date(),
+            idPanorama: "",
+            mensajeAccion: "",
+            uiobtenerFecha: false,
+            work: false,
         }
         if (fetched) {
             return
@@ -49,6 +59,31 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
 
         fetchPanoramasRealizados()
     }
+
+    /**
+     *  Cambia el estado para poder obter la fecha que el usuario ingresará
+     */
+    public uiObterFecha = (idPanorama: string, mensajeAccion: string) => () => {
+        this.setState({
+            idPanorama,
+            mensajeAccion,
+            uiobtenerFecha: true
+
+        })
+    }
+    public cancelAdd = () => {
+        this.setState({
+            uiobtenerFecha: false
+        });
+
+    }
+    public handleChangeDate = (date: any) => {
+        this.setState({
+            fechaInicial: date
+        });
+    };
+
+
 
     public onAlert = (irA: string, ruta: string) => {
         // tslint:disable-next-line: no-console
@@ -74,7 +109,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
         this.setState({
             alert: null,
         });
-        // location.href = "/app/admin"
+        location.href = "/app/realizados"
     };
     public onClickRegistro = (ruta: string) => () => {
         // location.href = '/register'
@@ -84,15 +119,36 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
 
     public render() {
         const { data, loading } = this.props
+        const { work, uiobtenerFecha, idPanorama, mensajeAccion } = this.state
+
         //  const {auth, db} = service   
         //   const uid = auth.currentUser ? auth.currentUser.uid : undefined
         // const {loading} = this.state
         // tslint:disable-next-line: no-console
-        console.log("Data", data)
-        if (this.state.work) {
+        // console.log("Data", data)
+
+
+        if (uiobtenerFecha) {
             return (
                 <Alert variant="info" className="container">
-                    <Alert.Heading className="d-flex container justify-content-center" > Procesando... </Alert.Heading>
+                    <Alert.Heading className="d-flex container justify-content-center" > ¿Cuándo {mensajeAccion}? Selecciona una fecha. </Alert.Heading>
+                    <div className="d-flex  flex-wrap container justify-content-center">
+                        <DatePicker
+                            selected={this.state.fechaInicial}
+                            onChange={this.handleChangeDate}
+                        />  <Button variant="outline-primary" onClick={this.handlePorRealizar(idPanorama)} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
+                        <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
+                        {this.state.alert}
+                    </div>
+                </Alert>
+            );
+        }
+
+        if (work) {
+            return (
+                <Alert variant="info" className="container">
+                    <Alert.Heading className="d-flex container justify-content-center" > Procesando </Alert.Heading>
+
                     <div className="d-flex container justify-content-center">
                         <Spinner
                             className="m-5 align-middle"
@@ -119,7 +175,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
                         <div style={{
                             color: "#689f38"
                         }}>
-                            <FontAwesomeIcon icon={faThumbsUp} /> Tus panoramas realizados
+                            <FontAwesomeIcon icon={faHiking} /> Tus panoramas realizados
                         </div>
                     </Alert.Heading>
                     <div className="d-flex pl-5">
@@ -127,7 +183,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
                       </div>
                     <hr />
                     <p className="mb-0 font-weight-bold">
-                        <code> <FontAwesomeIcon icon={faChartLine} size="2x" /> Tu nivel es  {utils.nivelEplorador(Object.keys(data).length)} </code>
+                        <code> <FontAwesomeIcon icon={faChartLine} size="2x" /> Tu nivel es  {utils.nivelEplorador(Object.keys(data).length)}. </code>
                     </p>
                 </Alert>
                 {Object.keys(data).map(x => {
@@ -147,7 +203,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
                             calificacion={post.calificacion}
                             exigenciaFisica={post.exigenciaFisica}
                             valor={post.valor}
-                            porRealizar={this.handlePorRealizar(x)}
+                            porRealizar={this.uiObterFecha(x, "deseas cumplir este deseo")}
                             realizado={this.handleRealizado(x)}
                             titulo={"Realizado"}
                             nombuton={"Más informácion"}
@@ -167,9 +223,9 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
 
         } else {
             return (<Alert variant="info" className="container">
-                <Alert.Heading>¡Hola! Nada por acá</Alert.Heading>
+                <Alert.Heading>¡Hola! Nada por acá.</Alert.Heading>
                 <p>
-                    No tienes panoramas en tu lista de  "Realizados". Cada vez que concretes un panorama, márcalo como "Realizado" para que aparezca acá.
+                    No tienes panoramas en tu lista de  "Realizados". Cada vez que concretes un panorama, márcalo como "Realizado" para que aparezca en esta lista.
               </p>
                 <hr />
                 <p className="mb-0">
@@ -184,6 +240,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
         const { auth, db } = services
         const u = auth.currentUser
         this.setState({
+            uiobtenerFecha: false,
             work: true,
         });
         if (u != null) {
@@ -216,7 +273,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
             work: false,
         });
         // `app/xrealizar
-        this.onAlert("Por Realizar", "xrealizar")
+        this.onAlert("Deseados", "xrealizar")
 
     };
 

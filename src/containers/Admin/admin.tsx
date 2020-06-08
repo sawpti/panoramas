@@ -3,13 +3,16 @@ import service from '../../service'
 import { bindActionCreators } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { Spinner, Container, Alert, Button, Card } from 'react-bootstrap'
-import Panorama from '../../components/PanoramaEdit'
+import { Spinner, Container, Alert, Button, Table } from 'react-bootstrap';
+// import Panorama from '../../components/PanoramaEdit'
 import * as postsDuck from '../../ducks/Panoramas'
 import { IState } from '../../ducks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlusCircle, faDesktop, faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import EditarPanorama from '../../components/EditarPanorama';
+import Nav from 'react-bootstrap/Nav';
+import { Navbar } from 'react-bootstrap/';
+// import Usuario from '../../components/Usuario';
 
 interface IAdmin {
   fetchFindPanoramaUsuario: (uid: string) => void
@@ -41,6 +44,7 @@ interface IStateAdmin {
   urlTripAdvisor?: string
   urlWeb?: string
   urlMapUbicacion?: string
+  uiSeleccionada: string // Dashboard, Panoramas,Usuarios
   valor?: number
 
 }
@@ -68,12 +72,36 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
       loading1: true,
       mEditar: false,
       rol: "turista",
-      uid: ""
+      uiSeleccionada: "Dashboard",
+      uid: "",
 
     };
 
   };
 
+
+  public subMenuAdmin = () => {
+    return (
+      <Navbar collapseOnSelect={true} expand="lg" >
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav>
+            <Nav.Link onClick={this.onClickSubMenu("Dashboard")}><FontAwesomeIcon icon={faDesktop} size="1x" /> Dashboard </Nav.Link>
+            <Nav.Link onClick={this.onClickSubMenu("Panoramas")}><FontAwesomeIcon icon={faMountain} size="1x" /> Panoramas</Nav.Link>
+            <Nav.Link onClick={this.onClickSubMenu("Usuarios")}><FontAwesomeIcon icon={faUserFriends} size="1x" /> Usuarios</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    )
+  }
+
+  public onClickSubMenu = (opcion: string) => () => {
+    this.setState({
+      uiSeleccionada: opcion
+
+    })
+
+  }
   public async componentDidMount() {
     const { auth, db } = service
     const u = auth.currentUser
@@ -107,14 +135,13 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
   }
 
   public render() {
-    const { loading1, rol, mEditar } = this.state
+    const { loading1, rol, mEditar, uiSeleccionada } = this.state
     const { data, loading } = this.props
+    let i = 0;
 
 
     if (loading1 && loading) {
       return (
-
-
 
         <Container fluid={true} className="align-content-center justify-content-center d-flex p-5">
           <Spinner className="mt-5 align-middle" animation="border" variant="info" />
@@ -125,78 +152,134 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
     } else {
 
-
       if (!mEditar && rol === "admin") {
 
-        return (
-          <div className="d-flex flex-wrap container justify-content-center">
+        switch (uiSeleccionada) {
+          case "Dashboard":
+            return (
+              <div className="d-flex flex-wrap container justify-content-end">
+                {this.subMenuAdmin()}
+                <Alert variant="info" className="container">
+                  <Alert.Heading>  <FontAwesomeIcon icon={faDesktop} /> Dashboard </Alert.Heading>
+                  <p>
+                    Dashboard
+             </p>
+                  <hr />
 
-            <Alert variant="info" className="container">
-              <Alert.Heading>  <FontAwesomeIcon icon={faMountain} /> Panoramas </Alert.Heading>
-              <p>
-                Para agregar un nuevo panorama usa el botón <FontAwesomeIcon icon={faPlusCircle} /> y para editar usa el botón "Editar panorama"
+
+                </Alert>
+              </div>
+            )
+
+
+            break;
+          case "Panoramas":
+            return (
+              <div className="d-flex flex-wrap container justify-content-end">
+                {this.subMenuAdmin()}
+                <Alert variant="info" className="container">
+                  <Alert.Heading>  <FontAwesomeIcon icon={faMountain} /> Panoramas </Alert.Heading>
+                  <p>
+                    Para agregar un nuevo panorama usa el botón <FontAwesomeIcon icon={faPlusCircle} /> y para editar usa el botón "Editar panorama"
 
                Tienes {Object.keys(data).length} panoramas bajo tu administración.
                       </p>
-              <hr />
-              <div className="container d-flex justify-content-lg-end">
-                <Button variant="outline-primary" href="/app/admin/register"> <FontAwesomeIcon size="2x" icon={faPlusCircle} /> </Button> </div>
+                  <hr />
+                  <div className="container d-flex justify-content-end">
 
-            </Alert>
+                    <Button variant="outline-primary" href="/app/admin/register"> <FontAwesomeIcon size="2x" icon={faPlusCircle} /> </Button>
+                  </div>
 
-            {Object.keys(data).map(x => {
-              const post = data[x]
-              //  tslint:disable-next-line: no-console
-              // console.log("key ",x)
+                </Alert>
+                <Table responsive={true} striped={true} bordered={true} hover={true}>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Imagen</th>
+                      <th>Nombre</th>
+                      <th>Ubicacción</th>
+                      <th>Acción</th>
 
-              return <div key={x} style={{ margin: '0 auto' }}>
-                <Panorama
-                  urlImagen={post.urlImagen}
-                  nombre={post.nombre}
-                  descripcion={post.descripcion}
-                />
-                <Card style={{ width: "18rem" }}>
-                  <Card.Body className="d-flex justify-content-center">
-                    <Card.Text>
-                      {/* {(idP: string, nom: string, des: string, urlMap: string,
-                        urlW: string, urlF: string, urlI: string, urlT: string)} */}
-                      <Button variant="outline-primary"
-                        onClick={this.onEditar(
-                          post.idPanorama || "No existe",
-                          post.nombre,
-                          post.descripcion,
-                          post.urlMapUbicacion || "No ingresada",
-                          post.urlWeb || "No ingresada",
-                          post.urlFacebook,
-                          post.urlInstagram || "No ingresada",
-                          post.urlTripAdvisor || "No ingresada",
-                          post.calificacion || 0,
-                          post.exigenciaFisica,
-                          post.valor,
-                          post.destacado || "NO",
-                          post.urlImagen,
-                          post.urlImagen1,
-                          post.urlImagen2,
-                          post.lat,
-                          post.lng,
-                          post.direccion || ""
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {
+                      Object.keys(data).map(x => {
+                        const post = data[x]
+                        i++
+                        //  tslint:disable-next-line: no-console
+                        // console.log("key ",x)
+
+                        return <tr key={x}  >
+
+                          <td>{i}</td>
+                          <td><img src={post.urlImagen} style={{
+                            borderRadius: '10%',
+                            height: '80px',
+                            width: '80px',
+                          }} /></td>
+                          <td>{post.nombre}</td>
+                          <td>{post.direccion}</td>
+                          <td>   <Button variant="outline-primary"
+                            onClick={this.onEditar(
+                              post.idPanorama || "No existe",
+                              post.nombre,
+                              post.descripcion,
+                              post.urlMapUbicacion || "No ingresada",
+                              post.urlWeb || "No ingresada",
+                              post.urlFacebook,
+                              post.urlInstagram || "No ingresada",
+                              post.urlTripAdvisor || "No ingresada",
+                              post.calificacion || 0,
+                              post.exigenciaFisica,
+                              post.valor,
+                              post.destacado || "NO",
+                              post.urlImagen,
+                              post.urlImagen1,
+                              post.urlImagen2,
+                              post.lat,
+                              post.lng,
+                              post.direccion || ""
+
+                            )}
+                          // size="lg"
+                          > Editar</Button></td>
+                        </tr>
 
 
-                        )
+                      })}
+                  </tbody>
+                </Table>
 
-                        }
-                      // size="lg"
-                      > Editar panorama</Button>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
               </div>
 
-            })}
-          </div>
+
+            )
+
+            break;
+          case "Usuarios":
+            return (
+              <div className="d-flex flex-wrap container justify-content-end">
+                {this.subMenuAdmin()}
+                <Alert variant="info" className="container">
+                  <Alert.Heading>  <FontAwesomeIcon icon={faUserFriends} /> Usuarios </Alert.Heading>
+                  <p>
+                    Usuarios
+             </p>
+                  <hr />
 
 
-        )
+                </Alert>
+              </div>
+            )
+            break;
+
+          default:
+            break;
+        }
+
+
 
       }
       if (mEditar && rol === "admin") {
@@ -308,6 +391,9 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
   public actualizar = () => {
 
     location.href = "/app/admin" // Se utliza esta opción para actualizar la página
+    this.setState({
+      uiSeleccionada: "Panoramas"
+    })
 
   }
 

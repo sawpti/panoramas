@@ -9,6 +9,7 @@ import { IState } from '../../ducks'
 import ProfileImg from '../../components/ProfileImg'
 import { Spinner, Container } from 'react-bootstrap'
 import services from 'src/service'
+import imgPerfil from '../../images/unnamed.jpg'
 
 // import services from 'src/service'
 // import services from '../../service'
@@ -71,6 +72,7 @@ class Perfil extends React.Component<IUser, IState1>{
       const { data, loading, submitProfileImg, handleProfileImageSubmit, profileImage } = this.props
       // tslint:disable-next-line: no-console
       // console.log('Usuario', Object.keys(data[0].nombre));
+      //   const imagen = profileImage ? profileImage : imgPerfil
       return (
          loading ? (
             <Container fluid={true} className="align-content-center justify-content-center d-flex p-5">
@@ -145,7 +147,7 @@ class Perfil extends React.Component<IUser, IState1>{
 
 const mapStateToProps = (state: IState) => {
    const { Users: { data, fetched, fetching, profileImage: tempPI } } = state
-   const profileImage = tempPI || 'http://lorempixel.com/200/200/nature'
+   const profileImage = tempPI || imgPerfil
    const loading = fetching || !fetched
 
    return {

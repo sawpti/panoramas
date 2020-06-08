@@ -7,6 +7,8 @@ import { IState } from "../../ducks";
 import * as postsDuck from "../../ducks/Panoramas";
 import SweetAlert from "react-bootstrap-sweetalert";
 import services from 'src/service';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // import noImage from '../../images/unnamed.jpg';
 
@@ -18,19 +20,23 @@ import {
     InputGroup,
     FormControl,
     Pagination,
+    Navbar,
+    Nav,
+    Button,
 
 } from "react-bootstrap";
 
 // import { useState } from 'react';
 // import SweetAlert from 'react-bootstrap-sweetalert';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMountain, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faMountain, faSearch, faMapPin, faCheckCircle, faBan } from '@fortawesome/free-solid-svg-icons';
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng,
 } from "use-places-autocomplete";
 // import Geocode from 'react-geocode'
 import useOnclickOutside from "react-cool-onclickoutside";
+
 
 
 interface INewsFeedProps {
@@ -48,10 +54,15 @@ interface INewsFeedProps {
 }
 interface IStatePanorama {
     // alert: any
+    fechaInicial: Date
+    idPanorama: string
+    mensajeAccion: string
+    uiobtenerFecha: boolean
     work: boolean
     listPanoramas: postsDuck.IDataPanorama
     comuna: string
     activePage: number
+    opcionAccion: number  // 1: Por realizar ( deseados) 2: Realizados
     paginaActual: number
     paginas: any[]
     paginaSize: number
@@ -78,17 +89,99 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
             alert: null,
             cargando: true,
             comuna: "Curarrehue",
+            fechaInicial: new Date(),
+            idPanorama: "",
             listPanoramas: {},
+            mensajeAccion: "",
+            opcionAccion: 0,
             paginaActual: 0,
             paginaSize: 10, // panoramas por página
             paginas: [],
             panoramaInicial: null,
             totalPaginas: 0,
             totalPanoramas: 0,
+            uiobtenerFecha: false,
             work: false,
         }
 
     }
+
+
+
+
+    public subMenuComunas = (comuna: string) => {
+
+
+        switch (comuna) {
+            case "Pucón":
+                return (
+                    <Navbar >
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="mr-auto">
+                                <Nav.Link onClick={this.cambiarComuna("Curarrehue")}> Curarrehue </Nav.Link>
+                                <Nav.Link active={true} onClick={this.cambiarComuna("Pucón")}> <u> Pucón</u> </Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+
+                )
+
+
+                break;
+            case "Curarrehue":
+                return (
+                    <Navbar >
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="mr-auto">
+                                <Nav.Link active={true} onClick={this.cambiarComuna("Curarrehue")}>  <u>Curarrehue</u>  </Nav.Link>
+                                <Nav.Link onClick={this.cambiarComuna("Pucón")}> Pucón </Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+
+                )
+                break;
+            default:
+                return (
+                    <Navbar >
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="mr-auto">
+                                <Nav.Link active={true} onClick={this.cambiarComuna("Curarrehue")}> Curarrehue </Nav.Link>
+                                <Nav.Link onClick={this.cambiarComuna("Pucón")}> Pucón </Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+
+                )
+                break;
+        }
+
+    }
+
+    public uiObterFecha = (idPanorama: string, mensajeAccion: string, opcionAccion: number) => () => {
+        this.setState({
+            idPanorama,
+            mensajeAccion,
+            opcionAccion,
+            uiobtenerFecha: true
+
+        })
+    }
+    public cancelAdd = () => {
+        this.setState({
+            uiobtenerFecha: false
+        });
+
+    }
+    public handleChangeDate = (date: any) => {
+        this.setState({
+            fechaInicial: date
+        });
+    };
+
 
     public onAlert = (irA: string, ruta: string) => {
         // tslint:disable-next-line: no-console
@@ -121,6 +214,105 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         location.href = `/app/${ruta}`
 
     }
+
+    public onClickAccion = (opcion: number) => async () => {
+        const { idPanorama } = this.state
+        const { auth, db } = services
+        const u = auth.currentUser
+
+        // tslint:disable-next-line: no-console
+        console.log("Opcion: " + this.state.opcionAccion);
+        switch (opcion) {
+            case 1:
+                // tslint:disable-next-line: no-console
+                //  console.log("Llamando Por realizar");
+                this.setState({
+                    cargando: true,
+                    uiobtenerFecha: false,
+                });
+                if (u != null) {
+                    try {
+                        // Buscamos el post en cuestion
+                        const snap = await db.collection('users').doc(u.uid).get()
+                        const post = snap.data()
+                        if (post != null) {
+                            await db.collection('xrealizar').doc(`${idPanorama}_${u.uid}`).set({
+                                // ...post,
+                                ciudadOrigen: post.ciudad,
+                                createdAt: new Date(),
+                                email: post.email,
+                                nombreUsuario: post.nombre,
+                                pid: idPanorama,
+                                uid: u.uid
+                            })
+                            const sn = await db.collection('realizados').doc(`${idPanorama}_${u.uid}`).get()
+                            const xrealizar = sn.data()
+                            if (xrealizar !== undefined) {
+                                await db.collection('realizados').doc(`${idPanorama}_${u.uid}`).delete()
+                            }
+                        }
+                    } catch (error) {
+                        alert(error.message)
+                    }
+
+                }
+                this.setState({
+                    cargando: false,
+                });
+                this.onAlert("Deseados", "xrealizar")
+
+                break;
+
+            case 2:
+                this.setState({
+                    uiobtenerFecha: false,
+                    work: true,
+                });
+                if (u != null) {
+                    try {
+                        // Buscamos el post en cuestion
+                        const snap = await db.collection('users').doc(u.uid).get()
+                        const post = snap.data()
+                        if (post != null) {
+                            await db.collection('realizados').doc(`${idPanorama}_${u.uid}`).set({
+                                // ...post,
+                                ciudadOrigen: post.ciudad,
+                                createdAt: new Date(),
+                                email: post.email,
+                                nombreUsuario: post.nombre,
+                                pid: idPanorama,
+                                uid: u.uid
+                            })
+                            const sn = await db.collection('xrealizar').doc(`${idPanorama}_${u.uid}`).get()
+                            const xrealizar = sn.data()
+                            if (xrealizar !== undefined) {
+                                await db.collection('xrealizar').doc(`${idPanorama}_${u.uid}`).delete()
+                            }
+                        }
+                    } catch (error) {
+                        alert(error.message)
+                    }
+
+                }
+                this.setState({
+                    work: false,
+                });
+                this.onAlert("Realizados", "realizados")
+                this.handleRealizado(idPanorama)
+                break;
+
+            default:
+                return
+                //   alert(" No ha seleccioando en una opción" + this.state.opcionAccion)
+                break;
+        }
+        // this.setState({
+        //     uiobtenerFecha: false
+        // })
+
+    }
+
+
 
 
     public obtenerData = (paginaSize: number, panoramaInicial: any, comuna: string) => {
@@ -506,7 +698,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
     }
     public render() {
         const { listPanoramas, cargando, paginaActual, totalPaginas, totalPanoramas, comuna } = this.state
-
+        const { work, uiobtenerFecha, mensajeAccion } = this.state
 
         const active = paginaActual + 1
         const items = [];
@@ -518,7 +710,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
             );
         }
         // tslint:disable-next-line: no-console
-        console.log("Data en redender", this.state.paginas);
+        //  console.log("Data en redender", this.state.paginas);
 
 
         const PlacesAutocomplete = () => {
@@ -658,24 +850,23 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
             );
         };
 
-        // if (this.state.cargando) {
-        //     return (
-        //         <Container
-        //             fluid={true}
-        //             className="align-content-center justify-content-center d-flex p-5"
+        if (uiobtenerFecha) {
+            return (
+                <Alert variant="info" className="container">
+                    <Alert.Heading className="d-flex container justify-content-center" > ¿Cuándo {mensajeAccion}? Selecciona una fecha. </Alert.Heading>
+                    <div className="d-flex  flex-wrap container justify-content-center">
+                        <DatePicker
+                            selected={this.state.fechaInicial}
+                            onChange={this.handleChangeDate}
+                        />  <Button variant="outline-primary" onClick={this.onClickAccion(this.state.opcionAccion)} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
+                        <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
+                        {this.state.alert}
+                    </div>
+                </Alert>
+            );
+        }
 
-        //         >
-        //             <Spinner
-        //                 className="mt-5 align-middle"
-        //                 animation="border"
-        //                 variant="info"
-        //             />
-        //             ...Cargando...
-        //         </Container>
-        //     );
-        // }
-
-        if (cargando) {
+        if (cargando || work) {
             return (
                 <Container
                     fluid={true}
@@ -690,20 +881,23 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
             );
         }
 
-        if (this.state.work) {
-            return (
-                <Alert variant="info" className="container">
-                    <Alert.Heading className="d-flex container justify-content-center" > Procesando... </Alert.Heading>
-                    <div className="d-flex container justify-content-center">
-                        <Spinner
-                            className="m-5 align-middle"
-                            animation="border"
-                            variant="warning"
-                        />
-                    </div>
-                </Alert>
-            );
-        }
+        // if (this.state.work) {
+        //     return (
+
+        //         <Alert variant="info" className="container">
+        //             <Alert.Heading className="d-flex container justify-content-center" > Procesando... </Alert.Heading>
+        //             <div className="d-flex container justify-content-center">
+        //                 <Spinner
+        //                     className="m-5 align-middle"
+        //                     animation="border"
+        //                     variant="warning"
+        //                 />
+        //             </div>
+        //         </Alert>
+
+        //     );
+
+        // } else {
 
         return (
             <div className="d-flex flex-wrap container justify-content-center">
@@ -712,17 +906,22 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                         <div style={{
                             color: "#689f38"
                         }}>
-                            <FontAwesomeIcon icon={faMountain} color="#689f38" /> Panoramas de Aventura y
-            Naturaleza
+                            <FontAwesomeIcon icon={faMountain} color="#689f38" /> Panoramas de Naturaleza y Aventura
                      </div>
 
                     </Alert.Heading>
+                    <div>
+                        {this.subMenuComunas(comuna)}
+
+                    </div>
                     <hr />
                     <div className="justify-content-lg-center pl-5">
                         {/* Tienes {Object.keys(listPanoramas).length} panoramas disponibles */}
-                        Tienes {totalPanoramas} panoramas outdoors en {comuna}
-                        <h4> {this.state.comuna}</h4>
-                    </div>
+
+                        <h4> <FontAwesomeIcon icon={faMapPin} /> Estás en la comuna de <b>{comuna} </b></h4>
+                        Y tienes {totalPanoramas} panoramas outdoors para realizar en esta zona.
+
+                      </div>
 
                     <PlacesAutocomplete />
 
@@ -751,8 +950,8 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                                 calificacion={post.calificacion}
                                 exigenciaFisica={post.exigenciaFisica}
                                 valor={post.valor}
-                                porRealizar={this.handlePorRealizar(x)}
-                                realizado={this.handleRealizado(x)}
+                                porRealizar={this.uiObterFecha(x, "deseas cumplir este deseo", 1)}
+                                realizado={this.uiObterFecha(x, "realizaste el panorama", 2)}
                                 hidenCompartir={false}
                                 hiddenRealizado={false}
                                 hiddenXRealizar={false}
@@ -771,46 +970,27 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                         <Pagination.Next onClick={this.siguientePagina} />
                     </Pagination>
 
-
-                    {/* { <Pagination>
-                        <Pagination.First />
-                        <Pagination.Prev />
-                        <Pagination.Item>{1}</Pagination.Item>
-                        <Pagination.Ellipsis />
-
-                        <Pagination.Item>{10}</Pagination.Item>
-                        <Pagination.Item>{11}</Pagination.Item>
-                        <Pagination.Item active={true}>{12}</Pagination.Item>
-                        <Pagination.Item>{13}</Pagination.Item>
-                        <Pagination.Item disabled={true}>{14}</Pagination.Item>
-
-                        <Pagination.Ellipsis />
-                        <Pagination.Item>{20}</Pagination.Item>
-                        <Pagination.Next />
-                        <Pagination.Last />
-                    </Pagination>} */}
                     {this.state.alert}
                 </div>
             </div>
         );
 
-        // return (
-        //     loading ? (
-        //         <Container fluid={true} className="align-content-center justify-content-center d-flex p-5">
-        //             <Spinner className="mt-5 align-middle" animation="border" variant="primary" />
-        //         </Container>) :
+        // }
+
+
+
     }
 
-    // private next = () => {
-    //     alert("Hola")
-    // }
 
 
-    private handlePorRealizar = (panoramaId: string) => async () => {
+    public handlePorRealizar = (panoramaId: string) => async () => {
         const { auth, db } = services
         const u = auth.currentUser
+        // tslint:disable-next-line: no-console
+        console.log("Llamando Por realizar");
         this.setState({
-            work: true,
+            cargando: true,
+            uiobtenerFecha: false,
         });
         if (u != null) {
             try {
@@ -839,10 +1019,10 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
         }
         this.setState({
-            work: false,
+            cargando: false,
         });
         // `app/xrealizar
-        this.onAlert("Por Realizar", "xrealizar")
+        this.onAlert("Deseados", "xrealizar")
         // const { xrealizar } = this.props;
         // this.setState({
         //     work: true,
@@ -865,6 +1045,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         const { auth, db } = services
         const u = auth.currentUser
         this.setState({
+            uiobtenerFecha: false,
             work: true,
         });
         if (u != null) {
@@ -921,6 +1102,52 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
     // };
 
 
+    private cambiarComuna = (comuna: string) => async () => {
+        const { db } = services
+        const { paginaSize } = this.state
+        this.setState({
+            cargando: true,
+        });
+        await db.collection("panoramas")
+            .where('comuna', '==', comuna)
+            .get().then(snp => {
+                // tslint:disable-next-line: no-console
+                console.log("Todos los panoramas", snp.docs.length)
+                // tslint:disable-next-line: no-console
+                console.log("Total página", snp.docs.length / paginaSize)
+
+                this.setState(
+                    {
+                        comuna,
+                        totalPaginas: Math.ceil(snp.docs.length / paginaSize),
+                        totalPanoramas: snp.docs.length
+                    }
+                )
+
+
+            })
+
+        this.obtenerData(this.state.paginaSize, this.state.panoramaInicial, comuna)
+            .then((res: IRespuesta) => {
+                const { paginas } = this.state
+
+                const pagina = {
+                    finalValor: res.valorFinal,
+                    inicialValor: res.valorInicial
+                }
+                paginas.push(pagina)
+                this.setState({
+                    listPanoramas: res.arrayP,
+                    paginas,
+
+                })
+
+
+            })
+        this.setState({
+            cargando: false,
+        });
+    }
 
 
     private handleShare = (id: string) => () => {

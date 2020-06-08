@@ -21,16 +21,17 @@ import {
   faInfoCircle,
   faShare,
   faMapMarked,
-  faThumbsUp,
   faHiking,
   faMoneyBill,
   faTimes,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import iconFb from "../images/iconfacebook.png";
 import iconIn from "../images/iconinstagram.png";
 import iconWeb from "../images/iweb.png";
 import iconTA from "../images/tripAdvisor.png";
 import * as utils from "../utils";
+
 
 
 
@@ -90,8 +91,53 @@ function ModalPanorama(datos: IPanoramaProps) {
             {datos.nombre}: <small> {datos.titulo}/{datos.direccion}</small>
           </Modal.Title>
         </Modal.Header>
+
+
         <Modal.Body>
+
           <Container>
+            <div className="d-flex justify-content-between">
+
+
+              <OverlayTrigger
+                overlay={
+                  <Tooltip id="tooltip-disabled">
+                    Agrega el panorama a tu lista de  Panoramas Deseados"
+              </Tooltip>
+                }
+              >
+
+                <div className="text-dark" onClick={datos.porRealizar} hidden={datos.hiddenXRealizar}>
+                  <FontAwesomeIcon icon={faHeart}
+                    size="2x"
+                    color="#689f38"
+                  /> Marcar como deseado
+                </div>
+
+              </OverlayTrigger>
+
+              <OverlayTrigger
+                overlay={
+                  <Tooltip id="tooltip-disabled">
+                    {" "}
+                Agrega el panorama a tu lista de "Panoramas Realizados"
+              </Tooltip>
+                }
+              >
+                <div className="d-inline-block">
+                  <div className="text-dark" onClick={datos.realizado} hidden={datos.hiddenRealizado}>
+                    <FontAwesomeIcon
+                      icon={faHiking}
+                      size="2x"
+                      color="#689f38"
+                    /> Marcar como realizado
+                  </div>
+                </div>
+
+              </OverlayTrigger>
+
+            </div>
+            <hr />
             <Row className="show-grid">
               <Col xs={12} md={6}>
                 <Carousel>
@@ -117,31 +163,30 @@ function ModalPanorama(datos: IPanoramaProps) {
 
                 <div>
                   <h4>Indicadores</h4>
-                  <code>
 
-                    <BeautyStars
-                      value={datos.calificacion}
-                      inactiveColor="#e0e0e0"
-                      size="26px"
-                      editable={false}
-                    //  onChange={value => this.setState({ value })}
-                    />
-                    <h6>
-                      {" "}
-                      <small>Calificación promedio:</small>{" "}
-                      {utils.calificacion(datos.calificacion)}
-                    </h6>
+                  <BeautyStars
+                    maxStars={5}
+                    value={datos.calificacion}
+                    inactiveColor="#e0e0e0"
+                    size="26px"
+                    editable={false}
+                  //  onChange={value => this.setState({ value })}
+                  />
+                  <h6>
+                    {" "}
+                    <small>Calificación promedio:</small>{" "}
+                    {utils.calificacion(datos.calificacion)}
+                  </h6>
 
-                    <ProgressBar
-                      variant="success"
-                      now={datos.exigenciaFisica}
-                      max={7}
-                    />
-                    <h6>
-                      <small>Exigencia física requerida:</small>{" "}
-                      {utils.eFisica(datos.exigenciaFisica)}{" "}
-                    </h6>
-                  </code>
+                  <ProgressBar
+                    variant="success"
+                    now={datos.exigenciaFisica}
+                    max={5}
+                  />
+                  <h6>
+                    <small>Exigencia física requerida:</small>{" "}
+                    {utils.eFisica(datos.exigenciaFisica)}{" "}
+                  </h6>
 
                   <h4>Web y redes</h4>
                   <small>
@@ -276,41 +321,6 @@ function ModalPanorama(datos: IPanoramaProps) {
 
                 <FontAwesomeIcon icon={faShare} size="2x" color="Dodgerblue" />
                 <p className="text-info text-center small">Compartir</p>
-              </div>
-            </span>
-          </OverlayTrigger>
-
-          <OverlayTrigger
-            overlay={
-              <Tooltip id="tooltip-disabled">
-                Agrega el panorama a tu lista "Por realizar"
-              </Tooltip>
-            }
-          >
-            <span className="d-inline-block">
-              <div onClick={datos.porRealizar} hidden={datos.hiddenXRealizar}>
-                <FontAwesomeIcon icon={faHiking} size="2x" color="Dodgerblue" />
-                <p className="text-info text-center small">Por realizar</p>
-              </div>
-            </span>
-          </OverlayTrigger>
-
-          <OverlayTrigger
-            overlay={
-              <Tooltip id="tooltip-disabled">
-                {" "}
-                Agrega el panorama a tu lista de "Realizados"
-              </Tooltip>
-            }
-          >
-            <span className="d-inline-block">
-              <div onClick={datos.realizado} hidden={datos.hiddenRealizado}>
-                <FontAwesomeIcon
-                  icon={faThumbsUp}
-                  size="2x"
-                  color="Dodgerblue"
-                />
-                <p className="text-info text-center small">Realizado</p>
               </div>
             </span>
           </OverlayTrigger>

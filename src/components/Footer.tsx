@@ -24,20 +24,20 @@ export default class Footer extends Component {
 
                 </Row>
 
-                <Row className="d-flex container-fluid  justify-content-center pb-5">
-                    <div>
-                        <a href="https://www.glampingpod.cl/" target="_blank">
-                            <img src={logoGlamping} alt="Glamping Podd Via" width="200px" className="rounded" />
+                <Row className="d-flex flex-wrap container-fluid  justify-content-center pb-5">
 
-                        </a>
-                        <a href="https://www.pocolpen.cl/" target="_blank">
-                            <img src={logoSaltos} alt="Saltos Pocolpén" width="200px" className="rounded" />
+                    <a href="https://www.glampingpod.cl/" target="_blank">
+                        <img src={logoGlamping} alt="Glamping Podd Via" width="200px" className="rounded" />
 
-
-                        </a>
+                    </a>
+                    <a href="https://www.pocolpen.cl/" target="_blank">
+                        <img src={logoSaltos} alt="Saltos Pocolpén" width="200px" className="rounded" />
 
 
-                    </div>
+                    </a>
+
+
+
                 </Row>
                 <Row className="d-flex container  justify-content-center pb-5">
 

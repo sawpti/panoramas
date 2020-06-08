@@ -655,7 +655,7 @@ export const fetchPanoramasRealizados = () =>
 
                     ...posts[x],
 
-                    exigenciaFisica: posts[x].exigencia_fisica,
+                    exigenciaFisica: posts[x].exigenciaFisica,
                     idPanorama: x,
                     urlFacebook: posts[x].urlFacebook,
                     urlImagen: keyedImages[x][0],
@@ -761,7 +761,7 @@ export const fetchPanoramasPorRealizar = () =>
 
                     ...posts[x],
 
-                    exigenciaFisica: posts[x].exigencia_fisica,
+                    exigenciaFisica: posts[x].exigenciaFisica,
                     idPanorama: x,
                     urlFacebook: posts[x].urlFacebook,
                     urlImagen: keyedImages[x][0],

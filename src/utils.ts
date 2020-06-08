@@ -23,13 +23,11 @@ export const calificacion = (c: number) => {
 };
 
 export const eFisica = (c: number) => {
-    if (c === 1) {
-        return "Mínima";
-    } else if (c > 1 && c <= 2.3) {
-        return "Baja";
-    } else if (c > 2.3 && c < 4.2) {
+    if (c <= 2) {
+        return "Mínimo esfuerzo";
+    } else if (c > 2 && c < 4) {
         return "Media";
-    } else if (c > 4.2 && c <= 5) {
+    } else if (c >= 4 && c <= 5) {
         return "Alta";
     } else {
         return "No determinada";
