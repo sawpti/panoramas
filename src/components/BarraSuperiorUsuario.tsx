@@ -49,7 +49,7 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
         if (users[u.uid].role === "admin") {
 
           // tslint:disable-next-line: no-console
-          console.log("Rol: admin");
+          //  console.log("Rol: admin");
           this.setState({
             rol: "admin"
 

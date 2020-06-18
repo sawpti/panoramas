@@ -11,6 +11,8 @@ import noImage from '../images/unnamed.jpg';
 const START = 'posts/fetch-start'
 const SUCCESS = 'posts/fetch-success'
 const SUCCESS1 = 'posts/fetch-success1'
+const SUCCESSREALIZADOSPROVEEDOR = 'posts/fetch-successrealizadosproveedor'
+const SUCCESSDESEADOSPROVEEDOR = 'posts/fetch-successdeseadosproveedor'
 const ERROR = 'posts/fetch-error'
 const ADD = 'posts/add' // va a ser de tipo post y accion add
 const SET_PANORAMA_IMAGE = 'panoramas/set-panorama-image'
@@ -32,6 +34,7 @@ export interface IPanorama {
     destacado?: string
     exigenciaFisica: number
     nomProveedor?: string
+    uidProveedor?: string
     nombre: string
     urlImagen: string
     urlImagen1: string
@@ -75,6 +78,18 @@ const fetchSuccess1 = (payload: IDataFirebase) => ({
     type: SUCCESS1,
 })
 
+const fetchSuccessRealizadosByProveedor = (payload: IDataPanorama) => ({
+    payload,
+    type: SUCCESSREALIZADOSPROVEEDOR,
+})
+const fetchSuccessdeseadosByProveedor = (payload: IDataPanorama) => ({
+    payload,
+    type: SUCCESSDESEADOSPROVEEDOR,
+})
+
+
+
+
 
 
 const fetchError = (error: Error) => ({
@@ -91,6 +106,7 @@ const add = (payload: IDataPanorama) => ({
 const initialState = {
     data: {},
     data1: {},
+    dataRealizadosByProveedor: {},
     fetched: false,
     fetching: false,
 }
@@ -123,6 +139,22 @@ export default function reducer(state = initialState, action: AnyAction) {
                 fetched: true,
                 fetching: false,
             }
+        case SUCCESSREALIZADOSPROVEEDOR:
+            return {
+                ...state,
+                dataRealizadosByProveedor: action.payload,
+                fetched: true,
+                fetching: false,
+            }
+        case SUCCESSDESEADOSPROVEEDOR:
+            return {
+                ...state,
+                dataDeseadosByProveedor: action.payload,
+                fetched: true,
+                fetching: false,
+            }
+
+
 
         case ERROR:
             return {
@@ -221,6 +253,7 @@ export const fetchPosts = () =>
 
                     exigenciaFisica: posts[x].exigenciaFisica,
                     idPanorama: x,
+                    uidProveedor: posts[x].uid,
                     urlFacebook: posts[x].urlFacebook,
                     urlImagen: keyedImages[x][0],
                     urlImagen1: keyedImages[x][1],
@@ -329,6 +362,7 @@ export const fetchFindPanoramasByComuna = async (paginaSize: number, panoramaIni
                         ...arrayPanoramas[x], // estos son los campos que se llaman igual en la bd como en la interface
                         exigenciaFisica: arrayPanoramas[x].exigenciaFisica,
                         idPanorama: x,
+                        uidProveedor: arrayPanoramas[x].uid,
                         urlFacebook: arrayPanoramas[x].urlFacebook,
                         urlImagen: keyedImages[x][0],
                         urlImagen1: keyedImages[x][1],
@@ -464,6 +498,7 @@ export const fetchFindPanoramaComuna = (comuna: string, limitConsulta: number) =
                     ...posts[x], // estos son los campos que se llaman igual en la bd como en la interface
                     exigenciaFisica: posts[x].exigenciaFisica,
                     idPanorama: x,
+                    uidProveedor: posts[x].uid,
                     urlFacebook: posts[x].urlFacebook,
                     urlImagen: keyedImages[x][0],
                     urlImagen1: keyedImages[x][1],
@@ -494,7 +529,7 @@ export const fetchFindPanoramaComuna = (comuna: string, limitConsulta: number) =
     }
 
 
-// Panoramas por  usuario
+// Panoramas por  usuario (usuario creador)
 export const fetchFindPanoramaUsuario = (uid: string) =>
     async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
 
@@ -541,6 +576,7 @@ export const fetchFindPanoramaUsuario = (uid: string) =>
                     ...posts[x], // estos son los campos que se llaman igual en la bd como en la interface
                     exigenciaFisica: posts[x].exigenciaFisica,
                     idPanorama: x,
+                    uidProveedor: posts[x].uid,
                     urlFacebook: posts[x].urlFacebook,
                     urlImagen: keyedImages[x][0],
                     urlImagen1: keyedImages[x][1],
@@ -564,28 +600,22 @@ export const fetchFindPanoramaUsuario = (uid: string) =>
         }
     }
 
-export const fetchPanoramasRealizados = () =>
+/** Obtiene todos los panoramas realizados de los usarios que correspondan al proveedor que inició sesión */
+export const fetchPanoramasRealizadosByProveedor = () =>
     async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
 
         dispatch(fetchStart())
+        if (!auth.currentUser) {
+            return
+        }
 
         try {
-
-            const uid = auth.currentUser ? auth.currentUser.uid : undefined
-            const snaps = await db.collection('panoramas').get()
-            /* 
-            Del listado de panoramas realizados obtengo todos objetos que contengan el uid del usuario actual
-            */
-            const realizadosRef = db.collection('realizados')
-                .where('uid', '==', uid)
-
-            //  .limit(1)
-
-
-            const realizados = {} // Panoramas   realizados 
-
-            /**  */
-            await realizadosRef.get()
+            const uid = auth.currentUser.uid
+            const xrealizarRef = db.collection('realizados')
+                .where('uidProveedor', '==', uid)
+                .orderBy("idPanorama")
+            const pxr = {} // Panoramas por realizar
+            await xrealizarRef.get()
                 .then(snapshot => {
                     if (snapshot.empty) {
                         // tslint:disable-next-line: no-console
@@ -594,7 +624,7 @@ export const fetchPanoramasRealizados = () =>
                     }
                     snapshot.forEach(doc => {
                         // tslint:disable-next-line: no-console
-                        realizados[doc.id] = doc.data()
+                        pxr[doc.id] = doc.data()
                         //   console.log(doc.id, '=>', doc.data());
                     });
                 })
@@ -602,85 +632,67 @@ export const fetchPanoramasRealizados = () =>
                     // tslint:disable-next-line: no-console
                     console.log('Error', err.message);
                 });
-
-
-            const posts = {} // Panoramas 
-            snaps.forEach((x) => {
-
-                Object.keys(realizados).forEach(r => {
-                    /**
-                     * r= id del objeto (documentos) sacado de la consulta
-                     * realizados[r].pid= es la pripiedad pid del objeto (documentos)
-                     */
-                    // posts[x.id] = x.data()
-
-                    // tslint:disable-next-line: no-console
-                    //   console.log('r=>'+r +'   x.id=>'+x.id, x.data());
-
-                    /* Si la propiedad pid coincide con el id del documento(panorama) significa que está en la lista de realizados */
-                    if (realizados[r].pid === x.id) {
-                        posts[x.id] = x.data()
-                        return
-                        // // tslint:disable-next-line: no-console
-                        // console.log('r=>'+r +'x.id=>'+x.id, posts[x.id]);
-                    }
-
-                })
-
-            })
             // tslint:disable-next-line: no-console
-            console.log('Panoramas realizados', realizados);
+            //  console.log('Enviando data', pxr);
+            dispatch(fetchSuccessRealizadosByProveedor(pxr))
 
-            const imgIds = await Promise.all(Object.keys(posts).
-                map(async x => {
-                    const ref = storage.ref(`panoramas/${x}.jpeg`)
-                    const url = await ref.getDownloadURL()
-                    const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
-                    const url1 = await ref1.getDownloadURL()
-                    const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
-                    const url2 = await ref2.getDownloadURL()
-                    return [x, url, `${x}1`, url1, `${x}2`, url2]
-                }))
 
+        } catch (error) {
             // tslint:disable-next-line: no-console
-
-
-            const keyedImages = {}
-            // Opción 1: una clave para una arreglo que contiene las tres imagens
-            imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
-
-            Object.keys(posts).forEach(x => {
-
-                posts[x] = {
-
-                    ...posts[x],
-
-                    exigenciaFisica: posts[x].exigenciaFisica,
-                    idPanorama: x,
-                    urlFacebook: posts[x].urlFacebook,
-                    urlImagen: keyedImages[x][0],
-                    urlImagen1: keyedImages[x][1],
-                    urlImagen2: keyedImages[x][2],
-                    urlInstagram: posts[x].instagram,
-                    // urlMapUbicacion: posts[x].url_map_ubicacion,
-                    urlTripAdvisor: posts[x].trip_advisor,
-                    urlWeb: posts[x].urlWeb,
-                }
-                // tslint:disable-next-line: no-console
-                // console.log("post Realizados", posts[x])
-
-            })
-
-            // tslint:disable-next-line: no-console
-            //   console.log(posts)
-            dispatch(fetchSuccess(posts))
-        } catch (e) {
-            // tslint:disable-next-line: no-console
-            console.log(e)
-            dispatch(fetchError(e))
+            console.log(error)
+            dispatch(fetchError(error))
 
         }
+
     }
+
+
+/** Obtiene todos los panoramas deseados (xrealizar)  de los usarios que correspondan al proveedor que inició sesión */
+export const fetchPanoramasDeseadosByProveedor = () =>
+    async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
+
+        dispatch(fetchStart())
+        if (!auth.currentUser) {
+            return
+        }
+
+        try {
+            const uid = auth.currentUser.uid
+            const xrealizarRef = db.collection('xrealizar')
+                .where('uidProveedor', '==', uid)
+                .orderBy("idPanorama")
+            const pxr = {} // Panoramas por realizar
+            await xrealizarRef.get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // tslint:disable-next-line: no-console
+                        console.log('Consulta vacía');
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        // tslint:disable-next-line: no-console
+                        pxr[doc.id] = doc.data()
+                        //   console.log(doc.id, '=>', doc.data());
+                    });
+                })
+                .catch(err => {
+                    // tslint:disable-next-line: no-console
+                    console.log('Error', err.message);
+                });
+            // tslint:disable-next-line: no-console
+            //  console.log('Enviando data', pxr);
+            dispatch(fetchSuccessdeseadosByProveedor(pxr))
+
+
+        } catch (error) {
+            // tslint:disable-next-line: no-console
+            console.log(error)
+            dispatch(fetchError(error))
+
+        }
+
+    }
+
 
 export const fetchPanoramasPorRealizar = () =>
     async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
@@ -688,25 +700,21 @@ export const fetchPanoramasPorRealizar = () =>
         dispatch(fetchStart())
 
         try {
-
             const uid = auth.currentUser ? auth.currentUser.uid : undefined
-            const snaps = await db.collection('panoramas').get()
             const xrealizarRef = db.collection('xrealizar')
                 .where('uid', '==', uid)
-            const realizados = {} // Panoramas   realizados 
-            let vacio = false
-
+            const pxr = {} // Panoramas por realizar
             await xrealizarRef.get()
                 .then(snapshot => {
                     if (snapshot.empty) {
                         // tslint:disable-next-line: no-console
                         console.log('Consulta vacía');
-                        vacio = true
+
                         return;
                     }
                     snapshot.forEach(doc => {
                         // tslint:disable-next-line: no-console
-                        realizados[doc.id] = doc.data()
+                        pxr[doc.id] = doc.data()
                         //   console.log(doc.id, '=>', doc.data());
                     });
                 })
@@ -714,78 +722,59 @@ export const fetchPanoramasPorRealizar = () =>
                     // tslint:disable-next-line: no-console
                     console.log('Error', err.message);
                 });
+            dispatch(fetchSuccess(pxr))
 
 
-            const posts = {} // Panoramas 
-            snaps.forEach((x) => {
-
-                Object.keys(realizados).forEach(r => {
-                    if (realizados[r].pid === x.id) {
-                        posts[x.id] = x.data()
-                        return
-
-                    }
-
-                })
-
-            })
-
-            {
-                // tslint:disable-next-line: no-console
-                console.log('Panoramas por realizar', realizados);
-
-            }
-
-
-            const imgIds = await Promise.all(Object.keys(posts).
-                map(async x => {
-                    const ref = storage.ref(`panoramas/${x}.jpeg`)
-                    const url = await ref.getDownloadURL()
-                    const ref1 = storage.ref(`panoramas/${x}1.jpeg`)
-                    const url1 = await ref1.getDownloadURL()
-                    const ref2 = storage.ref(`panoramas/${x}2.jpeg`)
-                    const url2 = await ref2.getDownloadURL()
-                    return [x, url, `${x}1`, url1, `${x}2`, url2]
-                }))
-
+        } catch (error) {
             // tslint:disable-next-line: no-console
-
-
-            const keyedImages = {}
-            // Opción 1: una clave para una arreglo que contiene las tres imagens
-            imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
-
-            Object.keys(posts).forEach(x => {
-
-                posts[x] = {
-
-                    ...posts[x],
-
-                    exigenciaFisica: posts[x].exigenciaFisica,
-                    idPanorama: x,
-                    urlFacebook: posts[x].urlFacebook,
-                    urlImagen: keyedImages[x][0],
-                    urlImagen1: keyedImages[x][1],
-                    urlImagen2: keyedImages[x][2],
-                    urlInstagram: posts[x].instagram,
-                    // urlMapUbicacion: posts[x].url_map_ubicacion,
-                    urlTripAdvisor: posts[x].trip_advisor,
-                    urlWeb: posts[x].urlWeb,
-                    vacio
-                }
-
-            })
-
-            // tslint:disable-next-line: no-console
-            //   console.log(posts)
-            dispatch(fetchSuccess(posts))
-        } catch (e) {
-            // tslint:disable-next-line: no-console
-            console.log(e)
-            dispatch(fetchError(e))
+            console.log(error)
+            dispatch(fetchError(error))
 
         }
+
     }
+
+export const fetchPanoramasRealizados = () =>
+    async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
+
+        dispatch(fetchStart())
+
+        try {
+            const uid = auth.currentUser ? auth.currentUser.uid : undefined
+            const xrealizarRef = db.collection('realizados')
+                .where('uid', '==', uid)
+            const pxr = {} // Panoramas por realizar
+            await xrealizarRef.get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // tslint:disable-next-line: no-console
+                        console.log('Consulta vacía');
+
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        // tslint:disable-next-line: no-console
+                        pxr[doc.id] = doc.data()
+                        //   console.log(doc.id, '=>', doc.data());
+                    });
+                })
+                .catch(err => {
+                    // tslint:disable-next-line: no-console
+                    console.log('Error', err.message);
+                });
+            dispatch(fetchSuccess(pxr))
+
+
+        } catch (error) {
+            // tslint:disable-next-line: no-console
+            console.log(error)
+            dispatch(fetchError(error))
+
+        }
+
+    }
+
+
 
 // definimos los dos thunks de like y share
 export const like = (id: string) =>
@@ -900,6 +889,12 @@ export const realizado = (id: string) =>
 
     }
 
+
+
+
+
+
+
 export const sharetemp = (id: string) =>
     async (dispatch: Dispatch, getState: () => any, { auth }: IServices) => {
         if (!auth.currentUser) {
@@ -1013,3 +1008,95 @@ export const handlePanoramaImageSubmit = (payload: { profileImg: File }, idPanor
         console.log(`url Imagen:  ${url}`)
         dispatch(setPanoramaImage(url))
     }
+
+export const porRealizarAdd = (p: IPanorama, fecha: Date) =>
+    async (dispatch: Dispatch, getState: () => any, { auth, db }: IServices) => {
+        return new Promise(async (resolve, eject) => {
+            if (!auth.currentUser) {
+                return
+            }
+            try {
+                // Obtenemos los datos del usurio en Firestore
+                const snap = await db.collection('users').doc(auth.currentUser.uid).get()
+                const userFirestore = snap.data()
+                if (userFirestore != null) {
+                    await db.collection('xrealizar').doc(`${p.idPanorama}_${auth.currentUser.uid}`).set({
+                        ...p,
+                        ciudadOrigen: userFirestore.ciudad,
+                        createdAt: new Date(),
+                        email: userFirestore.email,
+                        fecha,
+                        nombreUsuario: userFirestore.nombre,
+                        uid: auth.currentUser.uid
+                    })
+                    const sn = await db.collection('realizados').doc(`${p.idPanorama}_${auth.currentUser.uid}`).get()
+                    const reali = sn.data()
+                    if (reali !== undefined) {
+                        await db.collection('realizados').doc(`${p.idPanorama}_${auth.currentUser.uid}`).delete()
+                    }
+                    resolve("OK");
+                }
+            } catch (error) {
+                // tslint:disable-next-line:no-console
+                console.log("Error", error.message) // esto
+                // alert(error.message)
+                resolve(error.message);
+            }
+
+
+        })
+
+
+
+    }
+
+export const realizadoAdd = (p: IPanorama, fecha: Date) =>
+    async (dispatch: Dispatch, getState: () => any, { auth, db }: IServices) => {
+        return new Promise(async (resolve, eject) => {
+            if (!auth.currentUser) {
+                return
+            }
+            try {
+                // Obtenemos los datos del usurio en Firestore
+                const snap = await db.collection('users').doc(auth.currentUser.uid).get()
+                const userFirestore = snap.data()
+                if (userFirestore != null) {
+                    await db.collection('realizados').doc(`${p.idPanorama}_${auth.currentUser.uid}`).set({
+                        ...p,
+                        ciudadOrigen: userFirestore.ciudad,
+                        createdAt: new Date(),
+                        email: userFirestore.email,
+                        fecha,
+                        nombreUsuario: userFirestore.nombre,
+                        uid: auth.currentUser.uid
+                    })
+                    const sn = await db.collection('xrealizar').doc(`${p.idPanorama}_${auth.currentUser.uid}`).get()
+                    const reali = sn.data()
+                    if (reali !== undefined) {
+                        await db.collection('xrealizar').doc(`${p.idPanorama}_${auth.currentUser.uid}`).delete()
+                    }
+                    resolve("OK");
+                }
+            } catch (error) {
+                // tslint:disable-next-line:no-console
+                console.log("Error", error.message) // esto
+                // alert(error.message)
+                resolve(error.message);
+            }
+
+
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+

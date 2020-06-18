@@ -8,6 +8,8 @@ export interface IState {
     //  panoramaImage?: string;
     data: IDataPanorama;
     data1: IDataFirebase;
+    dataRealizadosByProveedor: IDataPanorama
+    dataDeseadosByProveedor: IDataPanorama
     fetched: boolean;
     fetching: boolean;
     alert: boolean;

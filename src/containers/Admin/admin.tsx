@@ -3,24 +3,32 @@ import service from '../../service'
 import { bindActionCreators } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { Spinner, Container, Alert, Button, Table } from 'react-bootstrap';
+import { Spinner, Container, Alert, Button, Table, Card, Row, Col } from 'react-bootstrap';
 // import Panorama from '../../components/PanoramaEdit'
 import * as postsDuck from '../../ducks/Panoramas'
 import { IState } from '../../ducks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlusCircle, faDesktop, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlusCircle, faDesktop, faUserFriends, faChartLine } from '@fortawesome/free-solid-svg-icons';
 import EditarPanorama from '../../components/EditarPanorama';
 import Nav from 'react-bootstrap/Nav';
 import { Navbar } from 'react-bootstrap/';
+import { panoramaMasRealizado, panoramaMasDeseado } from 'src/utils';
 // import Usuario from '../../components/Usuario';
 
+
+
 interface IAdmin {
+  fetchPanoramasRealizadosByProveedor: () => void
+  fetchPanoramasDeseadosByProveedor: () => void
   fetchFindPanoramaUsuario: (uid: string) => void
   editar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
   guardar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
   fetched: boolean
   loading: boolean
   data: postsDuck.IDataPanorama
+  dataRealizadosByProveedor: postsDuck.IDataPanorama
+  dataDeseadosByProveedor: postsDuck.IDataPanorama
+
 }
 interface IStateAdmin {
   lat?: number
@@ -35,6 +43,8 @@ interface IStateAdmin {
   rol: string
   uid: string
   mEditar: boolean
+  pMasRealizado: any
+  pMasDeseado: any
   nombre?: string
   urlImagen?: string
   urlImagen1?: string
@@ -62,15 +72,17 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
   constructor(props: IAdmin) {
     super(props)
-    const { fetched } = props
+    const { fetched, fetchPanoramasRealizadosByProveedor, fetchPanoramasDeseadosByProveedor } = props
     if (fetched) {
       return
     }
-
-
+    fetchPanoramasRealizadosByProveedor()
+    fetchPanoramasDeseadosByProveedor() // Carga en el estado los panoramas realizados por el usuario del proveedor que inició sesión
     this.state = {
       loading1: true,
       mEditar: false,
+      pMasDeseado: {},
+      pMasRealizado: {},
       rol: "turista",
       uiSeleccionada: "Dashboard",
       uid: "",
@@ -125,19 +137,31 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
       }
       this.props.fetchFindPanoramaUsuario(this.state.uid)
+      const pMasR = panoramaMasRealizado(this.props.dataRealizadosByProveedor)
+      const pMasD = panoramaMasDeseado(this.props.dataDeseadosByProveedor)
+
       this.setState({
-        loading1: false
+
+        loading1: false,
+        pMasDeseado: pMasD,
+        pMasRealizado: pMasR,
       })
-
-
-
     }
+
+    // tslint:disable-next-line: no-console
+    //  console.log(" Util panoramasMasRealizados:", pMasR)
+    // panoramasMasRealizados();
+
   }
 
   public render() {
-    const { loading1, rol, mEditar, uiSeleccionada } = this.state
+    const { loading1, rol, mEditar, uiSeleccionada, pMasRealizado, pMasDeseado } = this.state
     const { data, loading } = this.props
     let i = 0;
+    // // tslint:disable-next-line: no-console
+    // console.log(" dataRealizadosByProveedor", dataRealizadosByProveedor)
+    // // tslint:disable-next-line: no-console
+    // console.log(" dataDeseadosByProveedor", dataDeseadosByProveedor)
 
 
     if (loading1 && loading) {
@@ -157,18 +181,100 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
         switch (uiSeleccionada) {
           case "Dashboard":
             return (
-              <div className="d-flex flex-wrap container justify-content-end">
-                {this.subMenuAdmin()}
-                <Alert variant="info" className="container">
-                  <Alert.Heading>  <FontAwesomeIcon icon={faDesktop} /> Dashboard </Alert.Heading>
-                  <p>
-                    Dashboard
+              <div className="d-flex flex-wrap container justify-content-between justify-content-center">
+                <div className="d-flex  flex-wrap container justify-content-end">
+                  {this.subMenuAdmin()}
+                  <Alert variant="info" className="container">
+                    <Alert.Heading>  <FontAwesomeIcon icon={faDesktop} /> Dashboard </Alert.Heading>
+                    <p>
+                      Dashboard
              </p>
-                  <hr />
+                    <hr />
 
 
-                </Alert>
+                  </Alert>
+                </div>
+                <Container>
+                  <Row>
+                    <Col className="d-flex container justify-content-center align-content-center">
+                      <Card style={{ width: '18rem', margin: "5px", background: "#f5f5f5" }}>
+                        <div className="h4 d-flex justify-content-center bg-light"> Más realizado</div>
+                        <Card.Img variant="bottom" src={pMasRealizado.urlImagen} />
+                        <Card.Body>
+
+                          <Card.Text>
+                            <div className="h4"> {pMasRealizado.nombre}</div>
+                          De todos tus panoramas este es el más realizado por los usuarios <br />
+                            <h3>{pMasRealizado.vecesRealizado} veces</h3>
+                          </Card.Text>
+                          <div className="d-flex justify-content-center">
+                            <Button block={true} variant="outline-info">
+                              <FontAwesomeIcon icon={faChartLine} /> Información detallada
+                            </Button>
+                          </div>
+
+                        </Card.Body>
+                      </Card>
+
+                    </Col>
+                    <Col className="d-flex container justify-content-center" >
+
+                      <Card style={{ width: '18rem', margin: "5px", background: "#f5f5f5" }}>
+                        <div className="h4 d-flex justify-content-center bg-light"> Más deseado</div>
+                        <Card.Img variant="bottom" src={pMasDeseado.urlImagen} />
+                        <Card.Body>
+
+                          <Card.Text>
+                            <div className="h4"> {pMasDeseado.nombre}</div>
+                          De todos tus panoramas este es el más deseado por los usuarios <br />
+                            <h3>{pMasDeseado.vecesRealizado} veces</h3>
+                          </Card.Text>
+                          <div className="d-flex justify-content-center">
+                            <Button block={true} variant="outline-info">
+                              <FontAwesomeIcon icon={faChartLine} /> Información detallada
+                            </Button>
+                          </div>
+                        </Card.Body>
+                      </Card>
+
+                    </Col >
+                    <Col className="d-flex container justify-content-center"> <Card style={{ width: '18rem', margin: "5px" }}>
+                      <Card.Img variant="top" src={""} />
+                      <Card.Body>
+                        <Card.Title>Usuario con más panoramas realizados</Card.Title>
+                        <Card.Text>
+                          De todos tus panoramas este es el más deseado por los usuarios <br />
+                          <h3>125 veces</h3>
+                        </Card.Text>
+                        <Button variant="primary">Info</Button>
+                      </Card.Body>
+                    </Card></Col>
+                  </Row>
+                  <Row>
+
+                    <Col className="d-flex container justify-content-center"> <Card style={{ width: '18rem', margin: "5px" }}>
+                      <Card.Img variant="top" src={""} />
+                      <Card.Body>
+                        <Card.Title>Usuario con más panoramas realizados</Card.Title>
+                        <Card.Text>
+                          De todos tus panoramas este es el más deseado por los usuarios <br />
+                          <h3>125 veces</h3>
+                        </Card.Text>
+                        <Button variant="primary">Info</Button>
+                      </Card.Body>
+                    </Card>
+                    </Col>
+
+                  </Row>
+                </Container>
+
+
+
+
+
+
               </div>
+
             )
 
 
@@ -179,16 +285,17 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                 {this.subMenuAdmin()}
                 <Alert variant="info" className="container">
                   <Alert.Heading>  <FontAwesomeIcon icon={faMountain} /> Panoramas </Alert.Heading>
+                  <div className="d-flex container justify-content-end position-absolute pr-5 pb-5" >
+
+                    <Button variant="outline-primary" href="/app/admin/register"> <FontAwesomeIcon size="2x" icon={faPlusCircle} /> </Button>
+                  </div>
                   <p>
                     Para agregar un nuevo panorama usa el botón <FontAwesomeIcon icon={faPlusCircle} /> y para editar usa el botón "Editar panorama"
 
                Tienes {Object.keys(data).length} panoramas bajo tu administración.
                       </p>
                   <hr />
-                  <div className="container d-flex justify-content-end">
 
-                    <Button variant="outline-primary" href="/app/admin/register"> <FontAwesomeIcon size="2x" icon={faPlusCircle} /> </Button>
-                  </div>
 
                 </Alert>
                 <Table responsive={true} striped={true} bordered={true} hover={true}>
@@ -402,7 +509,7 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 }
 
 const mapStateToProps = (state: IState) => {
-  const { Posts: { data, fetched, fetching } } = state
+  const { Posts: { data, dataRealizadosByProveedor, dataDeseadosByProveedor, fetched, fetching } } = state
   const loading = fetching || !fetched
 
 
@@ -410,6 +517,8 @@ const mapStateToProps = (state: IState) => {
   // porque lo estamos usando en el constructor. Y data que son los datos de los posts
   return {
     data,
+    dataDeseadosByProveedor,
+    dataRealizadosByProveedor,
     fetched,
     loading,
 

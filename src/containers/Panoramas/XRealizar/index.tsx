@@ -10,18 +10,20 @@ import { Spinner, Container, Alert, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faCheckCircle, faBan } from '@fortawesome/free-solid-svg-icons';
 import SweetAlert from "react-bootstrap-sweetalert";
-import services from 'src/service';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { IPanorama } from '../../../ducks/Panoramas';
+import { firestore } from 'firebase';
 
 
 
 interface IPanoramasxRealizar {
     fetchPanoramasPorRealizar: () => void
-    xrealizar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
-    realizado: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
-    share: (a: string) => void // vamos a necesitar la referencia del panorama  al que le damos share
-    sharetemp: (a: string) => void
+    realizadoAdd: (p: IPanorama, fecha: Date) => any
+    // xrealizar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
+    // realizado: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
+    // share: (a: string) => void // vamos a necesitar la referencia del panorama  al que le damos share
+    // sharetemp: (a: string) => void
     fetched: boolean
     loading: boolean
     data: postsDuck.IDataPanorama
@@ -33,6 +35,8 @@ interface IStatePorRealizr{
     mensajeAccion:string
     uiobtenerFecha:boolean
     alert: React.ReactNode
+    panorama: IPanorama
+    uidProveedor: string
     work:boolean
 }
 
@@ -45,6 +49,23 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
             fechaInicial: new Date(),
             idPanorama:"",
             mensajeAccion:"",
+            panorama: {
+                calificacion: 0,
+                createdAt: firestore.Timestamp.fromDate(new Date()),
+                descripcion: "",
+                direccion: "string",
+                exigenciaFisica: 0,
+                lat: 0,
+                lng: 0,
+                nombre: "string",
+                urlFacebook: " string",
+                urlImagen: "string",
+                urlImagen1: " string",
+                urlImagen2: " string",
+                urlMapUbicacion: "string",
+                valor: 0,
+            },
+            uidProveedor: "",
             uiobtenerFecha:false,
             work:false,
         }
@@ -58,11 +79,11 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
    /**
     *  Cambia el estado para poder obter la fecha que el usuario ingresará
     */
-    public uiObterFecha=(idPanorama:string, mensajeAccion: string)=>()=>{
+    public uiObterFecha = (panorama: IPanorama, mensajeAccion: string) => () => {
         this.setState({
-            idPanorama,
             mensajeAccion,
-            uiobtenerFecha:true
+            panorama,
+            uiobtenerFecha: true
 
         })
     }
@@ -90,14 +111,14 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
         this.setState({
             alert: (
                 <SweetAlert
-                     success={true}
-                   // customIcon={logo}
-                    title="Listo"
+                    success={true}
+                    // customIcon={logo}
+                    title="¡Listo!"
                     showCancel={true}
                     showCloseButton={true}
                     confirmBtnText="Sí"
                     cancelBtnText="No"
-                    onCancel={this.hideAlert}
+                    onCancel={this.hideAlert(true)}
                     onConfirm={this.onClickRegistro(ruta)}>
                     El panorama  ha sido agregado a tu lista de {lista} ¿Deseas revisarla ahora?
                 </SweetAlert>
@@ -106,15 +127,42 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
     };
 
 
+    public onAlertError = (error: string) => {
+        // tslint:disable-next-line: no-console
+        //  console.log(`value ${value} otro: ${value.length}`);
+        this.setState({
+            alert: (
+                <SweetAlert
+                    error={true}
+                    // customIcon={logo}
+                    title="¡Error!"
+                    //  showCancel={true}
+                    showCloseButton={true}
+                    confirmBtnText="OK"
+                    //     cancelBtnText="No"
+                    //  onCancel={this.hideAlert}
+                    onConfirm={this.hideAlert(false)}>
+                    Se ha producido un error: {error}
+                </SweetAlert>
+            ),
+        });
+    };
 
 
 
-    public hideAlert = () => {
+    public hideAlert = (redireccionar: boolean) => () => {
         this.setState({
             alert: null,
         });
-     location.href = "/app/xrealizar"
+        if (redireccionar) {
+            location.href = "/app/xrealizar"
+        }
+
     };
+
+
+
+  
     public onClickRegistro = (ruta: string) => () => {
         // location.href = '/register'
         location.href = `/app/${ruta}`
@@ -124,11 +172,9 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
     // handleLike recibe un id y retorna una funcion. Esto nos permite 
     public render() {
         const { data, loading } = this.props
-        const {work, uiobtenerFecha, idPanorama, mensajeAccion}= this.state
-
+        const {work, uiobtenerFecha,  mensajeAccion}= this.state
         //  tslint:disable-next-line: no-console
        //  console.log("data", Object.keys(data).length);
-
         //  tslint:disable-next-line: no-console
        //  console.log("Fecha: "+this.state.fechaInicial);
 
@@ -141,7 +187,7 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                         <DatePicker
                             selected={this.state.fechaInicial}
                             onChange={this.handleChangeDate}
-                        />  <Button variant="outline-primary" onClick={this.handleRealizado(idPanorama)} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
+                        />  <Button variant="outline-primary" onClick={this.realizado} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
                         <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
                         {this.state.alert}
                     </div>
@@ -215,8 +261,8 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                             calificacion={post.calificacion}
                             exigenciaFisica={post.exigenciaFisica}
                             valor={post.valor}
-                            porRealizar={this.handlePorRealizar(x)}
-                            realizado={this.uiObterFecha(x, "realizaste el panorama")}
+                          //  porRealizar={this.handlePorRealizar(x)}
+                            realizado={this.uiObterFecha(post, "realizaste el panorama")}
                             titulo={"Por realizar"}
                             hidenCompartir={false}
                             hiddenRealizado={false}
@@ -252,153 +298,38 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
 
 
     }
-
-    // public setDatos = () => () => {
-      
-    //             this.setState({
-    //                 alert: (
-    //                     <SweetAlert
-    //                         input={true}
-    //                         showCancel={true}
-    //                         cancelBtnBsStyle="default"
-    //                         defaultValue={this.props.fono}
-    //                         title="Actualiza tu teléfono"
-    //                         //  placeholder="Write something"
-    //                         onConfirm={this.onClick("fono")}
-    //                         onCancel={this.hideAlert1}
-    //                     >
-    //                         Ingresa tu nuevo número de teléfono. Para más de uno, separalos por una coma.
-    //                     </SweetAlert>
-    //                 )
-    //             })
-            
-            
-    //     }
-    private handlePorRealizar = (panoramaId: string) => async () => {
-        const { auth, db } = services
-        const u = auth.currentUser
-        this.setState({
-        
-            work: true,
-
-        });
-        if (u != null) {
-            try {
-                // Buscamos el post en cuestion
-                const snap = await db.collection('users').doc(u.uid).get()
-                const post = snap.data()
-                if (post != null) {
-                    await db.collection('xrealizar').doc(`${panoramaId}_${u.uid}`).set({
-                        // ...post,
-                        ciudadOrigen: post.ciudad,
-                        createdAt: new Date(),
-                        email: post.email,
-                        nombreUsuario: post.nombre,
-                        pid: panoramaId,
-                        uid: u.uid
-                    })
-                    const sn = await db.collection('realizados').doc(`${panoramaId}_${u.uid}`).get()
-                    const xrealizar = sn.data()
-                    if (xrealizar !== undefined) {
-                        await db.collection('realizados').doc(`${panoramaId}_${u.uid}`).delete()
-                    }
-                }
-            } catch (error) {
-                alert(error.message)
-            }
-
-        }
-        this.setState({
-            work: false,
-        });
-        // `app/xrealizar
-        this.onAlertOk("Deseados", "xrealizar")
-        // const { xrealizar } = this.props;
-        // this.setState({
-        //     work: true,
-        // });
-        // xrealizar(id);
-        // //  tslint:disable-next-line: no-console
-        // console.log("Agregando a la lista de por realizar ", this.state.work);
-        // setTimeout(() => {
-        //     // tslint:disable-next-line: no-console
-        //     console.log("Ya se agregó  a la lista por realizar", this.state.work);
-        //     this.setState({
-        //         work: false,
-        //     });
-        // }, 2000);
-
-        //   location.href = "/app/xrealizar";
-    };
-
-    private handleRealizado = (panoramaId: string) => async () => {
-        const { auth, db } = services
-        const u = auth.currentUser
-      
+       private realizado = () => {
+        const { panorama, fechaInicial } = this.state
+        const { realizadoAdd } = this.props
         this.setState({
             uiobtenerFecha: false,
             work: true,
         });
-        if (u != null) {
-            try {
-                // Buscamos el post en cuestion
-                const snap = await db.collection('users').doc(u.uid).get()
-                const post = snap.data()
-                if (post != null) {
-                    await db.collection('realizados').doc(`${panoramaId}_${u.uid}`).set({
-                        // ...post,
-                        ciudadOrigen: post.ciudad,
-                        createdAt: new Date(),
-                        email: post.email,
-                        fechaRealizado:this.state.fechaInicial,
-                        nombreUsuario: post.nombre,
-                        pid: panoramaId,
-                        uid: u.uid
-                    })
-                    const sn = await db.collection('xrealizar').doc(`${panoramaId}_${u.uid}`).get()
-                    const xrealizar = sn.data()
-                    if (xrealizar !== undefined) {
-                        await db.collection('xrealizar').doc(`${panoramaId}_${u.uid}`).delete()
-                    }
-                }
-            } catch (error) {
-                alert(error.message)
+
+
+
+
+        
+        realizadoAdd(panorama, fechaInicial).then((res: string) => {
+            if (res === "OK") {
+                this.setState({
+                    work: false,
+                });
+
+                this.onAlertOk("Realizados", "realizados")
+
+            } else {
+                this.setState({
+                    work: false,
+                });
+                this.onAlertError(res)
             }
-
-        }
-        this.setState({
-            work: false,
-        });
-        this.onAlertOk("Realizados", "realizados")
-
-    };
-
-
-
-    // private handlePorRealizar = (id: string) => () => {
-    //     const { xrealizar } = this.props
-    //     xrealizar(id)
-    //     setTimeout(() => {
-
-    //         location.href = "/app/xrealizar";
-    //     }, 1000)
-
-
-    // }
-    // private handleRealizado = (id: string) => () => {
-    //     const { realizado } = this.props
-    //     realizado(id)
-    //     setTimeout(() => {
-
-    //         location.href = "/app/realizados";
-    //     }, 1000)
-
-
-    // }
+        })
+    }
 
     private handleShare = (id: string) => () => {
-        const { share } = this.props
-        share(id)
+        // const { share } = this.props
+        // share(id)
     }
 
 }
