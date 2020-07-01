@@ -14,12 +14,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { IPanorama } from '../../../ducks/Panoramas';
 import { firestore } from 'firebase';
-
-
-
+import BeautyStars from 'beauty-stars';
 interface IPanoramasxRealizar {
     fetchPanoramasPorRealizar: () => void
-    realizadoAdd: (p: IPanorama, fecha: Date) => any
+    realizadoAdd: (p: IPanorama, fecha: Date, calificacion:number) => any
     // xrealizar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
     // realizado: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
     // share: (a: string) => void // vamos a necesitar la referencia del panorama  al que le damos share
@@ -30,6 +28,7 @@ interface IPanoramasxRealizar {
 
 }
 interface IStatePorRealizr{
+    calificacion:number
     fechaInicial:Date
     idPanorama:string
     mensajeAccion:string
@@ -46,6 +45,7 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
         const { fetchPanoramasPorRealizar, fetched } = props
         this.state={
             alert:null,
+            calificacion:0, // Calificacion otorgada por el usuario cuano lo selecciona como realizado
             fechaInicial: new Date(),
             idPanorama:"",
             mensajeAccion:"",
@@ -74,6 +74,15 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
         }
 
         fetchPanoramasPorRealizar()
+    }
+
+    public cambiarCalificacion = (value: any) => {
+
+        this.setState({
+            calificacion: value
+        })
+
+
     }
 
    /**
@@ -181,21 +190,50 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
 
         if (uiobtenerFecha) {
             return (
-                <Alert variant="info" className="container">
-                    <Alert.Heading className="d-flex   container justify-content-center" >¿Cuándo {mensajeAccion}? Selecciona una fecha. </Alert.Heading>
-                    <div className="d-flex flex-wrap container justify-content-center">
-                        <DatePicker
-                            selected={this.state.fechaInicial}
-                            onChange={this.handleChangeDate}
-                        />  <Button variant="outline-primary" onClick={this.realizado} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
-                        <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
-                        {this.state.alert}
+                <Alert variant="info" className="container justify-content-center">
+                    <Alert.Heading className="d-flex  container justify-content-center" > 
+                    <hr/>
+                    ¿Cuándo {mensajeAccion}? Selecciona una fecha y otorga una calificación. 
+                    </Alert.Heading>
+                    <div className="flex-column  container justify-content-center">
+
+
+                        <div className="d-flex justify-content-center">
+                            Fecha: <DatePicker
+                                selected={this.state.fechaInicial}
+                                onChange={this.handleChangeDate}
+                            />
+                        </div>
+
+                        <hr />
+
+
+                        <div className="d-flex justify-content-center">
+                            Calificación: <BeautyStars
+                                maxStars={5}
+                                value={this.state.calificacion}
+                                inactiveColor="#e0e0e0"
+                                size="26px"
+                                editable={true}
+                                onChange={this.cambiarCalificacion}
+                            />
+                        </div>
+
+                        <hr />
+                        <div className="d-flex justify-content-center">
+
+                            <Button variant="outline-primary" onClick={this.realizado} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
+                            <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
+                            {this.state.alert}
+                        </div>
+
                     </div>
                 </Alert>
+            
             );
         }
 
-
+//  onClick={this.realizado}
 
 
         if (work) {
@@ -298,33 +336,57 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
 
 
     }
-       private realizado = () => {
-        const { panorama, fechaInicial } = this.state
+    private realizado = () => {
+        const { panorama, fechaInicial, calificacion } = this.state
         const { realizadoAdd } = this.props
-        this.setState({
-            uiobtenerFecha: false,
-            work: true,
-        });
+        if (calificacion === 0) {
+
+            this.setState({
+                alert: (
+                    <SweetAlert
+                        warning={true}
+                        title="¡Cuidado!"
+                        showCloseButton={true}
+                        confirmBtnText="Entendí"
+                        onConfirm={this.hideAlert(false)}>
+                        Debes marcar una calificación.
+                        {/* {  <BeautyStars
+                            maxStars={5}
+                            value={this.state.calificacion}
+                            inactiveColor="#e0e0e0"
+                            size="26px"
+                            editable={true}
+                            onChange={this.cambiarCalificacion}
+                        />} */}
+                    </SweetAlert>
+                ),
+            });
+          
+
+        } else {
+            this.setState({
+                uiobtenerFecha: false,
+                work: true,
+            });
+            realizadoAdd(panorama, fechaInicial, calificacion).then((res: string) => {
+                if (res === "OK") {
+                    this.setState({
+                        work: false,
+                    });
+
+                    this.onAlertOk("Realizados", "realizados")
+
+                } else {
+                    this.setState({
+                        work: false,
+                    });
+                    this.onAlertError(res)
+                }
+            })
 
 
+        }
 
-
-        
-        realizadoAdd(panorama, fechaInicial).then((res: string) => {
-            if (res === "OK") {
-                this.setState({
-                    work: false,
-                });
-
-                this.onAlertOk("Realizados", "realizados")
-
-            } else {
-                this.setState({
-                    work: false,
-                });
-                this.onAlertError(res)
-            }
-        })
     }
 
     private handleShare = (id: string) => () => {

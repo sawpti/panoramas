@@ -1,19 +1,20 @@
 import * as React from 'react';
+import { useState } from "react";
 import service from '../../service'
 import { bindActionCreators } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { Spinner, Container, Alert, Button, Table, Card, Row, Col } from 'react-bootstrap';
+import { Spinner, Container, Alert, Button, Table, Card, Row, Col, Modal } from 'react-bootstrap';
 // import Panorama from '../../components/PanoramaEdit'
 import * as postsDuck from '../../ducks/Panoramas'
 import { IState } from '../../ducks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlusCircle, faDesktop, faUserFriends, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlusCircle, faDesktop, faUserFriends, faChartLine, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import EditarPanorama from '../../components/EditarPanorama';
 import Nav from 'react-bootstrap/Nav';
 import { Navbar } from 'react-bootstrap/';
 import { panoramaMasRealizado, panoramaMasDeseado } from 'src/utils';
-// import Usuario from '../../components/Usuario';
+
 
 
 
@@ -21,6 +22,8 @@ interface IAdmin {
   fetchPanoramasRealizadosByProveedor: () => void
   fetchPanoramasDeseadosByProveedor: () => void
   fetchFindPanoramaUsuario: (uid: string) => void
+  findUsersByIdPanoramaMR: (idPanorama: string) => any
+  findUsersByIdPanoramaMD: (idPanorama: string) => any
   editar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
   guardar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
   fetched: boolean
@@ -46,6 +49,8 @@ interface IStateAdmin {
   pMasRealizado: any
   pMasDeseado: any
   nombre?: string
+  usuariosByPanoramaMR: any
+  usuariosByPanoramaMD: any
   urlImagen?: string
   urlImagen1?: string
   urlImagen2?: string
@@ -56,8 +61,12 @@ interface IStateAdmin {
   urlMapUbicacion?: string
   uiSeleccionada: string // Dashboard, Panoramas,Usuarios
   valor?: number
+  usuarios?: any
 
 }
+
+
+
 
 // const volver = () => {
 
@@ -67,6 +76,176 @@ interface IStateAdmin {
 //     </div>
 //   )
 // }
+
+
+function ModalEstadisticasMasRealizado(usersByPanoramas: any) {
+  let users = {};
+
+  Object.keys(usersByPanoramas).map((x) => {
+    users = usersByPanoramas[x];
+  });
+
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  return (
+    <>
+      <Button block={true} variant="outline-info" onClick={handleShow}>
+        <FontAwesomeIcon icon={faChartLine} /> Información detallada
+          </Button>
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton={true}>
+          <Modal.Title id="example-custom-modal-styling-title">
+            Panorama más realizado. Últimos {Object.keys(users).length} visitantes
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Table
+            responsive={true}
+            striped={true}
+            bordered={true}
+            hover={true}
+          >
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Procedencia</th>
+                <th>Fecha visita</th>
+                <th>Calificación otorgada</th>
+                <th>Enviar mensaje</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(users).map((x) => {
+                const user = users[x];
+
+
+                return (
+                  <tr key={x}>
+                    <td>{user.nombre}</td>
+                    <td>{user.procedencia}</td>
+                    <td>
+                      {new Date(
+                        user.fechaVisita.toDate()
+                      ).toLocaleDateString()}
+                    </td>
+                    <td>{user.califiacionOtorgada}</td>
+                    <td className="d-flex justify-content-center">
+                      {" "}
+                      <Button variant="outline-info">
+                        <FontAwesomeIcon icon={faEnvelope} />
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+
+          <p>
+            Esta tabla muestra la información de los últimos 50 visitantes
+            que han realizado el panorama. Si el panorama ha sido realizado
+            menos de 50 veces, muestra todos los usuarios que lo han
+            realizado. Puedes enviar un e-mail al usuario, agredeciendole o saludandolo, con la función "Enviar mensaje"
+              </p>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+
+}
+function ModalEstadisticasMasDeseado(usersByPanoramas: any) {
+  let users = {};
+
+  Object.keys(usersByPanoramas).map((x) => {
+    users = usersByPanoramas[x];
+  });
+
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  return (
+    <>
+      <Button block={true} variant="outline-info" onClick={handleShow}>
+        <FontAwesomeIcon icon={faChartLine} /> Información detallada
+          </Button>
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton={true}>
+          <Modal.Title id="example-custom-modal-styling-title">
+            Panorma más de desado. Últimos {Object.keys(users).length} visitantes
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Table
+            responsive={true}
+            striped={true}
+            bordered={true}
+            hover={true}
+          >
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Procedencia</th>
+                <th>Fecha que espera visitar</th>
+                <th>Enviar mensaje</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(users).map((x) => {
+                const user = users[x];
+
+
+                return (
+                  <tr key={x}>
+                    <td>{user.nombre}</td>
+                    <td>{user.procedencia}</td>
+                    <td>
+                      {new Date(
+                        user.fechaDeseo.toDate()
+                      ).toLocaleDateString()}
+                    </td>
+                    <td className="d-flex justify-content-center">
+                      {" "}
+                      <Button variant="outline-info">
+                        <FontAwesomeIcon icon={faEnvelope} />
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+
+          <p>
+            Esta tabla muestra la información de los últimos 50 usuarios
+            que han marcado el panorama como deseado. Si el panorama ha sido marcado como deseados
+            menos de 50 veces, muestra todos los usuarios.
+            Puedes enviar un e-mail al usuario ofreciendole alguna oferta personalizada con la función "Enviar mensaje"
+              </p>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+
+}
+
+
+
+
 
 class Admin extends React.Component<IAdmin, IStateAdmin> {
 
@@ -86,6 +265,8 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
       rol: "turista",
       uiSeleccionada: "Dashboard",
       uid: "",
+      usuariosByPanoramaMD: {},
+      usuariosByPanoramaMR: {}
 
     };
 
@@ -121,6 +302,11 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
     if (u != null) {
 
+      this.setState({
+        loading1: true,
+
+      })
+
       const snaps = await db.collection('users')
         .where('uid', '==', u.uid)
         .limit(1)
@@ -134,30 +320,100 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
           uid: u.uid
 
         })
-
       }
       this.props.fetchFindPanoramaUsuario(this.state.uid)
       const pMasR = panoramaMasRealizado(this.props.dataRealizadosByProveedor)
       const pMasD = panoramaMasDeseado(this.props.dataDeseadosByProveedor)
 
       this.setState({
-
-        loading1: false,
         pMasDeseado: pMasD,
         pMasRealizado: pMasR,
       })
     }
 
+
+    this.props.findUsersByIdPanoramaMR(this.state.pMasRealizado.idPanorama).then((res: any) => {
+      // tslint:disable-next-line:no-console
+      //  console.log("Lista de usuarios PR", res) // esto
+      this.setState({
+        usuariosByPanoramaMR: res
+      })
+
+    })
+    // tslint:disable-next-line:no-console
+    console.log("Id PMR", this.state.pMasDeseado.idPanorama) // esto
+    this.props.findUsersByIdPanoramaMD(this.state.pMasDeseado.idPanorama).then((res: any) => {
+      // tslint:disable-next-line:no-console
+      //    console.log("Lista de usuarios PD", res) // esto
+      this.setState({
+        usuariosByPanoramaMD: res
+      })
+
+    })
+
+    // tslint:disable-next-line:no-console
+    //  console.log("Mas deseados", this.state.pMasDeseado) // esto
+
+
+    try {
+      //      const uid = auth.currentUser ? auth.currentUser.uid : "undefined"
+      const snaps = await db.collection('users')
+        .get()
+      const users = {}
+      snaps.forEach(x => users[x.id] = x.data())
+
+      this.setState({
+        usuarios: users
+      })
+
+      // tslint:disable-next-line: no-console
+      //   console.log("Usuarios", users)
+
+    } catch (e) {
+      // tslint:disable-next-line: no-console
+      console.log("Error", e)
+
+
+    }
+
+
     // tslint:disable-next-line: no-console
-    //  console.log(" Util panoramasMasRealizados:", pMasR)
-    // panoramasMasRealizados();
+    // console.log("Usuarios del estado:", this.state.usuarios)
+
+
+
+    this.setState({
+      loading1: false,
+
+    })
+
+
 
   }
 
   public render() {
-    const { loading1, rol, mEditar, uiSeleccionada, pMasRealizado, pMasDeseado } = this.state
+    const { loading1, rol, mEditar, uiSeleccionada, pMasRealizado, pMasDeseado, usuarios, usuariosByPanoramaMD, usuariosByPanoramaMR } = this.state
     const { data, loading } = this.props
     let i = 0;
+    let j = 0;
+    let k = 0
+    // let usersPanoramasMD = {};
+    // let usersPanoramasMR = {};
+    // Object.keys(usuariosByPanoramaMD).map((x) => {
+    //   usersPanoramasMD = usuariosByPanoramaMR[x];
+    // });
+    // Object.keys(usuariosByPanoramaMD).map((x) => {
+    //   usersPanoramasMR = usuariosByPanoramaMR[x];
+    // });
+    // const a = [...usersPanoramasMR, ...usersPanoramasMD]
+    // Object.keys(usuariosByPanoramaMD).concat(Object.keys(usuariosByPanoramaMR))
+    // tslint:disable-next-line: no-console
+    // console.log("Usuarios MD+MR", usuariosByPanoramaMD.concat(usuariosByPanoramaMR))
+    // // tslint:disable-next-line: no-console
+    // console.log("Usuarios MD", usuariosByPanoramaMR)
+
+
+
     // // tslint:disable-next-line: no-console
     // console.log(" dataRealizadosByProveedor", dataRealizadosByProveedor)
     // // tslint:disable-next-line: no-console
@@ -182,7 +438,7 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
           case "Dashboard":
             return (
               <div className="d-flex flex-wrap container justify-content-between justify-content-center">
-                <div className="d-flex  flex-wrap container justify-content-end">
+                <div className="d-flex  flex-wrap container justify-content-start">
                   {this.subMenuAdmin()}
                   <Alert variant="info" className="container">
                     <Alert.Heading>  <FontAwesomeIcon icon={faDesktop} /> Dashboard </Alert.Heading>
@@ -208,9 +464,9 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                             <h3>{pMasRealizado.vecesRealizado} veces</h3>
                           </Card.Text>
                           <div className="d-flex justify-content-center">
-                            <Button block={true} variant="outline-info">
-                              <FontAwesomeIcon icon={faChartLine} /> Información detallada
-                            </Button>
+                            <ModalEstadisticasMasRealizado
+                              usersByPanoramas={this.state.usuariosByPanoramaMR}
+                            />
                           </div>
 
                         </Card.Body>
@@ -230,15 +486,16 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                             <h3>{pMasDeseado.vecesRealizado} veces</h3>
                           </Card.Text>
                           <div className="d-flex justify-content-center">
-                            <Button block={true} variant="outline-info">
-                              <FontAwesomeIcon icon={faChartLine} /> Información detallada
-                            </Button>
+                            <ModalEstadisticasMasDeseado
+                              usersByPanoramas={this.state.usuariosByPanoramaMD}
+                            />
                           </div>
                         </Card.Body>
                       </Card>
 
                     </Col >
-                    <Col className="d-flex container justify-content-center"> <Card style={{ width: '18rem', margin: "5px" }}>
+
+                    {/* { <Col className="d-flex container justify-content-center"> <Card style={{ width: '18rem', margin: "5px" }}>
                       <Card.Img variant="top" src={""} />
                       <Card.Body>
                         <Card.Title>Usuario con más panoramas realizados</Card.Title>
@@ -248,9 +505,12 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                         </Card.Text>
                         <Button variant="primary">Info</Button>
                       </Card.Body>
-                    </Card></Col>
+                    </Card></Col>} */}
+
+
                   </Row>
-                  <Row>
+
+                  {/* {  <Row>
 
                     <Col className="d-flex container justify-content-center"> <Card style={{ width: '18rem', margin: "5px" }}>
                       <Card.Img variant="top" src={""} />
@@ -265,7 +525,9 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                     </Card>
                     </Col>
 
-                  </Row>
+                  </Row>} */}
+
+
                 </Container>
 
 
@@ -281,7 +543,7 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
             break;
           case "Panoramas":
             return (
-              <div className="d-flex flex-wrap container justify-content-end">
+              <div className="d-flex flex-wrap container justify-content-start">
                 {this.subMenuAdmin()}
                 <Alert variant="info" className="container">
                   <Alert.Heading>  <FontAwesomeIcon icon={faMountain} /> Panoramas </Alert.Heading>
@@ -367,17 +629,151 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
             break;
           case "Usuarios":
             return (
-              <div className="d-flex flex-wrap container justify-content-end">
+              <div className="d-flex flex-wrap container justify-content-start">
                 {this.subMenuAdmin()}
                 <Alert variant="info" className="container">
                   <Alert.Heading>  <FontAwesomeIcon icon={faUserFriends} /> Usuarios </Alert.Heading>
                   <p>
-                    Usuarios
+                    Existen {Object.keys(usuarios).length} usuarios registrados
              </p>
                   <hr />
 
 
                 </Alert>
+
+                <div> <b>Usuarios del panorama más realizado</b> </div>
+
+                <Table responsive={true} striped={true} bordered={true} hover={true}>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Procedencia</th>
+                      <th>Nombre</th>
+                      <th>Fono/Email</th>
+                      <th>Fecha visita</th>
+                      <th>Acción</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {
+                      Object.keys(usuariosByPanoramaMR).map(x => {
+                        const post = usuariosByPanoramaMR[x]
+                        i++
+                        //  tslint:disable-next-line: no-console
+                        // console.log("key ",x)
+
+                        return <tr key={x}  >
+
+                          <td>{i}</td>
+                          <td>{post.procedencia}</td>
+                          <td>{post.nombre}</td>
+                          <td>{post.email}</td>
+                          <td>  {new Date(
+                            post.fechaVisita.toDate()
+                          ).toLocaleDateString()} </td>
+
+                          <td className="d-flex justify-content-sm-center">   <Button variant="outline-primary"
+
+                          // size="lg"
+                          > Enviar</Button></td>
+                        </tr>
+
+
+                      })}
+                  </tbody>
+                </Table>
+
+                <div className="title"> <b>Usuarios del panorama más deseado</b></div>
+
+                <Table responsive={true} striped={true} bordered={true} hover={true}>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Procedencia</th>
+                      <th>Nombre</th>
+                      <th>Fono/Email</th>
+                      <th>Fecha estimada</th>
+                      <th>Acción</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {
+                      Object.keys(usuariosByPanoramaMD).map(x => {
+                        const post = usuariosByPanoramaMD[x]
+                        j++
+                        //  tslint:disable-next-line: no-console
+                        // console.log("key ",x)
+
+                        return <tr key={x}  >
+
+                          <td>{j}</td>
+                          <td>{post.procedencia}</td>
+                          <td>{post.nombre}</td>
+                          <td>{post.email}</td>
+                          <td>  {new Date(
+                            post.fechaDeseo.toDate()
+                          ).toLocaleDateString()} </td>
+
+                          <td className="d-flex justify-content-sm-center">   <Button variant="outline-primary"
+
+                          // size="lg"
+                          > Enviar</Button></td>
+                        </tr>
+
+
+                      })}
+                  </tbody>
+                </Table>
+
+                <div > <b>Todos los usuarios</b></div>
+
+                <Table responsive={true} striped={true} bordered={true} hover={true}>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>UID</th>
+                      <th>Nombre</th>
+                      <th>Fono/Email</th>
+                      <th>Fecha registro</th>
+                      <th>Acción</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {
+                      Object.keys(usuarios).map(x => {
+                        const post = usuarios[x]
+                        k++
+                        //  tslint:disable-next-line: no-console
+                        // console.log("key ",x)
+
+                        return <tr key={x}  >
+
+                          <td>{k}</td>
+                          <td>{post.uid}</td>
+                          <td>{post.nombre}</td>
+                          <td>{post.email}/ {post.fono}</td>
+                          <td>  {new Date(
+                            post.createdAt.toDate()
+                          ).toLocaleDateString()} </td>
+
+                          <td className="d-flex justify-content-sm-center">   <Button variant="outline-primary"
+
+                          // size="lg"
+                          > Enviar</Button></td>
+                        </tr>
+
+
+                      })}
+                  </tbody>
+                </Table>
+
+
               </div>
             )
             break;
@@ -488,6 +884,7 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
     }
   public volver = () => {
+    //  const { findUsersByIdPanorama } = this.props
     // Si no quiseramos actualizar la página, solo cambiariamos el estado
     this.setState({
       mEditar: false

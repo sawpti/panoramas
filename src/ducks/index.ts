@@ -16,7 +16,7 @@ export interface IState {
   };
   Users: {
     profileImage?: string;
-    data: IDataUsers;
+    dataUsers: IDataUsers;
     fetched: boolean;
     fetching: boolean;
   };

@@ -75,7 +75,7 @@ function ModalPanorama(datos: IPanoramaProps) {
 
   return (
     <>
-      <Button variant="outline-primary" onClick={handleShow}>
+      <Button variant="outline-success" block={true} onClick={handleShow}>
         <FontAwesomeIcon icon={faInfoCircle} size="1x" /> {datos.nombuton}
       </Button>
 

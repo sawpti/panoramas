@@ -19,15 +19,18 @@ export interface ILogin {
 }
 
 export interface IUser {
-    email: string
-    emailVerified: boolean
-    direccion?: string
-    password: string
-    rePassword: string
-    nombre: string
-    fono: string
     ciudad: string
     comuna: string
+    createdAt: Date
+    direccion?: string
+    email: string
+    emailVerified: boolean
+    fono: string
+    nombre: string
+    password: string
+    rePassword: string
+    role: string
+    uid: string
 
 
 }
@@ -47,7 +50,7 @@ const fetchError = (error: Error) => ({
     type: ERROR,
 })
 const initialState = {
-    data: {},
+    dataUsers: {},
     fetched: false,
     fetching: false,
 }
@@ -64,7 +67,7 @@ export default function reducer(state = initialState, action: AnyAction) {
         case SUCCESS:
             return {
                 ...state,
-                data: action.payload,
+                dataUsers: action.payload,
                 fetched: true,
                 fetching: false,
             }
@@ -134,6 +137,9 @@ export const fetchUsers = () =>
 
         }
     }
+
+
+
 
 export const login = ({ email, password }: ILogin) =>
     async (dispatch: Dispatch, getState: () => IState, { auth }: IServices) =>
@@ -317,3 +323,24 @@ export const update = ({ email, nombre, ciudad, fono, comuna, direccion }: IUser
             })
         }
     }
+export const getUsers = () =>
+    async (dispatch: Dispatch, getState: () => any, { db, storage, auth }: IServices) => {
+
+        dispatch(fetchStart())
+
+        try {
+            //      const uid = auth.currentUser ? auth.currentUser.uid : "undefined"
+            const snaps = await db.collection('users')
+                .get()
+            const users = {}
+            snaps.forEach(x => users[x.id] = x.data())
+            dispatch(fetchSuccess(users))
+        } catch (e) {
+            // tslint:disable-next-line: no-console
+            console.log("Error", e)
+            dispatch(fetchError(e))
+
+        }
+    }
+
+

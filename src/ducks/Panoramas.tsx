@@ -7,6 +7,7 @@ import noImage from '../images/unnamed.jpg';
 
 
 
+
 // Definicion de tipos para nuestras acciones
 const START = 'posts/fetch-start'
 const SUCCESS = 'posts/fetch-success'
@@ -921,7 +922,8 @@ export const sharetemp = (id: string) =>
     }
 export const register = ({ nombre, descripcion, urlFacebook, urlInstagram, urlWeb, urlTripAdvisor, calificacion, valor, exigenciaFisica, destacado }: IPanorama) =>
     async (dispatch: Dispatch, getstate: () => IState, { auth, db }: IServices) => {
-
+        // const snap = await db.collection('users').doc(auth.currentUser.uid).get()
+        // const userFirestore = snap.data()
 
         if (auth.currentUser != null) {
             const id = auth.currentUser.uid
@@ -1050,7 +1052,7 @@ export const porRealizarAdd = (p: IPanorama, fecha: Date) =>
 
     }
 
-export const realizadoAdd = (p: IPanorama, fecha: Date) =>
+export const realizadoAdd = (p: IPanorama, fecha: Date, calificacion: number) =>
     async (dispatch: Dispatch, getState: () => any, { auth, db }: IServices) => {
         return new Promise(async (resolve, eject) => {
             if (!auth.currentUser) {
@@ -1060,9 +1062,11 @@ export const realizadoAdd = (p: IPanorama, fecha: Date) =>
                 // Obtenemos los datos del usurio en Firestore
                 const snap = await db.collection('users').doc(auth.currentUser.uid).get()
                 const userFirestore = snap.data()
+
                 if (userFirestore != null) {
                     await db.collection('realizados').doc(`${p.idPanorama}_${auth.currentUser.uid}`).set({
                         ...p,
+                        calificacionOtorgada: calificacion,
                         ciudadOrigen: userFirestore.ciudad,
                         createdAt: new Date(),
                         email: userFirestore.email,
@@ -1088,15 +1092,139 @@ export const realizadoAdd = (p: IPanorama, fecha: Date) =>
         })
     }
 
+export const fetchPanoramasRealizadosByIdPanorama = (idPanorama: string) =>
+    async (dispatch: Dispatch, getState: () => any, { db }: IServices) => {
+
+        dispatch(fetchStart())
+
+        try {
+
+            const consulta = db.collection('realizados')
+                .where('idPanorama', '==', idPanorama)
+                .orderBy('fecha', 'asc')
+                .limit(50)
+            const pxr = {} // Panoramas por realizar
+            await consulta.get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // tslint:disable-next-line: no-console
+                        console.log('Consulta vacía');
+
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        // tslint:disable-next-line: no-console
+                        pxr[doc.id] = doc.data()
+                        //   console.log(doc.id, '=>', doc.data());
+                    });
+                })
+                .catch(err => {
+                    // tslint:disable-next-line: no-console
+                    console.log('Error', err.message);
+                });
+            dispatch(fetchSuccess(pxr))
 
 
+        } catch (error) {
+            // tslint:disable-next-line: no-console
+            console.log(error)
+            dispatch(fetchError(error))
+
+        }
+
+    }
+
+export const findUsersByIdPanoramaMR = (idPanorama: string) =>
+    async (dispatch: Dispatch, getState: () => any, { auth, db }: IServices) => {
+        return new Promise(async (resolve, eject) => {
+            if (!auth.currentUser) {
+                return
+            }
+            try {
+                const consulta = db.collection('realizados')
+                    .where('idPanorama', '==', idPanorama)
+                    .orderBy('fecha', 'asc')
+                    .limit(50)
+                const usersByPaorama = {}
+                await consulta.get()
+                    .then(snapshot => {
+                        if (snapshot.empty) {
+                            // tslint:disable-next-line: no-console
+                            console.log('Consulta vacía');
+                            // resolve("Consulta vacía")
+                            return;
+                        }
+                        snapshot.forEach(doc => {
+                            // tslint:disable-next-line: no-console
+                            usersByPaorama[doc.data().uid] = {
+                                califiacionOtorgada: doc.data().calificacionOtorgada ? doc.data().calificacionOtorgada : "No otorgada",
+                                email: doc.data().email,
+                                fechaVisita: doc.data().fecha,
+                                nombre: doc.data().nombreUsuario,
+                                procedencia: doc.data().ciudadOrigen,
+                            }
+                        });
+                        resolve(usersByPaorama);
+                        // tslint:disable-next-line: no-console
+                        // console.log("Usduarios panorama", pxr);
 
 
+                    })
+                    .catch(err => {
+                        // tslint:disable-next-line: no-console
+                        console.log('Error', err.message);
+                    });
+            } catch (error) {
+                // tslint:disable-next-line: no-console
+                console.log(error)
+                resolve(error.message)
+            }
+        })
+    }
+
+export const findUsersByIdPanoramaMD = (idPanorama: string) =>
+    async (dispatch: Dispatch, getState: () => any, { auth, db }: IServices) => {
+        return new Promise(async (resolve, eject) => {
+            if (!auth.currentUser) {
+                return
+            }
+            try {
+                const consulta = db.collection('xrealizar')
+                    .where('idPanorama', '==', idPanorama)
+                    .orderBy('fecha', 'asc')
+                    .limit(50)
+                const usersByPaorama = {}
+                await consulta.get()
+                    .then(snapshot => {
+                        if (snapshot.empty) {
+                            // tslint:disable-next-line: no-console
+                            console.log('Consulta vacía');
+                            // resolve("Consulta vacía")
+                            return;
+                        }
+                        snapshot.forEach(doc => {
+                            // tslint:disable-next-line: no-console
+                            usersByPaorama[doc.data().uid] = {
+                                email: doc.data().email,
+                                fechaDeseo: doc.data().fecha,
+                                nombre: doc.data().nombreUsuario,
+                                procedencia: doc.data().ciudadOrigen,
+                            }
+                        });
+                        resolve(usersByPaorama);
+                        // tslint:disable-next-line: no-console
+                        // console.log("Usduarios panorama", pxr);
 
 
-
-
-
-
-
-
+                    })
+                    .catch(err => {
+                        // tslint:disable-next-line: no-console
+                        console.log('Error', err.message);
+                    });
+            } catch (error) {
+                // tslint:disable-next-line: no-console
+                console.log(error)
+                resolve(error.message)
+            }
+        })
+    }

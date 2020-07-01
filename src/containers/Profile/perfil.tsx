@@ -21,7 +21,7 @@ interface IUser {
    fetched: boolean
    loading: boolean
    profileImage: string
-   data: usersDuck.IDataUsers
+   dataUsers: usersDuck.IDataUsers
 
 }
 interface IState1 {
@@ -69,7 +69,7 @@ class Perfil extends React.Component<IUser, IState1>{
 
 
    public render() {
-      const { data, loading, submitProfileImg, handleProfileImageSubmit, profileImage } = this.props
+      const { dataUsers, loading, submitProfileImg, handleProfileImageSubmit, profileImage } = this.props
       // tslint:disable-next-line: no-console
       // console.log('Usuario', Object.keys(data[0].nombre));
       //   const imagen = profileImage ? profileImage : imgPerfil
@@ -88,8 +88,8 @@ class Perfil extends React.Component<IUser, IState1>{
 
                </div>
 
-               {Object.keys(data).map(x => {
-                  const user = data[x]
+               {Object.keys(dataUsers).map(x => {
+                  const user = dataUsers[x]
                   return <div key={x} style={{ margin: '10 auto' }}>
 
                      <Usuario
@@ -146,12 +146,12 @@ class Perfil extends React.Component<IUser, IState1>{
 
 
 const mapStateToProps = (state: IState) => {
-   const { Users: { data, fetched, fetching, profileImage: tempPI } } = state
+   const { Users: { dataUsers, fetched, fetching, profileImage: tempPI } } = state
    const profileImage = tempPI || imgPerfil
    const loading = fetching || !fetched
 
    return {
-      data,
+      dataUsers,
       fetched,
       loading,
       profileImage

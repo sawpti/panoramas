@@ -38,6 +38,10 @@ import usePlacesAutocomplete, {
 import useOnclickOutside from "react-cool-onclickoutside";
 import { IPanorama } from '../../ducks/Panoramas';
 import { firestore } from 'firebase';
+import BeautyStars from 'beauty-stars';
+
+
+
 
 
 
@@ -51,7 +55,7 @@ interface INewsFeedProps {
     // share: (a: string) => void; // vamos a necesitar la referencia del panorama  al que le damos share
     // sharetemp: (a: string) => void;
     porRealizarAdd: (p: IPanorama, fecha: Date) => any
-    realizadoAdd: (p: IPanorama, fecha: Date) => any
+    realizadoAdd: (p: IPanorama, fecha: Date, calificacion: number) => any
     fetched: boolean
     loading: boolean
     data1: postsDuck.IDataFirebase
@@ -59,10 +63,12 @@ interface INewsFeedProps {
 }
 interface IStatePanorama {
     // alert: any
+    calificacion: number
     fechaInicial: Date
     idPanorama: string
     mensajeAccion: string
-    uiobtenerFecha: boolean
+    uiobtenerFecha: boolean,
+
     work: boolean
     listPanoramas: postsDuck.IDataPanorama
     comuna: string
@@ -96,6 +102,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         this.state = {
             activePage: 1,
             alert: null,
+            calificacion: 0,
             cargando: true,
             comuna: "Curarrehue",
             fechaInicial: new Date(),
@@ -123,6 +130,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                 valor: 0,
             },
             panoramaInicial: null,
+
             totalPaginas: 0,
             totalPanoramas: 0,
             uidProveedor: "",
@@ -139,7 +147,14 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
     }
 
 
+    public cambiarCalificacion = (value: any) => {
 
+        this.setState({
+            calificacion: value
+        })
+
+
+    }
 
     public subMenuComunas = (comuna: string) => {
 
@@ -196,9 +211,10 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
     public uiObterFecha = (panorama: IPanorama, mensajeAccion: string, opcionAccion: number) => () => {
         this.setState({
             mensajeAccion,
-            opcionAccion,
+            opcionAccion, // 1 Por realizar, 2 Realiazado
             panorama,
-            uiobtenerFecha: true
+            uiobtenerFecha: true,
+
 
         })
     }
@@ -683,7 +699,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         const { work, uiobtenerFecha, mensajeAccion } = this.state
 
         // tslint:disable-next-line: no-console
-        //   console.log("dataRealizadosByProveedor: ", dataRealizadosByProveedor);
+        console.log("Calificación: ", this.state.calificacion);
 
         const active = paginaActual + 1
         const items = [];
@@ -837,19 +853,86 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
 
         if (uiobtenerFecha) {
-            return (
-                <Alert variant="info" className="container">
-                    <Alert.Heading className="d-flex container justify-content-center" > ¿Cuándo {mensajeAccion}? Selecciona una fecha. </Alert.Heading>
-                    <div className="d-flex  flex-wrap container justify-content-center">
-                        <DatePicker
-                            selected={this.state.fechaInicial}
-                            onChange={this.handleChangeDate}
-                        />  <Button variant="outline-primary" onClick={this.onClickAccion(this.state.opcionAccion)} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
-                        <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
-                        {this.state.alert}
-                    </div>
-                </Alert>
-            );
+
+
+            switch (this.state.opcionAccion) {
+                case 1:
+                    return (
+                        <Alert variant="info" className="container justify-content-center">
+                            <Alert.Heading className="d-flex  container justify-content-center" > ¿Cuándo {mensajeAccion}? Selecciona una fecha. </Alert.Heading>
+                            <div className="flex-column  container justify-content-center">
+
+
+                                <div className="d-flex justify-content-center">
+                                    Fecha: <DatePicker
+                                        selected={this.state.fechaInicial}
+                                        onChange={this.handleChangeDate}
+                                    />
+                                </div>
+
+                                <hr />
+
+                                <div className="d-flex justify-content-center">
+
+                                    <Button variant="outline-primary" onClick={this.onClickAccion(this.state.opcionAccion)} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
+                                    <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
+                                    {this.state.alert}
+                                </div>
+
+                            </div>
+                        </Alert>
+                    );
+                    break;
+
+                case 2:
+                    return (
+                        <Alert variant="info" className="container justify-content-center">
+                            <Alert.Heading className="d-flex  container justify-content-center" > ¿Cuándo {mensajeAccion}? Selecciona una fecha y otorga una calificación. </Alert.Heading>
+                            <div className="flex-column  container justify-content-center">
+
+
+                                <div className="d-flex justify-content-center">
+                                    Fecha: <DatePicker
+                                        selected={this.state.fechaInicial}
+                                        onChange={this.handleChangeDate}
+                                    />
+                                </div>
+
+                                <hr />
+
+
+                                <div className="d-flex justify-content-center">
+                                    Calificación: <BeautyStars
+                                        maxStars={5}
+                                        value={this.state.calificacion}
+                                        inactiveColor="#e0e0e0"
+                                        size="26px"
+                                        editable={true}
+                                        onChange={this.cambiarCalificacion}
+                                    />
+                                </div>
+
+
+                                <hr />
+                                <div className="d-flex justify-content-center">
+
+                                    <Button variant="outline-primary" onClick={this.onClickAccion(this.state.opcionAccion)} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
+                                    <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
+                                    {this.state.alert}
+                                </div>
+
+                            </div>
+                        </Alert>
+                    );
+
+                    break;
+
+                default:
+                    break;
+            }
+
+
+
         }
 
         if (cargando || work) {
@@ -1041,27 +1124,56 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
     }
 
     private realizado = () => {
-        const { panorama, fechaInicial } = this.state
+        const { panorama, fechaInicial, calificacion } = this.state
         const { realizadoAdd } = this.props
-        this.setState({
-            uiobtenerFecha: false,
-            work: true,
-        });
-        realizadoAdd(panorama, fechaInicial).then((res: string) => {
-            if (res === "OK") {
-                this.setState({
-                    work: false,
-                });
+        if (calificacion === 0) {
 
-                this.onAlert("Realizados", "realizados")
+            this.setState({
+                alert: (
+                    <SweetAlert
+                        warning={true}
+                        title="¡Cuidado!"
+                        showCloseButton={true}
+                        confirmBtnText="Entendí"
+                        onConfirm={this.hideAlert(false)}>
+                        Debes marcar una calificación.
+                        {/* {  <BeautyStars
+                            maxStars={5}
+                            value={this.state.calificacion}
+                            inactiveColor="#e0e0e0"
+                            size="26px"
+                            editable={true}
+                            onChange={this.cambiarCalificacion}
+                        />} */}
+                    </SweetAlert>
+                ),
+            });
+            //   alert("debes ingresar una calificacion seleccionar una calificación")
 
-            } else {
-                this.setState({
-                    work: false,
-                });
-                this.onAlertError(res)
-            }
-        })
+        } else {
+            this.setState({
+                uiobtenerFecha: false,
+                work: true,
+            });
+            realizadoAdd(panorama, fechaInicial, calificacion).then((res: string) => {
+                if (res === "OK") {
+                    this.setState({
+                        work: false,
+                    });
+
+                    this.onAlert("Realizados", "realizados")
+
+                } else {
+                    this.setState({
+                        work: false,
+                    });
+                    this.onAlertError(res)
+                }
+            })
+
+
+        }
+
     }
 }
 
