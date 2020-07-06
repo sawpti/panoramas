@@ -8,6 +8,7 @@ import {
   faRetweet,
   faArrowAltCircleLeft,
   faMapMarked,
+  faMapPin,
 } from "@fortawesome/free-solid-svg-icons";
 // nimport GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import usePlacesAutocomplete, {
@@ -22,6 +23,15 @@ import services from "../service";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { Alert, Image, ListGroup } from "react-bootstrap";
 import noImage from "../images/unnamed.jpg";
+// import { Map, GoogleApiWrapper } from 'google-maps-react';
+import {
+ 
+  withGoogleMap,
+  GoogleMap,
+  Marker,
+} from "react-google-maps";
+
+
 
 // Geocode.setApiKey("AIzaSyAHTaKvQEE-WnvtbneuXD0rqmtej1CZY5c");
 
@@ -199,6 +209,8 @@ export default class EditarPanorama extends React.Component<
       ),
     });
   };
+
+ 
   public hideAlert = () => {
     this.setState({
       alert: null,
@@ -206,11 +218,77 @@ export default class EditarPanorama extends React.Component<
     // location.href = "/app/admin"
   };
 
+
+  public onClickMap =(eve:any)=>{
+    
+    // tslint:disable-next-line: no-console
+    console.log("Evento: ", google.maps.places);
+   
+   
+
+  }
+  public onClickMarker = (eve:any) => {
+
+    // latLng: _.I
+    // lat: ƒ()
+    // lng: ƒ()
+     // tslint:disable-next-line: no-console
+    console.log("Evento: ", eve);
+  //  alert(` Latitud ${eve.latLng.lat()} Longitud ${eve.latLng.lng()}`)
+
+    this.setState({
+      lat: eve.latLng.lat(),
+      lng: eve.latLng.lng()
+    })
+   
+     this.setState({
+      alert: (
+        <SweetAlert 
+        info={true} 
+        title="Información" 
+        showCancel={true}
+        showCloseButton={true}
+        cancelBtnText="Cancelar"
+        onCancel={this.hideAlert}
+        confirmBtnText="Guardar"
+        onConfirm={this.setCoordenadas}
+        >
+         Latitud {eve.latLng.lat()} Longitud {eve.latLng.lng()}`
+        </SweetAlert>
+      ),
+    });
+
+
+  }
+
+  
   public render() {
     const { idPanorama } = this.props;
     //  let direccion=""
     // let lt=0
     // let ln=0
+    const MapWithAMarker = withGoogleMap(props =>
+      <GoogleMap
+        defaultZoom={15}
+        onClick={this.onClickMap}
+       // mapTypeId= {google.maps.MapTypeId.SATELLITE}
+        defaultCenter={{ lat: this.state.lat, lng: this.state.lng}}
+        
+      >
+        <Marker
+          defaultDraggable={true}
+        //  defaultClickable={true}
+            onClick={this.onClickMarker}
+       //   onDraggableChanged={this.onClickMarker}
+          position={{ lat:this.state.lat, lng: this.state.lng }}
+       
+        />
+      </GoogleMap>
+    );
+  
+
+ 
+
 
     const PlacesAutocomplete = () => {
       const {
@@ -413,6 +491,7 @@ export default class EditarPanorama extends React.Component<
             <FontAwesomeIcon icon={faMapMarked} size="1x" /> Ubicación:{" "}
             {this.state.direccion}
           </p>
+
           <div className="d-flex justify-content-between">
             <PlacesAutocomplete />
             <button
@@ -424,10 +503,47 @@ export default class EditarPanorama extends React.Component<
             </button>
           </div>
 
+          <hr/>
+          <MapWithAMarker
+            containerElement={<div style={{ height: `400px` }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+          />
+                
+
+          <hr className="noshade" />
+          <p className="mb-2 font-weight-bold">
+            <FontAwesomeIcon icon={faMapPin} size="1x" /><small> Cuando no encuentres la ubicación precisa en el buscador de arriba, mueve el marcador del mapa a la ubicación deseada, haz click sobre el y presiona guardar.
+              Tambien puedes ingresar las coordenadas manualmente y guardarlas </small>
+          </p>
+          <div className="d-flex justify-content-between">
+            <input
+              value={this.state.lat}
+              onChange={this.updateInputValue}
+              type="text"
+               className="form-control"
+              maxLength={150}
+            />
+            <input
+              value={this.state.lng}
+              onChange={this.updateInputValue}
+              type="text"
+              className="form-control"
+              maxLength={150}
+            />
+            <button
+              onClick={this.setCoordenadas}
+              type="button"
+              className="btn btn-outline-primary"
+            >
+              <FontAwesomeIcon icon={faSave} size="1x" />{" "}
+            </button>
+
+          </div>
+
           <hr />
           <p className="mb-2 font-weight-bold">
             <FontAwesomeIcon icon={faEdit} size="1x" /> Descripción
-          </p>
+          </p> 
           <div className="d-flex justify-content-between">
             <textarea
               rows={10}
@@ -436,7 +552,7 @@ export default class EditarPanorama extends React.Component<
               name="descripcion"
               id="descripcion"
               className="form-control"
-              maxLength={300} 
+              maxLength={300}
             />
             <button
               onClick={this.setDato("descripcion")}
@@ -447,6 +563,7 @@ export default class EditarPanorama extends React.Component<
             </button>
           </div>
 
+       
              <hr />
           <p className="mb-2 font-weight-bold">
             <FontAwesomeIcon icon={faEdit} size="1x" /> Url sitio web
@@ -789,6 +906,46 @@ export default class EditarPanorama extends React.Component<
         break;
     }
   };
+
+  public setCoordenadas=async()=>{
+    const {auth,db } = services;
+    const {
+      idPanorama } = this.state;
+   
+  
+  try {
+    const doc = db.collection("panoramas").doc(idPanorama);
+    const uid = auth.currentUser ? auth.currentUser.uid : undefined;
+    await doc.update({
+      lastModification: new Date(),
+      lat: this.state.lat,
+      lng: this.state.lng,
+      userToModify: uid,
+    });
+
+    this.setState({
+      alert: (
+        <SweetAlert success={true} title="¡Listo!" onConfirm={this.hideAlert}>
+          Las coordenadas han sido actualizadas
+        </SweetAlert>
+      ),
+    });
+    
+  } catch (error) {
+    this.setState({
+      alert: (
+        <SweetAlert error={true} title="Error" onConfirm={this.hideAlert}>
+          Se ha producido un  error:  {error.message}
+        </SweetAlert>
+      ),
+    });
+    
+  }
+   
+  
+
+
+  }
   public setDato = (nombreValor: string) => async () => {
     const {
       idPanorama,
@@ -901,6 +1058,10 @@ export default class EditarPanorama extends React.Component<
         this.onReceiveInput(`${destacado}`, nombreValor);
         break;
       case "coordenadas":
+        if (!this.state.comuna){
+          return
+
+        }
         await doc.update({
           
           comuna: this.state.comuna,
@@ -927,3 +1088,5 @@ export default class EditarPanorama extends React.Component<
     }
   };
 }
+
+

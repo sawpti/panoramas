@@ -33,7 +33,12 @@ import iconTA from "../images/tripAdvisor.png";
 import * as utils from "../utils";
 
 
+import {
 
+  withGoogleMap,
+  GoogleMap,
+  Marker,
+} from "react-google-maps";
 
 export interface IPanoramaProps {
   calificacion: number;
@@ -66,12 +71,25 @@ function ModalPanorama(datos: IPanoramaProps) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const Iframe = () => {
+  // const Iframe = () => {
 
-    const iframe = `<iframe  height="400" frameborder="0" style="border:0"
-      src="https://www.google.com/maps/embed/v1/place?q=${datos.direccion}&key=AIzaSyAHTaKvQEE-WnvtbneuXD0rqmtej1CZY5c" allowfullscreen></iframe>`
-    return (<div dangerouslySetInnerHTML={{ __html: iframe }} />)
-  }
+  //   const iframe = `<iframe  height="400" frameborder="0" style="border:0"
+  //     src="https://www.google.com/maps/embed/v1/place?q=${datos.direccion}&key=AIzaSyAHTaKvQEE-WnvtbneuXD0rqmtej1CZY5c" allowfullscreen></iframe>`
+  //   return (<div dangerouslySetInnerHTML={{ __html: iframe }} />)
+  // }
+  const MapWithAMarker = withGoogleMap(props =>
+    <GoogleMap
+      defaultZoom={15}
+      defaultCenter={{ lat: datos.lat, lng: datos.lng }}
+    >
+      <Marker
+
+        position={{ lat: datos.lat, lng: datos.lng }}
+      />
+    </GoogleMap>
+  );
+
+
 
   return (
     <>
@@ -291,7 +309,11 @@ function ModalPanorama(datos: IPanoramaProps) {
                   </a>
                 </h6>
                 <div className="card-img">
-                  <Iframe />
+                  <MapWithAMarker
+                    containerElement={<div style={{ height: `400px` }} />}
+                    mapElement={<div style={{ height: `100%` }} />}
+                  />
+
                 </div>
 
               </Col>
