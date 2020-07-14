@@ -14,7 +14,6 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import {
     Spinner,
-    //  Container,
     Alert,
     ListGroup,
     InputGroup,
@@ -24,12 +23,14 @@ import {
     Nav,
     Button,
 
+
+
 } from "react-bootstrap";
 
 // import { useState } from 'react';
 // import SweetAlert from 'react-bootstrap-sweetalert';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMountain, faSearch, faMapPin, faCheckCircle, faBan } from '@fortawesome/free-solid-svg-icons';
+import { faMountain, faSearch, faMapPin, faCheckCircle, faBan, faComment, faUser, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng,
@@ -39,6 +40,10 @@ import useOnclickOutside from "react-cool-onclickoutside";
 import { IPanorama } from '../../ducks/Panoramas';
 import { firestore } from 'firebase';
 import BeautyStars from 'beauty-stars';
+import { Container } from 'react-bootstrap';
+
+
+
 
 
 
@@ -56,6 +61,7 @@ interface INewsFeedProps {
     // sharetemp: (a: string) => void;
     porRealizarAdd: (p: IPanorama, fecha: Date) => any
     realizadoAdd: (p: IPanorama, fecha: Date, calificacion: number) => any
+    comentarioAdd: (idPanorama: string, fecha: Date, calificacion: number, comentario: string) => any
     fetched: boolean
     loading: boolean
     data1: postsDuck.IDataFirebase
@@ -67,13 +73,15 @@ interface IStatePanorama {
     fechaInicial: Date
     idPanorama: string
     mensajeAccion: string
-    uiobtenerFecha: boolean,
-
+    uisUsers: boolean,
+    resenia: string,
+    arrayComentarios: any,
     work: boolean
     listPanoramas: postsDuck.IDataPanorama
     comuna: string
     activePage: number
     opcionAccion: number  // 1: Por realizar ( deseados) 2: Realizados
+    obReseña: any
     paginaActual: number
     paginas: any[]
     paginaSize: number
@@ -102,6 +110,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         this.state = {
             activePage: 1,
             alert: null,
+            arrayComentarios: {},
             calificacion: 0,
             cargando: true,
             comuna: "Curarrehue",
@@ -109,6 +118,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
             idPanorama: "",
             listPanoramas: {},
             mensajeAccion: "",
+            obReseña: {},
             opcionAccion: 0,
             paginaActual: 0,
             paginaSize: 10, // panoramas por página
@@ -130,11 +140,11 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                 valor: 0,
             },
             panoramaInicial: null,
-
+            resenia: "",
             totalPaginas: 0,
             totalPanoramas: 0,
             uidProveedor: "",
-            uiobtenerFecha: false,
+            uisUsers: false,
             work: false,
         }
         if (fetched) {
@@ -145,12 +155,38 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
 
     }
+    public noComment = () => {
+        const { arrayComentarios } = this.state
+        if (Object.keys(arrayComentarios).length < 1) {
 
+            return (
+                <div className="card bg-transparent">
+                    Los usuarios aún no han escrito comentarios
+
+                </div>
+            )
+
+        } else {
+            return (<div className="p-3">
+                {null}
+
+            </div>)
+        }
+
+    }
 
     public cambiarCalificacion = (value: any) => {
 
         this.setState({
             calificacion: value
+        })
+
+
+    }
+    public cambiarResenia = (evt: any) => {
+
+        this.setState({
+            resenia: evt.target.value
         })
 
 
@@ -208,20 +244,41 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
     }
 
-    public uiObterFecha = (panorama: IPanorama, mensajeAccion: string, opcionAccion: number) => () => {
+    public uisUsers = (panorama: IPanorama, mensajeAccion: string, opcionAccion: number) => async () => {
+        const { auth, db } = services
+        if (!auth.currentUser || !panorama.idPanorama) {
+            return
+        }
+        // Obtenemo la reseña del usuario
+        const snapComentarios = await db.collection('panoramas')
+            .doc(panorama.idPanorama)
+            .collection("comentarios")
+            .doc(auth.currentUser.uid)
+            .get()
+        const obResenia = snapComentarios.data()
+        // tslint:disable-next-line: no-console
+        //     console.log("object rseña"+ obResenia.calificacion);
+
         this.setState({
+            calificacion: obResenia ? obResenia.calificacionOtorgada : 0,
             mensajeAccion,
-            opcionAccion, // 1 Por realizar, 2 Realiazado
+            opcionAccion, // 1 Por realizar, 2 Realiazado // Muestra los comentario del panorama
             panorama,
-            uiobtenerFecha: true,
+            resenia: obResenia ? obResenia.comentario : null,
+            uisUsers: true,
 
 
         })
-    }
 
+        if (opcionAccion === 3) {
+
+            this.verComentarios()
+        }
+    }
     public cancelAdd = () => {
         this.setState({
-            uiobtenerFecha: false
+            uisUsers: false,
+            work: false
         });
 
     }
@@ -295,7 +352,16 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
             case 2:
                 this.realizado()
+
                 break;
+
+
+            case 3:
+                // this.verComentarios()
+                // alert(" No ha seleccioando en una opción" + this.state.opcionAccion)
+
+                break;
+
 
             default:
                 return
@@ -695,11 +761,16 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         alert("Hola")
     }
     public render() {
-        const { listPanoramas, cargando, paginaActual, totalPaginas, totalPanoramas, comuna } = this.state
-        const { work, uiobtenerFecha, mensajeAccion } = this.state
+        const { listPanoramas, cargando, paginaActual, totalPaginas, totalPanoramas, comuna, arrayComentarios } = this.state
+        const { work, uisUsers, mensajeAccion } = this.state
 
         // tslint:disable-next-line: no-console
-        console.log("Calificación: ", this.state.calificacion);
+        // console.log(`Calificación:${this.state.calificacion} Reseña: ${this.state.resenia} `);
+        // tslint:disable-next-line: no-console
+        //  console.log("Reseña: ", this.state.resenia);
+        // tslint:disable-next-line: no-console
+        //  console.log("Lista Comentarios", arrayComentarios);
+
 
         const active = paginaActual + 1
         const items = [];
@@ -852,7 +923,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         };
 
 
-        if (uiobtenerFecha) {
+        if (uisUsers) {
 
 
             switch (this.state.opcionAccion) {
@@ -887,21 +958,25 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                 case 2:
                     return (
                         <Alert variant="info" className="container justify-content-center">
-                            <Alert.Heading className="d-flex  container justify-content-center" > ¿Cuándo {mensajeAccion}? Selecciona una fecha y otorga una calificación. </Alert.Heading>
+
+                            <Alert.Heading className="d-flex"> <div className="p-3"><img src={this.state.panorama.urlImagen} style={{
+                                borderRadius: '10%',
+                                height: '80px',
+                                width: '80px',
+                            }} /></div> <div className="pt-3"> {this.state.panorama.nombre}. <small>¿Cuándo {mensajeAccion}? Selecciona una fecha, otorga una calificación y escribe una reseña.</small></div></Alert.Heading>
+
+                            <hr />
+
                             <div className="flex-column  container justify-content-center">
-
-
-                                <div className="d-flex justify-content-center">
+                                <div className="d-flex justify-content-center pt-3">
                                     Fecha: <DatePicker
                                         selected={this.state.fechaInicial}
                                         onChange={this.handleChangeDate}
                                     />
                                 </div>
 
-                                <hr />
 
-
-                                <div className="d-flex justify-content-center">
+                                <div className="d-flex justify-content-center pt-3">
                                     Calificación: <BeautyStars
                                         maxStars={5}
                                         value={this.state.calificacion}
@@ -911,6 +986,20 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                                         onChange={this.cambiarCalificacion}
                                     />
                                 </div>
+
+
+                                <div className="d-flex justify-content-center pt-3">
+                                    <textarea
+                                        rows={10}
+                                        value={this.state.resenia}
+                                        onChange={this.cambiarResenia}
+                                        className="form-control"
+                                        placeholder="Por favor cuéntanos qué te pareció este panorama"
+                                        maxLength={300}
+                                    />
+                                </div>
+
+
 
 
                                 <hr />
@@ -923,6 +1012,84 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
                             </div>
                         </Alert>
+                    );
+
+                    break;
+
+                case 3:
+                    return (
+                        <Container>
+
+                            <Alert variant="light" className="d-flex container justify-content-center ">
+
+                                <Alert.Heading className="d-flex"> <div className="p-3"><img src={this.state.panorama.urlImagen} style={{
+                                    borderRadius: '10%',
+                                    height: '80px',
+                                    width: '80px',
+                                }} /></div> <div className="pt-3"> {this.state.panorama.nombre}. <small>  {this.state.panorama.descripcion}</small></div>
+
+                                </Alert.Heading>
+
+
+                            </Alert>
+
+                            <div className="light-green-text d-flex">
+                                <b>   Últimos 20 comentarios</b>
+
+                            </div>
+
+
+
+
+                            {Object.keys(arrayComentarios).map((x) => {
+                                const post = arrayComentarios[x];
+                                //  tslint:disable-next-line: no-console
+                                //  console.log("key ",x)
+
+                                return (
+
+                                    <div key={x} className="d-flex container bg-transparent  card rounded m-2" >
+                                        <div className="card-header d-flex justify-content-between">
+                                            <div className="">
+                                                <b> <FontAwesomeIcon icon={faUser} /> {post.nombreUsuario}</b>
+
+
+                                            </div>
+                                            <div >
+                                                <b> <FontAwesomeIcon icon={faCalendar} />  {new Date(
+                                                    post.fecha.toDate()
+                                                ).toLocaleDateString()}</b>
+                                            </div>
+                                            <div>
+                                                <b><FontAwesomeIcon icon={faMapPin} /> {post.ciudadOrigen}</b>
+
+                                            </div>
+
+                                        </div>
+                                        <div className="card-body">
+                                            <FontAwesomeIcon icon={faComment} /> {post.comentario}
+                                        </div>
+
+
+                                    </div>
+
+                                );
+                            })}
+                            {this.noComment()}
+
+
+                            <hr />
+                            <div className="d-flex justify-content-center p-3">
+
+                                <Button variant="outline-success" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faCheckCircle} /> Listo </Button>
+
+                                {this.state.alert}
+                            </div>
+
+
+
+
+                        </Container >
                     );
 
                     break;
@@ -991,6 +1158,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                     return (
                         <div key={x} style={{ margin: "0 auto" }}>
                             <Panorama
+                                //    idPanorama={x}
                                 setSharedClicked={this.handleShare(x)}
                                 urlImagen={post.urlImagen}
                                 nombre={post.nombre}
@@ -1005,8 +1173,9 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                                 calificacion={post.calificacion}
                                 exigenciaFisica={post.exigenciaFisica}
                                 valor={post.valor}
-                                porRealizar={this.uiObterFecha(post, "deseas cumplir este deseo", 1)}
-                                realizado={this.uiObterFecha(post, "realizaste el panorama", 2)}
+                                porRealizar={this.uisUsers(post, "deseas cumplir este deseo", 1)}
+                                realizado={this.uisUsers(post, "realizaste el panorama", 2)}
+                                showComnent={this.uisUsers(post, "Comentarios", 3)}
                                 hidenCompartir={false}
                                 hiddenRealizado={false}
                                 hiddenXRealizar={false}
@@ -1103,7 +1272,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         const { panorama, fechaInicial } = this.state
         const { porRealizarAdd } = this.props
         this.setState({
-            uiobtenerFecha: false,
+            uisUsers: false,
             work: true,
         });
         porRealizarAdd(panorama, fechaInicial).then((res: string) => {
@@ -1121,12 +1290,19 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                 this.onAlertError(res)
             }
         })
+
+
+
+
     }
 
     private realizado = () => {
-        const { panorama, fechaInicial, calificacion } = this.state
-        const { realizadoAdd } = this.props
-        if (calificacion === 0) {
+        const { panorama, fechaInicial, calificacion, resenia } = this.state
+        const { realizadoAdd, comentarioAdd } = this.props
+        if (!panorama.idPanorama) {
+            return
+        }
+        if (calificacion === 0 || resenia === "") {
 
             this.setState({
                 alert: (
@@ -1134,9 +1310,9 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                         warning={true}
                         title="¡Cuidado!"
                         showCloseButton={true}
-                        confirmBtnText="Entendí"
+                        confirmBtnText="Ok, entendido"
                         onConfirm={this.hideAlert(false)}>
-                        Debes marcar una calificación.
+                        Debes  seleccionar una fecha, marcar una calificación y escribir una pequeña reseña del panorama.
                         {/* {  <BeautyStars
                             maxStars={5}
                             value={this.state.calificacion}
@@ -1152,7 +1328,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
         } else {
             this.setState({
-                uiobtenerFecha: false,
+                uisUsers: false,
                 work: true,
             });
             realizadoAdd(panorama, fechaInicial, calificacion).then((res: string) => {
@@ -1170,11 +1346,108 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                     this.onAlertError(res)
                 }
             })
+            // (idPanorama: string, fecha: Date, calificacion: number, comentario: string)
+            comentarioAdd(panorama.idPanorama, fechaInicial, calificacion, resenia).then((res: string) => {
+                if (res === "OK") {
+                    this.setState({
+                        work: false,
+                    });
+
+                    this.onAlert("Deseados", "xrealizar")
+
+                } else {
+                    this.setState({
+                        work: false,
+                    });
+                    this.onAlertError(res)
+                }
+            })
 
 
         }
 
     }
+
+    // (panorama: IPanorama, mensajeAccion: string, opcionAccion: number
+    private verComentarios = async () => {
+        const { panorama } = this.state
+        const { auth, db } = services
+        // tslint:disable-next-line: no-console
+        //  console.log('Hola');
+        this.setState({
+            arrayComentarios: {},
+            work: true
+
+        })
+
+
+        if (!panorama.idPanorama) {
+            return
+        }
+
+        if (!auth.currentUser) {
+            return
+        }
+        try {
+
+            // Obtenemos los datos del usurio en Firestore
+            const snap = db.collection('panoramas')
+                .doc(panorama.idPanorama)
+                .collection("comentarios")
+                .orderBy('fecha', 'desc')
+                .limit(20)
+
+            const commentArray = {}
+            await snap.get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // tslint:disable-next-line: no-console
+                        console.log('Consulta vacía');
+                        // resolve("Consulta vacía")
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        // tslint:disable-next-line: no-console
+                        commentArray[doc.id] = doc.data()
+                    });
+
+                    // tslint:disable-next-line: no-console
+                    // console.log("Comentarios", commentArray);
+                    this.setState({
+
+                        arrayComentarios: commentArray,
+                        work: false,
+                    });
+                })
+                .catch(err => {
+                    // tslint:disable-next-line: no-console
+                    console.log('Error', err.message);
+                    this.setState({
+
+                    });
+
+
+                });
+        } catch (error) {
+            // tslint:disable-next-line: no-console
+            console.log(error)
+            this.setState({
+
+                work: false,
+            });
+
+        }
+        // this.setState({
+
+        //     work: false,
+        // });
+
+
+    }
+
+
+
+
 }
 
 

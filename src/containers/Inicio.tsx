@@ -176,9 +176,9 @@ export default class Inicio extends React.Component<any, IState> {
                   color: '#34515e'
                 }} >
                   <hr className="my-3" />
-                  <h6> Conoce los mejores panoramas outdoors de cada lugar, solo o junto a tu familia. Existen opciones para todos los intereses, arma tu excursión autoguiada con información actualizada.</h6>
+                  <h6> Conoce los mejores panoramas outdoors, solo o junto a tu familia. Existen opciones para todos los intereses. Arma tu excursión <b>autoguiada</b> con información actualizada  o programa una excursión <b>guiada</b> con personas <b>profesionales</b> del rubro.</h6>
                   <></>
-                  <h6> Bosques, lagos, lagunas, ríos, cascadas, miradores, senderos y grandes extensiones bosques esperan ser conocidos y fotografiados.</h6>
+                  <h6> Bosques, lagos, montañas, glaciares,  lagunas, ríos, cascadas, miradores, senderos y grandes extensiones bosques esperan ser explorados y fotografiados.</h6>
                   <h6>Una cosa piden estos paisajes: Cuidarlos y respetar las normas de cada lugar que visites. La naturaleza no debe notar que estuviste ahí.</h6>
                   <br />
 

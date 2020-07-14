@@ -2,8 +2,6 @@ import * as React from "react";
 import { useState } from "react";
 import BeautyStars from "beauty-stars";
 
-
-
 import {
   Card,
   Button,
@@ -25,6 +23,7 @@ import {
   faMoneyBill,
   faTimes,
   faHeart,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 import iconFb from "../images/iconfacebook.png";
 import iconIn from "../images/iconinstagram.png";
@@ -32,16 +31,14 @@ import iconWeb from "../images/iweb.png";
 import iconTA from "../images/tripAdvisor.png";
 import * as utils from "../utils";
 
+import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+// import services from 'src/service';
 
-import {
 
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} from "react-google-maps";
 
 export interface IPanoramaProps {
   calificacion: number;
+  idPanorama?: string;
   descripcion: string;
   destacado?: string;
   exigenciaFisica: number;
@@ -57,39 +54,59 @@ export interface IPanoramaProps {
   urlTripAdvisor?: string;
   titulo?: string;
   valor: number;
-  lat: number
-  lng: number
-  direccion?: string
+  lat: number;
+  lng: number;
+  direccion?: string;
   hiddenXRealizar: boolean;
   hiddenRealizado: boolean;
   hidenCompartir: boolean;
   setSharedClicked: () => void;
   porRealizar?: () => void;
   realizado?: () => void;
+  showComnent?: () => any;
 }
 function ModalPanorama(datos: IPanoramaProps) {
+  // const { auth, db } = services
+  // const listComentarios = {}
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  // if (!auth.currentUser) {
+  //   return (
+  //     <div>Debes iniciar sesión</div>
+  //   )
+  // }
+  // const snap = db.collection('panoramas')
+  //   .doc(datos.idPanorama)
+  //   .collection("comentarios")
+
+  // snap.get().then(sn => {
+  //   sn.forEach(x => {
+  //     listComentarios[x.id] = x.data()
+  //   })
+
+  // })
+
+  // // .get()
+  // // tslint:disable-next-line: no-console
+  // console.log("COmentarios: ", listComentarios);
+
   // const Iframe = () => {
 
   //   const iframe = `<iframe  height="400" frameborder="0" style="border:0"
   //     src="https://www.google.com/maps/embed/v1/place?q=${datos.direccion}&key=AIzaSyAHTaKvQEE-WnvtbneuXD0rqmtej1CZY5c" allowfullscreen></iframe>`
   //   return (<div dangerouslySetInnerHTML={{ __html: iframe }} />)
   // }
-  const MapWithAMarker = withGoogleMap(props =>
+  const MapWithAMarker = withGoogleMap((props) => (
     <GoogleMap
       defaultZoom={15}
       defaultCenter={{ lat: datos.lat, lng: datos.lng }}
     >
-      <Marker
-
-        position={{ lat: datos.lat, lng: datos.lng }}
-      />
+      <Marker position={{ lat: datos.lat, lng: datos.lng }} />
     </GoogleMap>
-  );
-
-
+  ));
 
   return (
     <>
@@ -106,54 +123,57 @@ function ModalPanorama(datos: IPanoramaProps) {
         <Modal.Header closeButton={true}>
           <Modal.Title>
             {" "}
-            {datos.nombre}: <small> {datos.titulo}/{datos.direccion}</small>
+            {datos.nombre}:{" "}
+            <small>
+              {" "}
+              {datos.titulo}/{datos.direccion}{" "}
+            </small>
           </Modal.Title>
         </Modal.Header>
 
-
         <Modal.Body>
-
           <Container>
             <div className="d-flex justify-content-between">
-
-
               <OverlayTrigger
                 overlay={
                   <Tooltip id="tooltip-disabled">
-                    Agrega el panorama a tu lista de  Panoramas Deseados"
-              </Tooltip>
+                    Agrega el panorama a tu lista de Panoramas Deseados"
+                  </Tooltip>
                 }
               >
-
-                <div className="text-dark" onClick={datos.porRealizar} hidden={datos.hiddenXRealizar}>
-                  <FontAwesomeIcon icon={faHeart}
-                    size="2x"
-                    color="#689f38"
-                  /> Marcar como deseado
+                <div
+                  className="text-dark"
+                  onClick={datos.porRealizar}
+                  hidden={datos.hiddenXRealizar}
+                >
+                  <FontAwesomeIcon icon={faHeart} size="2x" color="#689f38" />{" "}
+                  Marcar como deseado
                 </div>
-
               </OverlayTrigger>
 
               <OverlayTrigger
                 overlay={
                   <Tooltip id="tooltip-disabled">
                     {" "}
-                Agrega el panorama a tu lista de "Panoramas Realizados"
-              </Tooltip>
+                    Agrega el panorama a tu lista de "Panoramas Realizados"
+                  </Tooltip>
                 }
               >
                 <div className="d-inline-block">
-                  <div className="text-dark" onClick={datos.realizado} hidden={datos.hiddenRealizado}>
+                  <div
+                    className="text-dark"
+                    onClick={datos.realizado}
+                    hidden={datos.hiddenRealizado}
+                  >
                     <FontAwesomeIcon
                       icon={faHiking}
                       size="2x"
                       color="#689f38"
-                    /> Marcar como realizado
+                    />{" "}
+                    Marcar como realizado
                   </div>
                 </div>
-
               </OverlayTrigger>
-
             </div>
             <hr />
             <Row className="show-grid">
@@ -171,10 +191,9 @@ function ModalPanorama(datos: IPanoramaProps) {
                   </Carousel.Item>
                 </Carousel>
 
-
                 <h6 className="text-info">
                   {" "}
-                  <div className="div"> {" "}</div>
+
                   <FontAwesomeIcon icon={faMoneyBill} size="1x" /> Precio{" "}
                   <mark> $ {datos.valor} p/p</mark>
                 </h6>
@@ -223,8 +242,8 @@ function ModalPanorama(datos: IPanoramaProps) {
                         <a href={datos.urlWeb} target="_blank">
                           <img
                             src={iconWeb}
-                            width="38"
-                            height="38"
+                            width="30"
+                            height="30"
                             className="rounded bg-info"
                           />
                         </a>
@@ -242,8 +261,8 @@ function ModalPanorama(datos: IPanoramaProps) {
                         <a href={datos.urlFacebook} target="_blank">
                           <img
                             src={iconFb}
-                            width="40"
-                            height="40"
+                            width="30"
+                            height="30"
                             className="rounded bg-info"
                           />
                         </a>
@@ -261,8 +280,8 @@ function ModalPanorama(datos: IPanoramaProps) {
                         <a href={datos.urlInstagram} target="_blank">
                           <img
                             src={iconIn}
-                            width="40"
-                            height="40"
+                            width="30"
+                            height="30"
                             className="rounded bg-info"
                           />
                         </a>
@@ -280,8 +299,8 @@ function ModalPanorama(datos: IPanoramaProps) {
                         <a href={datos.urlTripAdvisor} target="_blank">
                           <img
                             src={iconTA}
-                            width="40"
-                            height="40"
+                            width="30"
+                            height="30"
                             className="rounded bg-info"
                           />
                         </a>
@@ -291,7 +310,6 @@ function ModalPanorama(datos: IPanoramaProps) {
                 </div>
               </Col>
               <Col xs={12} md={6}>
-
                 <h4> Descripción</h4>
                 {datos.descripcion}
                 <h6>
@@ -313,51 +331,92 @@ function ModalPanorama(datos: IPanoramaProps) {
                     containerElement={<div style={{ height: `400px` }} />}
                     mapElement={<div style={{ height: `100%` }} />}
                   />
-
                 </div>
+              </Col>
+            </Row>
+          </Container>
+        </Modal.Body>
+        <hr />
+        <Modal.Footer>
+          <Container>
+            <Row>
+              <Col className=" d-flex justify-content-center">
+                <Button variant="outline-success" block={true} onClick={datos.showComnent} > <FontAwesomeIcon
+                  icon={faComment}
+                /> Ver los comentarios </Button>
+                {/* {  <OverlayTrigger
+                  overlay={
+                    <Tooltip id="tooltip-disabled">
+                      Revisar los últimos comentarios de usuarios
+                  </Tooltip>
+                  }
+                >
+                  <span className="d-inline-block">
+                    <div
+                      onClick={datos.showComnent}
+                      hidden={datos.hidenCompartir}
+                    >
+                      <FontAwesomeIcon
+                        icon={faComment}
+                        size="2x"
+                        color="#689f38"
+                      />
+                      <p className="text-info text-center small">
+                        Ver comentarios
+                    </p>
+                    </div>
+                  </span>
+                </OverlayTrigger>} */}
 
               </Col>
             </Row>
+            <hr />
+            <Row >
 
 
+              <Col className=" d-flex justify-content-center">
+                <OverlayTrigger
+                  overlay={
+                    <Tooltip id="tooltip-disabled">
+                      Compartir en redes sociales
+                  </Tooltip>
+                  }
+                >
+                  <span className="d-inline-block">
+                    <div
+                      onClick={datos.setSharedClicked}
+                      hidden={datos.hidenCompartir}
+                    >
+                      <FontAwesomeIcon
+                        icon={faShare}
+                        size="2x"
+                        color="#689f38"
+                      />
+                      <p className="text-info text-center small">Compartir</p>
+                    </div>
+                  </span>
+                </OverlayTrigger>
+              </Col>
+              <Col className=" d-flex justify-content-center">
+                <OverlayTrigger
+                  overlay={
+                    <Tooltip id="tooltip-disabled"> Cierra esta ventana"</Tooltip>
+                  }
+                >
+                  <span className="d-inline-block">
+                    <div onClick={handleClose}>
+                      <FontAwesomeIcon
+                        icon={faTimes}
+                        size="2x"
+                        color="#689f38"
+                      />
+                      <p className="text-info text-center small">Cerrar</p>
+                    </div>
+                  </span>
+                </OverlayTrigger>
+              </Col>
+            </Row>
           </Container>
-
-
-
-        </Modal.Body>
-        <Modal.Footer className="justify-content-center">
-          <OverlayTrigger
-            overlay={
-              <Tooltip id="tooltip-disabled">
-                Compartir en redes sociales
-              </Tooltip>
-            }
-          >
-
-            <span className="d-inline-block">
-
-              <div
-                onClick={datos.setSharedClicked}
-                hidden={datos.hidenCompartir}
-              >
-
-                <FontAwesomeIcon icon={faShare} size="2x" color="Dodgerblue" />
-                <p className="text-info text-center small">Compartir</p>
-              </div>
-            </span>
-          </OverlayTrigger>
-          <OverlayTrigger
-            overlay={
-              <Tooltip id="tooltip-disabled"> Cierra esta ventana"</Tooltip>
-            }
-          >
-            <span className="d-inline-block">
-              <div onClick={handleClose}>
-                <FontAwesomeIcon icon={faTimes} size="2x" color="Dodgerblue" />
-                <p className="text-info text-center small">Cerrar</p>
-              </div>
-            </span>
-          </OverlayTrigger>
         </Modal.Footer>
       </Modal>
     </>
@@ -367,6 +426,7 @@ function ModalPanorama(datos: IPanoramaProps) {
 export default class Panorama extends React.Component<IPanoramaProps> {
   public render() {
     const {
+      idPanorama,
       descripcion,
       nombre,
       urlImagen,
@@ -383,13 +443,14 @@ export default class Panorama extends React.Component<IPanoramaProps> {
       porRealizar,
       realizado,
       titulo,
+      showComnent,
       hiddenRealizado,
       hiddenXRealizar,
       hidenCompartir,
       nombuton,
       lat,
       lng,
-      direccion
+      direccion,
     } = this.props;
     // tslint:disable-next-line: no-console
     // console.log(`Lat: ${lat}  Long: ${lng} `);
@@ -414,9 +475,9 @@ export default class Panorama extends React.Component<IPanoramaProps> {
               />
             </div>
 
-
             {/* { <Button variant="primary">  <FontAwesomeIcon icon={faInfoCircle} size="1x"/> Más información</Button>} */}
             <ModalPanorama
+              idPanorama={idPanorama}
               setSharedClicked={setSharedClicked}
               nombre={nombre}
               nombuton={nombuton}
@@ -434,6 +495,7 @@ export default class Panorama extends React.Component<IPanoramaProps> {
               valor={valor}
               porRealizar={porRealizar}
               realizado={realizado}
+              showComnent={showComnent}
               hiddenRealizado={hiddenRealizado}
               hiddenXRealizar={hiddenXRealizar}
               hidenCompartir={hidenCompartir}

@@ -1228,3 +1228,45 @@ export const findUsersByIdPanoramaMD = (idPanorama: string) =>
             }
         })
     }
+
+
+
+export const comentarioAdd = (idPanorama: string, fecha: Date, calificacion: number, comentario: string) =>
+    async (dispatch: Dispatch, getState: () => any, { auth, db }: IServices) => {
+        return new Promise(async (resolve, eject) => {
+            if (!auth.currentUser) {
+                return
+            }
+            try {
+                // Obtenemos los datos del usurio en Firestore
+                const snap = await db.collection('users').doc(auth.currentUser.uid).get()
+                const userFirestore = snap.data()
+
+                if (userFirestore != null) {
+                    await db.collection('panoramas')
+                        .doc(`${idPanorama}`)
+                        .collection("comentarios")
+                        .doc(auth.currentUser.uid)
+                        .set({
+                            calificacionOtorgada: calificacion,
+                            ciudadOrigen: userFirestore.ciudad,
+                            comentario,
+                            createdAt: new Date(),
+                            email: userFirestore.email,
+                            fecha,
+                            nombreUsuario: userFirestore.nombre,
+                            uid: auth.currentUser.uid
+                        })
+
+                    resolve("OK");
+                }
+            } catch (error) {
+                // tslint:disable-next-line:no-console
+                console.log("Error", error.message) // esto
+                // alert(error.message)
+                resolve(error.message);
+            }
+
+
+        })
+    }
