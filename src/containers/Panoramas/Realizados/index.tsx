@@ -268,6 +268,7 @@ class PanoramasRealizados extends React.Component<IPanoramasRealizados, IStateRe
                             lat={post.lat}
                             lng={post.lng}
                             direccion={post.direccion}
+                            btnComentario={true}
 
                         />
 

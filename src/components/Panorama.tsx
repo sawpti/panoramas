@@ -60,11 +60,35 @@ export interface IPanoramaProps {
   hiddenXRealizar: boolean;
   hiddenRealizado: boolean;
   hidenCompartir: boolean;
+  btnComentario: boolean
   setSharedClicked: () => void;
   porRealizar?: () => void;
   realizado?: () => void;
   showComnent?: () => any;
 }
+
+// const noComment = (c:boolean) => {
+
+//   if (c) {
+
+//     return (
+//       <div>
+//         <Button variant="outline-success" block={true} onClick={datos.showComnent} > Ver los comentarios  <FontAwesomeIcon
+//           icon={faComment}
+//         /></Button>
+
+//       </div>
+//     )
+
+//   } else {
+//     return (<div >
+//       {null}
+
+//     </div>)
+//   }
+
+// }
+
 function ModalPanorama(datos: IPanoramaProps) {
   // const { auth, db } = services
   // const listComentarios = {}
@@ -72,6 +96,10 @@ function ModalPanorama(datos: IPanoramaProps) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+
+
+
 
   // if (!auth.currentUser) {
   //   return (
@@ -341,9 +369,10 @@ function ModalPanorama(datos: IPanoramaProps) {
           <Container>
             <Row>
               <Col className=" d-flex justify-content-center">
-                <Button variant="outline-success" block={true} onClick={datos.showComnent} > <FontAwesomeIcon
+
+                <Button hidden={datos.btnComentario} variant="outline-success" block={true} onClick={datos.showComnent} > Ver los comentarios  <FontAwesomeIcon
                   icon={faComment}
-                /> Ver los comentarios </Button>
+                /></Button>
                 {/* {  <OverlayTrigger
                   overlay={
                     <Tooltip id="tooltip-disabled">
@@ -448,6 +477,7 @@ export default class Panorama extends React.Component<IPanoramaProps> {
       hiddenXRealizar,
       hidenCompartir,
       nombuton,
+      btnComentario,
       lat,
       lng,
       direccion,
@@ -502,6 +532,7 @@ export default class Panorama extends React.Component<IPanoramaProps> {
               lat={lat}
               lng={lng}
               direccion={direccion}
+              btnComentario={btnComentario}
             />
           </Card.Body>
         </Card>

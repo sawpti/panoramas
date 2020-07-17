@@ -30,7 +30,7 @@ import {
 // import { useState } from 'react';
 // import SweetAlert from 'react-bootstrap-sweetalert';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMountain, faSearch, faMapPin, faCheckCircle, faBan, faComment, faUser, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faMountain, faSearch, faMapPin, faCheckCircle, faBan, faUser, faCalendar, faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng,
@@ -1026,7 +1026,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                                     borderRadius: '10%',
                                     height: '80px',
                                     width: '80px',
-                                }} /></div> <div className="pt-3"> {this.state.panorama.nombre}. <small>  {this.state.panorama.descripcion}</small></div>
+                                }} /></div> <div className="pt-3"> {this.state.panorama.nombre}. <small>  {this.state.panorama.descripcion.substring(0, 100)}...</small></div>
 
                                 </Alert.Heading>
 
@@ -1066,8 +1066,8 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                                             </div>
 
                                         </div>
-                                        <div className="card-body">
-                                            <FontAwesomeIcon icon={faComment} /> {post.comentario}
+                                        <div className="card-body d-flex align-content-lg-between">
+                                            {post.comentario} <FontAwesomeIcon icon={faCommentAlt} />
                                         </div>
 
 
@@ -1182,6 +1182,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                                 lat={post.lat}
                                 lng={post.lng}
                                 direccion={post.direccion}
+                                btnComentario={false}
                             />
                         </div>
                     );
@@ -1337,8 +1338,6 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                         work: false,
                     });
 
-                    this.onAlert("Realizados", "realizados")
-
                 } else {
                     this.setState({
                         work: false,
@@ -1353,7 +1352,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                         work: false,
                     });
 
-                    this.onAlert("Deseados", "xrealizar")
+                    //  this.onAlert("Deseados", "xrealizar")
 
                 } else {
                     this.setState({
@@ -1365,6 +1364,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
 
         }
+        this.onAlert("Realizados", "realizados")
 
     }
 

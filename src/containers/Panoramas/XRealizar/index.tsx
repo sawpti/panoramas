@@ -18,6 +18,7 @@ import BeautyStars from 'beauty-stars';
 interface IPanoramasxRealizar {
     fetchPanoramasPorRealizar: () => void
     realizadoAdd: (p: IPanorama, fecha: Date, calificacion:number) => any
+    comentarioAdd: (idPanorama: string, fecha: Date, calificacion: number, comentario: string) => any
     // xrealizar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
     // realizado: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
     // share: (a: string) => void // vamos a necesitar la referencia del panorama  al que le damos share
@@ -35,6 +36,7 @@ interface IStatePorRealizr{
     uiobtenerFecha:boolean
     alert: React.ReactNode
     panorama: IPanorama
+    resenia: string,
     uidProveedor: string
     work:boolean
 }
@@ -65,6 +67,7 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                 urlMapUbicacion: "string",
                 valor: 0,
             },
+            resenia: "",
             uidProveedor: "",
             uiobtenerFecha:false,
             work:false,
@@ -80,6 +83,14 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
 
         this.setState({
             calificacion: value
+        })
+
+
+    }
+    public cambiarResenia = (evt: any) => {
+
+        this.setState({
+            resenia: evt.target.value
         })
 
 
@@ -190,25 +201,27 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
 
         if (uiobtenerFecha) {
             return (
+
                 <Alert variant="info" className="container justify-content-center">
-                    <Alert.Heading className="d-flex  container justify-content-center" > 
-                    <hr/>
-                    ¿Cuándo {mensajeAccion}? Selecciona una fecha y otorga una calificación. 
-                    </Alert.Heading>
+
+                    <Alert.Heading className="d-flex"> <div className="p-3"><img src={this.state.panorama.urlImagen} style={{
+                        borderRadius: '10%',
+                        height: '80px',
+                        width: '80px',
+                    }} /></div> <div className="pt-3"> {this.state.panorama.nombre}. <small>¿Cuándo {mensajeAccion}? Selecciona una fecha, otorga una calificación y escribe una reseña.</small></div></Alert.Heading>
+
+                    <hr />
+
                     <div className="flex-column  container justify-content-center">
-
-
-                        <div className="d-flex justify-content-center">
+                        <div className="d-flex justify-content-center pt-3">
                             Fecha: <DatePicker
                                 selected={this.state.fechaInicial}
                                 onChange={this.handleChangeDate}
                             />
                         </div>
 
-                        <hr />
 
-
-                        <div className="d-flex justify-content-center">
+                        <div className="d-flex justify-content-center pt-3">
                             Calificación: <BeautyStars
                                 maxStars={5}
                                 value={this.state.calificacion}
@@ -218,6 +231,21 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                                 onChange={this.cambiarCalificacion}
                             />
                         </div>
+
+
+                        <div className="d-flex justify-content-center pt-3">
+                            <textarea
+                                rows={10}
+                                value={this.state.resenia}
+                                onChange={this.cambiarResenia}
+                                className="form-control"
+                                placeholder="Por favor cuéntanos qué te pareció este panorama"
+                                maxLength={300}
+                            />
+                        </div>
+
+
+
 
                         <hr />
                         <div className="d-flex justify-content-center">
@@ -229,6 +257,47 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
 
                     </div>
                 </Alert>
+
+                // {<Alert variant="info" className="container justify-content-center">
+                //     <Alert.Heading className="d-flex  container justify-content-center" > 
+                //     <hr/>
+                //     ¿Cuándo {mensajeAccion}? Selecciona una fecha y otorga una calificación. 
+                //     </Alert.Heading>
+                //     <div className="flex-column  container justify-content-center">
+
+
+                //         <div className="d-flex justify-content-center">
+                //             Fecha: <DatePicker
+                //                 selected={this.state.fechaInicial}
+                //                 onChange={this.handleChangeDate}
+                //             />
+                //         </div>
+
+                //         <hr />
+
+
+                //         <div className="d-flex justify-content-center">
+                //             Calificación: <BeautyStars
+                //                 maxStars={5}
+                //                 value={this.state.calificacion}
+                //                 inactiveColor="#e0e0e0"
+                //                 size="26px"
+                //                 editable={true}
+                //                 onChange={this.cambiarCalificacion}
+                //             />
+                //         </div>
+
+                //         <hr />
+                //         <div className="d-flex justify-content-center">
+
+                //             <Button variant="outline-primary" onClick={this.realizado} ><FontAwesomeIcon icon={faCheckCircle} /> Agregar </Button>
+                //             <Button variant="outline-secondary" onClick={this.cancelAdd} ><FontAwesomeIcon icon={faBan} /> Cancelar </Button>
+                //             {this.state.alert}
+                //         </div>
+
+                //     </div>
+                // </Alert>}
+
             
             );
         }
@@ -308,6 +377,8 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                             lat={post.lat}
                             lng={post.lng}
                             direccion={post.direccion}
+                            btnComentario={true}
+
 
                         />
 
@@ -337,9 +408,12 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
 
     }
     private realizado = () => {
-        const { panorama, fechaInicial, calificacion } = this.state
-        const { realizadoAdd } = this.props
-        if (calificacion === 0) {
+        const { panorama, fechaInicial, calificacion, resenia } = this.state
+        const { realizadoAdd, comentarioAdd} = this.props
+        if (!panorama.idPanorama) {
+            return
+        }
+        if (calificacion === 0 || resenia==="") {
 
             this.setState({
                 alert: (
@@ -374,7 +448,7 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                         work: false,
                     });
 
-                    this.onAlertOk("Realizados", "realizados")
+                   
 
                 } else {
                     this.setState({
@@ -383,6 +457,25 @@ class PanoramasXRealizar extends React.Component<IPanoramasxRealizar, IStatePorR
                     this.onAlertError(res)
                 }
             })
+
+
+            comentarioAdd(panorama.idPanorama, fechaInicial, calificacion, resenia).then((res: string) => {
+                if (res === "OK") {
+                    this.setState({
+                        work: false,
+                    });
+
+                    //  this.onAlert("Deseados", "xrealizar")
+
+                } else {
+                    this.setState({
+                        work: false,
+                    });
+                    this.onAlertError(res)
+                }
+            })
+
+            this.onAlertOk("Realizados", "realizados")
 
 
         }
