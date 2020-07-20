@@ -4,6 +4,7 @@ import { Carousel, Card, Button } from 'react-bootstrap/';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { GoogleLogin } from 'react-google-login';
 import { faHiking, faUserFriends, faMountain } from '@fortawesome/free-solid-svg-icons'
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 
 
@@ -23,6 +24,7 @@ import s8 from '../images/portada/08.jpeg'
 import BarraSuperior from '../components/BarraSuperiorInicio';
 import Login from './Auth/Login';
 import { numeroAleatorioNoRepetido } from '../utils';
+import services from 'src/service';
 // import services from 'src/service';
 // import Button from '../components/Button';
 // const responseGoogle = (response: any) => {
@@ -53,6 +55,7 @@ const arrayAlerario = numeroAleatorioNoRepetido(arrayImagensPortada.length, 3)
 // };
 
 interface IState {
+  alert: React.ReactNode
   loading: boolean,
   ui: string
 
@@ -65,11 +68,79 @@ export default class Inicio extends React.Component<any, IState> {
     super(props);
 
     this.state = {
+      alert: null,
       loading: false,
       ui: "Registro",
     };
   };
+  public hideAlert = () => {
+    this.setState({
+      alert: null
+    });
 
+  }
+
+  public sendEmailRecuperacion = (eve: React.FormEvent<HTMLFormElement>) => {
+    const { auth } = services
+    // tslint:disable-next-line: no-console
+    // console.log("eve", eve.toString());
+
+    auth.sendPasswordResetEmail(eve.toString()).then(() => {
+      // Email sent.
+      this.setState({
+        alert: (
+          <SweetAlert success={true}
+            title="¡Listo!"
+            onConfirm={this.hideAlert}>
+            Te hemos enviado un e-mail  a {eve.toString()} con una url para que restablezcas tu contraseña.
+            <br /> Si no lo encuentras en tu bandeja principal por favor revisa en spam.
+          </SweetAlert>
+        )
+      });
+
+    }).catch((error) => {
+      // tslint:disable-next-line: no-console
+      console.log("Error", error);
+
+      this.setState({
+        alert: (
+          <SweetAlert
+            error={true}
+            title="Error"
+            onConfirm={this.hideAlert}>
+            Se ha producido el siguiente error.
+            <br />
+            Código: {error.code}
+            <br />
+            Mensaje:  {error.message}
+          </SweetAlert>
+        )
+      });
+    });
+
+
+
+  }
+
+  public recuperarPwdClicked = () => {
+
+    this.setState({
+      alert: (
+        <SweetAlert
+          input={true}
+          showCancel={true}
+          required={true}
+          cancelBtnBsStyle="default"
+          title="Restaurar contraseña"
+          placeholder="Ingresa tu e-mail"
+          onConfirm={this.sendEmailRecuperacion}
+          onCancel={this.hideAlert}
+        >
+          Escribe tu correo electrónico resgistrado
+        </SweetAlert>
+      )
+    })
+  }
 
   public render() {
     const { ui } = this.state
@@ -176,7 +247,7 @@ export default class Inicio extends React.Component<any, IState> {
                   color: '#34515e'
                 }} >
                   <hr className="my-3" />
-                  <h6> Conoce los mejores panoramas outdoors, solo o junto a tu familia. Existen opciones para todos los intereses. Arma tu excursión <b>autoguiada</b> con información actualizada  o programa una excursión <b>guiada</b> con personas <b>profesionales</b> del rubro.</h6>
+                  <h6> Conoce los mejores panoramas outdoors, solo o junto a tu familia. Existen opciones para todos los intereses. Arma tu excursión <b>autoguiada</b> con información actualizada  o programa una excursión <b>guiada</b> con<b> profesionales</b> del rubro.</h6>
                   <></>
                   <h6> Bosques, lagos, montañas, glaciares,  lagunas, ríos, cascadas, miradores, senderos y grandes extensiones bosques esperan ser explorados y fotografiados.</h6>
                   <h6>Una cosa piden estos paisajes: Cuidarlos y respetar las normas de cada lugar que visites. La naturaleza no debe notar que estuviste ahí.</h6>
@@ -197,12 +268,13 @@ export default class Inicio extends React.Component<any, IState> {
                   <hr className="my-3" />
                   <h6 > Vive una gran experiencia</h6>
                   <></>
-                  <Login setRegistroClicked={this.onClickRegistro} />
+                  <Login setRegistroClicked={this.onClickRegistro} recuperarPdwClicked={this.recuperarPwdClicked} />
 
                 </Card.Text>
 
               </Card.Body>
             </Card>
+            {this.state.alert}
 
 
           </div>
@@ -226,7 +298,7 @@ export default class Inicio extends React.Component<any, IState> {
                   <h6 style={{
                     color: '#34515e'
                   }} > Vive una gran experiencia</h6>
-                  <Login setRegistroClicked={this.onClickRegistro} />
+                  <Login setRegistroClicked={this.onClickRegistro} recuperarPdwClicked={this.recuperarPwdClicked} />
 
                 </Card.Text>
 
@@ -235,6 +307,7 @@ export default class Inicio extends React.Component<any, IState> {
 
           </div>
 
+          {this.state.alert}
 
         </div>
       )

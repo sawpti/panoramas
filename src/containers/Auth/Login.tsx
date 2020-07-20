@@ -15,13 +15,14 @@ interface ILoginProps {
 
   login: (a: ILogin) => void,
   setRegistroClicked?: () => void
+  recuperarPdwClicked?: () => void
 
 
 }
 
 class Login extends React.Component<ILoginProps> {
   public render() {
-    const { login, setRegistroClicked } = this.props
+    const { login, setRegistroClicked, recuperarPdwClicked } = this.props
     return (
 
       <Card className="bg-transparent">
@@ -29,7 +30,11 @@ class Login extends React.Component<ILoginProps> {
 
           <Card.Text>
             <LoginForm onSubmit={login} />
+            <div onClick={recuperarPdwClicked} className="d-flex container justify-content-center card-action">
+              <small>¿Olvidaste tu contraseña?</small>
+            </div>
           </Card.Text>
+
 
 
           <Button

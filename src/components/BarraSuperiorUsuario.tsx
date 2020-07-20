@@ -89,7 +89,7 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
     if (loading) {
       return (
 
-        <div className="div"> Cargando</div>
+        <div className=" d-flex justify-content-center"> Cargando menú</div>
       )
 
     } else {
