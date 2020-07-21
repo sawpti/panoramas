@@ -1362,9 +1362,9 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                 }
             })
 
-
+            this.onAlert("Realizados", "realizados")
         }
-        this.onAlert("Realizados", "realizados")
+
 
     }
 

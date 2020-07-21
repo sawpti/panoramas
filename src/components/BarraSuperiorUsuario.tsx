@@ -102,8 +102,8 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
               <Navbar.Brand href="/">
                 <img
                   src={logo}
-                  width="70"
-                  height="70"
+                  width="200"
+                  height="73"
                   className="d-inline-block align-top"
                   alt="Logo Saltos Pocolpén"
                 />
@@ -138,8 +138,8 @@ export default class BarraSuperiorUsuario extends React.Component<IBarraSUperior
               <Navbar.Brand href="/">
                 <img
                   src={logo}
-                  width="70"
-                  height="70"
+                  width="200"
+                  height="73"
                   className="d-inline-block align-top"
                   alt="Logo Saltos Pocolpén"
                 />
