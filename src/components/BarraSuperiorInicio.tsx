@@ -4,7 +4,7 @@ import { Navbar, Nav, Button } from 'react-bootstrap/';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import SweetAlert from "react-bootstrap-sweetalert";
 import { faUser, faQuestionCircle, faInfoCircle, faHiking, faMountain } from '@fortawesome/free-solid-svg-icons';
-import logo from '../images/logo.png';
+import logo from '../images/logobn.png';
 
 interface IBarraSUperiorInicioProps {
   setInicioClicked: () => void

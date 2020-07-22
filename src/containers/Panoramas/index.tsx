@@ -9,6 +9,11 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import services from 'src/service';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import melipeuco from '../../images/comunas/melipeuco.jpg';
+import curarrehue from '../../images/comunas/curarrehue.jpeg';
+import pucon from '../../images/comunas/pucon.jpeg';
+
+// import { Helmet } from "react-helmet";
 
 // import noImage from '../../images/unnamed.jpg';
 
@@ -22,6 +27,7 @@ import {
     Navbar,
     Nav,
     Button,
+    Container
 
 
 
@@ -40,7 +46,9 @@ import useOnclickOutside from "react-cool-onclickoutside";
 import { IPanorama } from '../../ducks/Panoramas';
 import { firestore } from 'firebase';
 import BeautyStars from 'beauty-stars';
-import { Container } from 'react-bootstrap';
+// import { Container, Button } from 'react-bootstrap';
+import { Card } from 'react-bootstrap/';
+
 
 
 
@@ -113,7 +121,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
             arrayComentarios: {},
             calificacion: 0,
             cargando: true,
-            comuna: "Curarrehue",
+            comuna: "No seleccionada", // "No seleccionada"
             fechaInicial: new Date(),
             idPanorama: "",
             listPanoramas: {},
@@ -185,12 +193,18 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
     }
     public cambiarResenia = (evt: any) => {
 
+
         this.setState({
-            resenia: evt.target.value
+            resenia: evt.target.value,
+
         })
 
 
+
+
     }
+
+
 
     public subMenuComunas = (comuna: string) => {
 
@@ -204,6 +218,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                             <Nav className="mr-auto">
                                 <Nav.Link onClick={this.cambiarComuna("Curarrehue")}> Curarrehue </Nav.Link>
                                 <Nav.Link active={true} onClick={this.cambiarComuna("Pucón")}> <u> Pucón</u> </Nav.Link>
+                                <Nav.Link onClick={this.cambiarComuna("Melipeuco")}> Melipeuco </Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
@@ -220,23 +235,46 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                             <Nav className="mr-auto">
                                 <Nav.Link active={true} onClick={this.cambiarComuna("Curarrehue")}>  <u>Curarrehue</u>  </Nav.Link>
                                 <Nav.Link onClick={this.cambiarComuna("Pucón")}> Pucón </Nav.Link>
+                                <Nav.Link onClick={this.cambiarComuna("Melipeuco")}>  Melipeuco </Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
 
                 )
                 break;
+            case "Melipeuco":
+                return (
+                    <Navbar >
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                        <Navbar.Collapse id="responsive-navbar-nav">
+                            <Nav className="mr-auto">
+                                <Nav.Link onClick={this.cambiarComuna("Curarrehue")}>  Curarrehue  </Nav.Link>
+                                <Nav.Link onClick={this.cambiarComuna("Pucón")}> Pucón </Nav.Link>
+                                <Nav.Link active={true} onClick={this.cambiarComuna("Melipeuco")}> <u> Melipeuco</u> </Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+
+                )
+                break;
+
+
+
+
+
             default:
                 return (
                     <Navbar >
                         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                         <Navbar.Collapse id="responsive-navbar-nav">
                             <Nav className="mr-auto">
-                                <Nav.Link active={true} onClick={this.cambiarComuna("Curarrehue")}> Curarrehue </Nav.Link>
+                                <Nav.Link onClick={this.cambiarComuna("Curarrehue")}> Curarrehue </Nav.Link>
                                 <Nav.Link onClick={this.cambiarComuna("Pucón")}> Pucón </Nav.Link>
+                                <Nav.Link onClick={this.cambiarComuna("Melipeuco")}>  Melipeuco </Nav.Link>
+
                             </Nav>
                         </Navbar.Collapse>
-                    </Navbar>
+                    </Navbar >
 
                 )
                 break;
@@ -675,6 +713,9 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
         if (u != null) {
             const { paginaSize, panoramaInicial, comuna, paginas } = this.state
+            this.setState({
+                work: true
+            })
             await db.collection("panoramas")
                 .where('comuna', '==', comuna)
                 .get().then(snp => {
@@ -706,6 +747,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                     cargando: false,
                     listPanoramas: res.arrayP,
                     paginas,
+                    work: false
 
                 })
             })
@@ -760,6 +802,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
     public onClickPage = () => {
         alert("Hola")
     }
+
     public render() {
         const { listPanoramas, cargando, paginaActual, totalPaginas, totalPanoramas, comuna, arrayComentarios } = this.state
         const { work, uisUsers, mensajeAccion } = this.state
@@ -1111,13 +1154,95 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                         <Spinner
                             className="m-5 align-middle"
                             animation="border"
-                            variant="warning"
+                            variant="success"
                         />
                     </div>
                 </Alert>
 
 
             );
+        }
+
+        if (comuna === "No seleccionada") {
+
+
+            return (
+                <div className="d-flex flex-wrap container justify-content-center">
+                    <Alert variant="light" className="container">
+                        <Alert.Heading className="justify-content-lg-center" >
+                            <div style={{
+                                color: "#689f38"
+                            }}>
+                                <FontAwesomeIcon icon={faMountain} color="#689f38" /> Panoramas de Naturaleza y Aventura
+                     </div>
+
+                        </Alert.Heading>
+                        <div>
+                            {this.subMenuComunas(comuna)}
+
+                        </div>
+                        <hr />
+                        <div className="justify-content-lg-center pl-5">
+                            {/* Tienes {Object.keys(listPanoramas).length} panoramas disponibles */}
+
+                            <h4> <FontAwesomeIcon icon={faMapPin} /> Selecciona una comuna para ver sus panoramas outdoor</h4>
+
+                        </div>
+
+                        {/* {  <PlacesAutocomplete />} */}
+
+                        <hr />
+                        {/* {<Helmet>
+                        <script async={true} src='https://cse.google.com/cse.js?cx=partner-pub-3482095027751690:4nh0vq-1ly9' />
+                        <div className="gcse-searchbox-only" > hola </div>
+                    </Helmet>} */}
+                    </Alert>
+                    <Card style={{ width: '18rem', margin: "5px", background: "#f5f5f5" }}>
+                        <div className="h4 d-flex justify-content-center bg-light text-success"> Pucón</div>
+                        <Card.Img variant="bottom" src={pucon} onClick={this.cambiarComuna("Pucón")} />
+                        <Card.Body>
+
+
+                            <div className="d-flex justify-content-center">
+                                <Button variant="outline-success" block={true} onClick={this.cambiarComuna("Pucón")}>
+                                    <FontAwesomeIcon icon={faMountain} size="1x" /> Ver panoramas
+                                </Button>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                    <Card style={{ width: '18rem', margin: "5px", background: "#f5f5f5" }}>
+                        <div className="h4 d-flex justify-content-center bg-light text-success"> Curarrehue</div>
+                        <Card.Img variant="bottom" src={curarrehue} onClick={this.cambiarComuna("Curarrehue")} />
+                        <Card.Body>
+
+
+                            <div className="d-flex justify-content-center">
+                                <Button variant="outline-success" block={true} onClick={this.cambiarComuna("Curarrehue")}>
+                                    <FontAwesomeIcon icon={faMountain} size="1x" /> Ver panoramas
+                                </Button>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                    <Card style={{ width: '18rem', margin: "5px", background: "#f5f5f5" }}>
+                        <div className="h4 d-flex justify-content-center bg-light text-success"> Melipeuco</div>
+                        <Card.Img variant="bottom" src={melipeuco} onClick={this.cambiarComuna("Melipeuco")} />
+                        <Card.Body>
+
+
+                            <div className="d-flex justify-content-center">
+                                <Button variant="outline-success" block={true} onClick={this.cambiarComuna("Melipeuco")}>
+                                    <FontAwesomeIcon icon={faMountain} size="1x" /> Ver panoramas
+                                </Button>
+                            </div>
+                        </Card.Body>
+                    </Card>
+
+                </div>
+            )
+
+
+
+
         }
 
 
@@ -1141,16 +1266,22 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                         {/* Tienes {Object.keys(listPanoramas).length} panoramas disponibles */}
 
                         <h4> <FontAwesomeIcon icon={faMapPin} /> Estás en la comuna de <b>{comuna} </b></h4>
-                        Y tienes {totalPanoramas} panoramas outdoors para realizar en esta zona.
+                        Y tienes {totalPanoramas} panoramas outdoor para realizar en esta zona.
 
                       </div>
 
                     <PlacesAutocomplete />
 
                     <hr />
+                    {/* {<Helmet>
+                        <script async={true} src='https://cse.google.com/cse.js?cx=partner-pub-3482095027751690:4nh0vq-1ly9' />
+                        <div className="gcse-searchbox-only" > hola </div>
+                    </Helmet>} */}
                 </Alert>
 
+
                 {Object.keys(listPanoramas).map((x) => {
+
                     const post = listPanoramas[x];
                     //  tslint:disable-next-line: no-console
                     //  console.log("key ",x)
@@ -1201,6 +1332,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
 
                     {this.state.alert}
 
+
                 </div>
 
             </div>
@@ -1219,7 +1351,7 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         const { db } = services
         const { paginaSize } = this.state
         this.setState({
-            cargando: true,
+            work: true,
         });
         await db.collection("panoramas")
             .where('comuna', '==', comuna)
@@ -1243,6 +1375,10 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
         this.obtenerData(this.state.paginaSize, this.state.panoramaInicial, comuna)
             .then((res: IRespuesta) => {
                 const { paginas } = this.state
+                this.setState({
+
+                    work: true
+                })
 
                 const pagina = {
                     finalValor: res.valorFinal,
@@ -1254,12 +1390,22 @@ class AllPanoramas extends React.Component<INewsFeedProps, IStatePanorama> {
                     paginas,
 
                 })
+                this.setState({
+
+                    work: false
+                })
+                // setTimeout(() => {
+
+                //     this.setState({
+
+                //         work: false
+                //     })
+
+                // }, 1000);
 
 
             })
-        this.setState({
-            cargando: false,
-        });
+
     }
 
 

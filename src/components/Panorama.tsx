@@ -209,7 +209,7 @@ function ModalPanorama(datos: IPanoramaProps) {
                 <Carousel>
                   <Carousel.Item>
                     <img className="d-block w-100" src={datos.urlImagen} />
-                    <hr />
+
                   </Carousel.Item>
                   <Carousel.Item>
                     <img className="d-block w-100" src={datos.urlImagen1} />
@@ -253,7 +253,7 @@ function ModalPanorama(datos: IPanoramaProps) {
                     {utils.eFisica(datos.exigenciaFisica)}{" "}
                   </h6>
 
-                  <h4>Web y redes</h4>
+                  <h4>Web, redes y comentarios</h4>
                   <small>
                     Al hacer click o dar touch en el icono se deplegrá una nueva
                     pestaña del navegador con la información correspondiente.
@@ -340,8 +340,8 @@ function ModalPanorama(datos: IPanoramaProps) {
               <Col xs={12} md={6}>
                 <h4> Descripción</h4>
                 {datos.descripcion}
+                <br />
                 <h6>
-                  {" "}
                   <a
                     href={`https://maps.google.com/?q=${datos.lat},${datos.lng}`}
                     target="_blank"
@@ -350,56 +350,38 @@ function ModalPanorama(datos: IPanoramaProps) {
                       icon={faMapMarked}
                       size="1x"
                       color="Dodgerblue"
-                    />{" "}
-                    Cómo llegar
+                    />   Cómo llegar
                   </a>
                 </h6>
-                <div className="card-img">
-                  <MapWithAMarker
-                    containerElement={<div style={{ height: `400px` }} />}
-                    mapElement={<div style={{ height: `100%` }} />}
-                  />
-                </div>
+
               </Col>
+            </Row>
+            <Row className="show-grid">
+              <Col className=" d-flex justify-content-center mt-2 mb-2">
+
+                <Button hidden={datos.btnComentario} variant="outline-success" block={true} onClick={datos.showComnent} > Ver los comentarios  <FontAwesomeIcon
+                  icon={faComment}
+                /></Button>
+              </Col>
+            </Row>
+            <Row className="show-grid">
+
+              <div className="card-img pl-2">
+                <h4>  Mapa</h4>
+
+                <MapWithAMarker
+                  containerElement={<div style={{ height: `400px` }} />}
+                  mapElement={<div style={{ height: `100%` }} />}
+                />
+              </div>
             </Row>
           </Container>
         </Modal.Body>
         <hr />
         <Modal.Footer>
           <Container>
-            <Row>
-              <Col className=" d-flex justify-content-center">
 
-                <Button hidden={datos.btnComentario} variant="outline-success" block={true} onClick={datos.showComnent} > Ver los comentarios  <FontAwesomeIcon
-                  icon={faComment}
-                /></Button>
-                {/* {  <OverlayTrigger
-                  overlay={
-                    <Tooltip id="tooltip-disabled">
-                      Revisar los últimos comentarios de usuarios
-                  </Tooltip>
-                  }
-                >
-                  <span className="d-inline-block">
-                    <div
-                      onClick={datos.showComnent}
-                      hidden={datos.hidenCompartir}
-                    >
-                      <FontAwesomeIcon
-                        icon={faComment}
-                        size="2x"
-                        color="#689f38"
-                      />
-                      <p className="text-info text-center small">
-                        Ver comentarios
-                    </p>
-                    </div>
-                  </span>
-                </OverlayTrigger>} */}
 
-              </Col>
-            </Row>
-            <hr />
             <Row >
 
 

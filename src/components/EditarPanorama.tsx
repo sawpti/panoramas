@@ -552,7 +552,7 @@ export default class EditarPanorama extends React.Component<
               name="descripcion"
               id="descripcion"
               className="form-control"
-              maxLength={300}
+              maxLength={600}
             />
             <button
               onClick={this.setDato("descripcion")}
@@ -987,7 +987,7 @@ export default class EditarPanorama extends React.Component<
         break;
       case "descripcion":
         await doc.update({
-          descripcion: descripcion.substr(0, 350), // Solo guarda los primero 350 caracteres
+          descripcion: descripcion.substr(0, 600), // Solo guarda los primero 350 caracteres
           lastModification: new Date(),
           userToModify: uid,
         });

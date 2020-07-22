@@ -14,7 +14,7 @@ export default class Footer extends Component {
                 <Row className="d-flex container  justify-content-center">
                     <p style={{
                         color: '#e0e0e0'
-                    }} className="pt-5" >App Panoramas, una App gratuita para que todos los visitantes de Pucón y Curarrehue disfruten al máximo.</p>
+                    }} className="pt-5" >Panoramas Outdoors, es una App gratuita desarrollada por Parque Parque Saltos Pocolpén para que todos los visitantes  y habitatantes de la Araucanía puedan conocer los panoramas de Naturaleza y Aventura de la zona.</p>
                 </Row>
                 <Row className="d-flex container  justify-content-center">
 

@@ -6,7 +6,7 @@ import service from '../service'
 // import Nav from 'react-bootstrap/Nav';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faQuestionCircle, faInfoCircle, faHiking, faMountain, faSignOutAlt, faUserLock, faHeart } from '@fortawesome/free-solid-svg-icons'
-import logo from '../images/logo.png';
+import logo from '../images/logobn.png';
 
 interface IBarraSUperiorInicioProps {
   todosClicked?: () => any
