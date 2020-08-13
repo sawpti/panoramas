@@ -4,16 +4,20 @@ import service from '../../service'
 import { bindActionCreators } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { Spinner, Container, Alert, Button, Table, Card, Row, Col, Modal } from 'react-bootstrap';
+import { Spinner, Container, Alert, Button, Table, Card, Row, Col, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 // import Panorama from '../../components/PanoramaEdit'
 import * as postsDuck from '../../ducks/Panoramas'
 import { IState } from '../../ducks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlusCircle, faDesktop, faUserFriends, faChartLine, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faMountain, faArrowAltCircleLeft, faRetweet, faArrowAltCircleUp, faPlusCircle, faDesktop, faUserFriends, faChartLine, faEnvelope, faInfo } from '@fortawesome/free-solid-svg-icons';
 import EditarPanorama from '../../components/EditarPanorama';
 import Nav from 'react-bootstrap/Nav';
 import { Navbar } from 'react-bootstrap/';
 import { panoramaMasRealizado, panoramaMasDeseado } from 'src/utils';
+
+
+
+
 
 
 
@@ -24,6 +28,7 @@ interface IAdmin {
   fetchFindPanoramaUsuario: (uid: string) => void
   findUsersByIdPanoramaMR: (idPanorama: string) => any
   findUsersByIdPanoramaMD: (idPanorama: string) => any
+  cantidadUsuariosByPanoramaRealizado: (idPanorama: string) => any
   editar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista  "Por realizar" 
   guardar: (a: string) => void // Referencia del panorama que vamos a a gregar a la lista de "Realizados"
   fetched: boolean
@@ -61,7 +66,10 @@ interface IStateAdmin {
   urlMapUbicacion?: string
   uiSeleccionada: string // Dashboard, Panoramas,Usuarios
   valor?: number
-  usuarios?: any
+  usuarios?: any // Todos los usuarios
+  usuariosR?: any  // Usuarios que han marcado un panorama como realizado
+  usuariosD?: any // Usuarios que han marcado un panorama como deseado
+  panoramaActual?: any // Panorama que se carga cuando el usuario hace click en Ver, en la tabla de panoramas
 
 }
 
@@ -247,16 +255,16 @@ function ModalEstadisticasMasDeseado(usersByPanoramas: any) {
 
 
 
+
+
+
 class Admin extends React.Component<IAdmin, IStateAdmin> {
 
   constructor(props: IAdmin) {
+
     super(props)
-    const { fetched, fetchPanoramasRealizadosByProveedor, fetchPanoramasDeseadosByProveedor } = props
-    if (fetched) {
-      return
-    }
-    fetchPanoramasRealizadosByProveedor()
-    fetchPanoramasDeseadosByProveedor() // Carga en el estado los panoramas realizados por el usuario del proveedor que inició sesión
+    const { fetched, fetchPanoramasRealizadosByProveedor, fetchPanoramasDeseadosByProveedor, fetchFindPanoramaUsuario } = props
+    const { auth } = service
     this.state = {
       loading1: true,
       mEditar: false,
@@ -269,6 +277,16 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
       usuariosByPanoramaMR: {}
 
     };
+
+
+    if (fetched) {
+      return
+    }
+    fetchPanoramasRealizadosByProveedor()
+    fetchPanoramasDeseadosByProveedor() // Carga en el estado los panoramas realizados por el usuario del proveedor que inició sesión
+    if (auth.currentUser != null) {
+      fetchFindPanoramaUsuario(auth.currentUser.uid)
+    }
 
   };
 
@@ -288,6 +306,9 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
     )
   }
 
+
+
+
   public onClickSubMenu = (opcion: string) => () => {
     this.setState({
       uiSeleccionada: opcion
@@ -295,6 +316,68 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
     })
 
   }
+  // Usuarios que han marcado un panorama como realizado
+  public onClickVerUsuariosR = (panorama: any, opcion: string) => () => {
+
+    this.setState({
+      loading1: true,
+    })
+
+    this.props.findUsersByIdPanoramaMR(panorama.idPanorama).then((res: any) => {
+
+      this.setState({
+        panoramaActual: panorama,
+        uiSeleccionada: opcion,
+        usuariosR: res
+
+      })
+
+      // tslint:disable-next-line:no-console
+      console.log(panorama);
+      // tslint:disable-next-line:no-console
+      console.log("Usuarios por panorama", this.state.usuariosR);
+      this.setState({
+        loading1: false,
+      })
+
+    })
+
+  }
+
+  // Usuarios que han marcado un panorama como dedeaso
+  public onClickVerUsuariosD = (panorama: any, opcion: string) => () => {
+
+    this.setState({
+      loading1: true,
+    })
+
+    this.props.findUsersByIdPanoramaMD(panorama.idPanorama).then((res: any) => {
+
+      this.setState({
+        panoramaActual: panorama,
+        uiSeleccionada: opcion,
+        usuariosD: res
+
+      })
+
+      // tslint:disable-next-line:no-console
+      console.log(panorama);
+      // tslint:disable-next-line:no-console
+      console.log("Usuarios por panorama", this.state.usuariosD);
+      this.setState({
+        loading1: false,
+      })
+
+    })
+
+  }
+
+
+
+
+
+
+
   public async componentDidMount() {
     const { auth, db } = service
     const u = auth.currentUser
@@ -321,7 +404,6 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
         })
       }
-      this.props.fetchFindPanoramaUsuario(this.state.uid)
       const pMasR = panoramaMasRealizado(this.props.dataRealizadosByProveedor)
       const pMasD = panoramaMasDeseado(this.props.dataDeseadosByProveedor)
 
@@ -333,13 +415,13 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
 
     this.props.findUsersByIdPanoramaMR(this.state.pMasRealizado.idPanorama).then((res: any) => {
-      // tslint:disable-next-line:no-console
-      //  console.log("Lista de usuarios PR", res) // esto
+
       this.setState({
         usuariosByPanoramaMR: res
       })
 
     })
+
     // tslint:disable-next-line:no-console
     console.log("Id PMR", this.state.pMasDeseado.idPanorama) // esto
     this.props.findUsersByIdPanoramaMD(this.state.pMasDeseado.idPanorama).then((res: any) => {
@@ -358,6 +440,8 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
     try {
       //      const uid = auth.currentUser ? auth.currentUser.uid : "undefined"
       const snaps = await db.collection('users')
+        .orderBy('createdAt', 'desc')
+        //   .limit(50)
         .get()
       const users = {}
       snaps.forEach(x => users[x.id] = x.data())
@@ -384,40 +468,17 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
     this.setState({
       loading1: false,
-
     })
-
-
 
   }
 
   public render() {
-    const { loading1, rol, mEditar, uiSeleccionada, pMasRealizado, pMasDeseado, usuarios, usuariosByPanoramaMD, usuariosByPanoramaMR } = this.state
+    const { loading1, rol, mEditar, uiSeleccionada, pMasRealizado, pMasDeseado, usuarios, usuariosByPanoramaMD, usuariosByPanoramaMR, usuariosR, usuariosD } = this.state
     const { data, loading } = this.props
     let i = 0;
     let j = 0;
     let k = 0
-    // let usersPanoramasMD = {};
-    // let usersPanoramasMR = {};
-    // Object.keys(usuariosByPanoramaMD).map((x) => {
-    //   usersPanoramasMD = usuariosByPanoramaMR[x];
-    // });
-    // Object.keys(usuariosByPanoramaMD).map((x) => {
-    //   usersPanoramasMR = usuariosByPanoramaMR[x];
-    // });
-    // const a = [...usersPanoramasMR, ...usersPanoramasMD]
-    // Object.keys(usuariosByPanoramaMD).concat(Object.keys(usuariosByPanoramaMR))
-    // tslint:disable-next-line: no-console
-    // console.log("Usuarios MD+MR", usuariosByPanoramaMD.concat(usuariosByPanoramaMR))
-    // // tslint:disable-next-line: no-console
-    // console.log("Usuarios MD", usuariosByPanoramaMR)
-
-
-
-    // // tslint:disable-next-line: no-console
-    // console.log(" dataRealizadosByProveedor", dataRealizadosByProveedor)
-    // // tslint:disable-next-line: no-console
-    // console.log(" dataDeseadosByProveedor", dataDeseadosByProveedor)
+    let l = 0
 
 
     if (loading1 && loading) {
@@ -495,45 +556,9 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
                     </Col >
 
-                    {/* { <Col className="d-flex container justify-content-center"> <Card style={{ width: '18rem', margin: "5px" }}>
-                      <Card.Img variant="top" src={""} />
-                      <Card.Body>
-                        <Card.Title>Usuario con más panoramas realizados</Card.Title>
-                        <Card.Text>
-                          De todos tus panoramas este es el más deseado por los usuarios <br />
-                          <h3>125 veces</h3>
-                        </Card.Text>
-                        <Button variant="primary">Info</Button>
-                      </Card.Body>
-                    </Card></Col>} */}
-
 
                   </Row>
-
-                  {/* {  <Row>
-
-                    <Col className="d-flex container justify-content-center"> <Card style={{ width: '18rem', margin: "5px" }}>
-                      <Card.Img variant="top" src={""} />
-                      <Card.Body>
-                        <Card.Title>Usuario con más panoramas realizados</Card.Title>
-                        <Card.Text>
-                          De todos tus panoramas este es el más deseado por los usuarios <br />
-                          <h3>125 veces</h3>
-                        </Card.Text>
-                        <Button variant="primary">Info</Button>
-                      </Card.Body>
-                    </Card>
-                    </Col>
-
-                  </Row>} */}
-
-
                 </Container>
-
-
-
-
-
 
               </div>
 
@@ -567,7 +592,14 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                       <th>Imagen</th>
                       <th>Nombre</th>
                       <th>Ubicacción</th>
-                      <th>Acción</th>
+                      <th>
+                        <small className="text-info"> Indica la cantidad de personas que ha marcado el panorama como </small> Realizado
+                      </th>
+                      <th>
+                        <small className="text-info"> Indica la cantidad de personas que ha marcado el panorama como </small> Deseado
+
+                      </th>
+                      <th>Editar</th>
 
                     </tr>
                   </thead>
@@ -582,7 +614,22 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
 
                         return <tr key={x}  >
 
-                          <td>{i}</td>
+                          <td>
+
+                            <OverlayTrigger
+                              overlay={
+                                <Tooltip id="tooltip-disabled"> {x}</Tooltip>
+                              }
+                            >
+                              <span className="d-inline-block">
+                                <div >
+
+                                  <p className="text-info text-center small"> {i}</p>
+                                </div>
+                              </span>
+                            </OverlayTrigger>
+
+                          </td>
                           <td><img src={post.urlImagen} style={{
                             borderRadius: '10%',
                             height: '80px',
@@ -590,6 +637,8 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                           }} /></td>
                           <td>{post.nombre}</td>
                           <td>{post.direccion}</td>
+                          <td className="text-info text-center" onClick={this.onClickVerUsuariosR(post, "UsuariosByPanoramaR")} >  {post.cantidadRealizado}  <FontAwesomeIcon icon={faUserFriends} /> Ver </td>
+                          <td className="text-info text-center" onClick={this.onClickVerUsuariosD(post, "UsuariosByPanoramaD")}>{post.cantidadDeseado} <FontAwesomeIcon icon={faUserFriends} /> Ver</td>
                           <td>   <Button variant="outline-primary"
                             onClick={this.onEditar(
                               post.idPanorama || "No existe",
@@ -649,7 +698,7 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                       <th>#</th>
                       <th>Procedencia</th>
                       <th>Nombre</th>
-                      <th>Fono/Email</th>
+                      <th>Email</th>
                       <th>Fecha visita</th>
                       <th>Acción</th>
 
@@ -670,6 +719,7 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                           <td>{post.procedencia}</td>
                           <td>{post.nombre}</td>
                           <td>{post.email}</td>
+
                           <td>  {new Date(
                             post.fechaVisita.toDate()
                           ).toLocaleDateString()} </td>
@@ -693,7 +743,7 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                       <th>#</th>
                       <th>Procedencia</th>
                       <th>Nombre</th>
-                      <th>Fono/Email</th>
+                      <th>Email</th>
                       <th>Fecha estimada</th>
                       <th>Acción</th>
 
@@ -714,6 +764,206 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                           <td>{post.procedencia}</td>
                           <td>{post.nombre}</td>
                           <td>{post.email}</td>
+
+                          <td>  {new Date(
+                            post.fechaDeseo.toDate()
+                          ).toLocaleDateString()} </td>
+
+                          <td className="d-flex justify-content-sm-center">
+                            <Button variant="outline-primary"
+
+
+                            > Enviar</Button></td>
+
+                        </tr>
+
+
+                      })}
+                  </tbody>
+                </Table>
+
+                <div > <b>Todos los usuarios</b></div>
+
+                <Table responsive={true} striped={true} bordered={true} hover={true}>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Nombre</th>
+                      <th>Fono/Email</th>
+                      <th>Comuna/Ciudad</th>
+                      <th>Fecha registro</th>
+                      <th>Más infomación</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+
+
+                    {
+                      Object.keys(usuarios).map(x => {
+                        const post = usuarios[x]
+                        k++
+                        //  tslint:disable-next-line: no-console
+                        // console.log("key ",x)
+
+                        return <tr key={x}  >
+
+                          <td>
+                            <OverlayTrigger
+                              overlay={
+                                <Tooltip id="tooltip-disabled"> {post.uid}</Tooltip>
+                              }
+                            >
+                              <span className="d-inline-block">
+                                <div >
+
+                                  <p className="text-info text-center small"> {k}</p>
+                                </div>
+                              </span>
+                            </OverlayTrigger>
+
+
+
+                          </td>
+                          <td>{post.nombre}</td>
+                          <td>{post.email}/ {post.fono}</td>
+                          <td>{post.comuna}/ {post.ciudad}</td>
+                          <td>  {new Date(
+                            post.createdAt.toDate()
+                          ).toLocaleDateString()} </td>
+
+                          <td className="d-flex justify-content-sm-center">
+                            <Button variant="outline-info">
+                              <FontAwesomeIcon icon={faInfo} />
+                            </Button>
+                          </td>
+                        </tr>
+
+
+                      })}
+                  </tbody>
+                </Table>
+
+
+              </div>
+            )
+            break;
+
+          case "UsuariosByPanoramaR": // Muestra los usuarios que han realizado un panorama
+            return (
+              <div className="d-flex flex-wrap container justify-content-start">
+                {this.subMenuAdmin()}
+                <Alert variant="info" className="container">
+                  <Alert.Heading>  <FontAwesomeIcon icon={faUserFriends} /> Usuarios del panorama <b>"{this.state.panoramaActual.nombre}"</b> </Alert.Heading>
+                  <p>
+                    <b>{Object.keys(usuariosR).length}</b>  usuarios han marcado el ponoramas como <b>realizado</b>.
+                  </p>
+                  <hr />
+
+
+                </Alert>
+                <div > <b>Últimos 100 usuarios</b></div>
+
+                <Table responsive={true} striped={true} bordered={true} hover={true}>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Procedencia</th>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Fecha visita</th>
+                      <th>Acción</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {
+                      Object.keys(usuariosR).map(x => {
+                        const post = usuariosR[x]
+                        l++
+                        //  tslint:disable-next-line: no-console
+                        // console.log("key ",x)
+
+                        return <tr key={x}  >
+
+                          <td>{l}</td>
+                          <td>{post.procedencia}</td>
+                          <td>{post.nombre}</td>
+                          <td>{post.email}</td>
+
+                          <td>  {new Date(
+                            post.fechaVisita.toDate()
+                          ).toLocaleDateString()} </td>
+
+                          <td className="d-flex justify-content-sm-center">   <Button variant="outline-primary"
+
+                          // size="lg"
+                          > Enviar</Button></td>
+                        </tr>
+
+
+                      })}
+                  </tbody>
+                </Table>
+
+
+                <div className="d-flex justify-content-center mb-5 align-content-center">
+                  <Button variant="outline-primary"
+                    onClick={this.onClickSubMenu("Panoramas")}
+                  > <FontAwesomeIcon icon={faMountain} /> Regresar a Panoramas </Button>
+                </div>
+
+
+              </div>
+            )
+            break;
+
+
+          case "UsuariosByPanoramaD": // Muestra los usuarios que han realizado un panorama
+            return (
+              <div className="d-flex flex-wrap container justify-content-start">
+                {this.subMenuAdmin()}
+                <Alert variant="info" className="container">
+                  <Alert.Heading>  <FontAwesomeIcon icon={faUserFriends} /> Usuarios del panorama <b>"{this.state.panoramaActual.nombre}"</b> </Alert.Heading>
+                  <p>
+                    <b>{Object.keys(usuariosD).length}</b>  usuarios han marcado el ponoramas como <b> deseado.</b>
+                  </p>
+                  <hr />
+
+
+                </Alert>
+                <div > <b>Últimos 100 usuarios</b></div>
+
+                <Table responsive={true} striped={true} bordered={true} hover={true}>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Procedencia</th>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Fecha estimada <small className="text-info"> Es la fecha que el usuario pretende realizar el panorama </small></th>
+                      <th>Acción</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {
+                      Object.keys(usuariosD).map(x => {
+                        const post = usuariosD[x]
+                        l++
+                        //  tslint:disable-next-line: no-console
+                        // console.log("key ",x)
+
+                        return <tr key={x}  >
+
+                          <td>{l}</td>
+                          <td>{post.procedencia}</td>
+                          <td>{post.nombre}</td>
+                          <td>{post.email}</td>
+
                           <td>  {new Date(
                             post.fechaDeseo.toDate()
                           ).toLocaleDateString()} </td>
@@ -729,54 +979,19 @@ class Admin extends React.Component<IAdmin, IStateAdmin> {
                   </tbody>
                 </Table>
 
-                <div > <b>Todos los usuarios</b></div>
 
-                <Table responsive={true} striped={true} bordered={true} hover={true}>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>UID</th>
-                      <th>Nombre</th>
-                      <th>Fono/Email</th>
-                      <th>Fecha registro</th>
-                      <th>Acción</th>
-
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                    {
-                      Object.keys(usuarios).map(x => {
-                        const post = usuarios[x]
-                        k++
-                        //  tslint:disable-next-line: no-console
-                        // console.log("key ",x)
-
-                        return <tr key={x}  >
-
-                          <td>{k}</td>
-                          <td>{post.uid}</td>
-                          <td>{post.nombre}</td>
-                          <td>{post.email}/ {post.fono}</td>
-                          <td>  {new Date(
-                            post.createdAt.toDate()
-                          ).toLocaleDateString()} </td>
-
-                          <td className="d-flex justify-content-sm-center">   <Button variant="outline-primary"
-
-                          // size="lg"
-                          > Enviar</Button></td>
-                        </tr>
-
-
-                      })}
-                  </tbody>
-                </Table>
+                <div className="d-flex justify-content-center mb-5 align-content-center">
+                  <Button variant="outline-primary"
+                    onClick={this.onClickSubMenu("Panoramas")}
+                  > <FontAwesomeIcon icon={faMountain} /> Regresar a Panoramas </Button>
+                </div>
 
 
               </div>
             )
-            break;
+
+
+
 
           default:
             break;

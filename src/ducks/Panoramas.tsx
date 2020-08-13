@@ -31,6 +31,8 @@ export interface ILogin {
 export interface IPanorama {
     createdAt: firestore.Timestamp
     calificacion: number
+    cantidadRealizado?: number
+    cantidadDeseado?: number
     descripcion: string
     destacado?: string
     exigenciaFisica: number
@@ -572,20 +574,74 @@ export const fetchFindPanoramaUsuario = (uid: string) =>
             // Opción 1: una clave para una arreglo que contiene las tres imagens
             imgIds.forEach(x => keyedImages[x[0]] = [x[1], x[3], x[5]])
             // Opción 1: de una clave para cada imagen
-            Object.keys(posts).forEach(x =>
-                posts[x] = {
-                    ...posts[x], // estos son los campos que se llaman igual en la bd como en la interface
-                    exigenciaFisica: posts[x].exigenciaFisica,
-                    idPanorama: x,
-                    uidProveedor: posts[x].uid,
-                    urlFacebook: posts[x].urlFacebook,
-                    urlImagen: keyedImages[x][0],
-                    urlImagen1: keyedImages[x][1],
-                    urlImagen2: keyedImages[x][2],
-                    urlInstagram: posts[x].urlInstagram,
-                    urlTripAdvisor: posts[x].urlTripAdvisor,
-                    urlWeb: posts[x].urlWeb,
-                }
+            let cantidadRealizado = 0
+
+
+
+            Object.keys(posts).forEach(async x => {
+                await db.collection('realizados')
+                    .where('idPanorama', '==', x)
+                    .get()
+                    .then(snapshot => {
+                        if (snapshot.empty) {
+                            // tslint:disable-next-line: no-console
+                            // console.log('Consulta vacía');ge
+                            cantidadRealizado = 0
+                        }
+                        cantidadRealizado = snapshot.docs.length
+                        posts[x] = {
+                            ...posts[x], // estos son los campos que se llaman igual en la bd como en la interface
+                            cantidadRealizado,
+                            exigenciaFisica: posts[x].exigenciaFisica,
+                            idPanorama: x,
+                            uidProveedor: posts[x].uid,
+                            urlFacebook: posts[x].urlFacebook,
+                            urlImagen: keyedImages[x][0],
+                            urlImagen1: keyedImages[x][1],
+                            urlImagen2: keyedImages[x][2],
+                            urlInstagram: posts[x].urlInstagram,
+                            urlTripAdvisor: posts[x].urlTripAdvisor,
+                            urlWeb: posts[x].urlWeb,
+                        }
+
+                    })
+
+                let cantidadDeseado = 0
+                await db.collection('xrealizar')
+                    .where('idPanorama', '==', x)
+                    .get()
+                    .then(snapshot => {
+                        if (snapshot.empty) {
+                            // tslint:disable-next-line: no-console
+                            // console.log('Consulta vacía');ge
+                            cantidadDeseado = 0
+                        }
+                        cantidadDeseado = snapshot.docs.length
+                        posts[x] = {
+                            ...posts[x], // estos son los campos que se llaman igual en la bd como en la interface
+                            cantidadDeseado,
+                            exigenciaFisica: posts[x].exigenciaFisica,
+                            idPanorama: x,
+                            uidProveedor: posts[x].uid,
+                            urlFacebook: posts[x].urlFacebook,
+                            urlImagen: keyedImages[x][0],
+                            urlImagen1: keyedImages[x][1],
+                            urlImagen2: keyedImages[x][2],
+                            urlInstagram: posts[x].urlInstagram,
+                            urlTripAdvisor: posts[x].urlTripAdvisor,
+                            urlWeb: posts[x].urlWeb,
+                        }
+
+                    })
+
+
+
+
+
+
+
+
+            }
 
 
             )
@@ -1092,48 +1148,51 @@ export const realizadoAdd = (p: IPanorama, fecha: Date, calificacion: number) =>
         })
     }
 
-export const fetchPanoramasRealizadosByIdPanorama = (idPanorama: string) =>
-    async (dispatch: Dispatch, getState: () => any, { db }: IServices) => {
+// export const fetchPanoramasRealizadosByIdPanorama = (idPanorama: string) =>
+//     async (dispatch: Dispatch, getState: () => any, { db }: IServices) => {
 
-        dispatch(fetchStart())
+//         dispatch(fetchStart())
 
-        try {
+//         try {
 
-            const consulta = db.collection('realizados')
-                .where('idPanorama', '==', idPanorama)
-                .orderBy('fecha', 'asc')
-                .limit(50)
-            const pxr = {} // Panoramas por realizar
-            await consulta.get()
-                .then(snapshot => {
-                    if (snapshot.empty) {
-                        // tslint:disable-next-line: no-console
-                        console.log('Consulta vacía');
+//             const consulta = db.collection('realizados')
+//                 .where('idPanorama', '==', idPanorama)
+//                 .orderBy('fecha', 'asc')
+//                 .limit(50)
+//             const pxr = {} // Panoramas por realizar
+//             await consulta.get()
+//                 .then(snapshot => {
+//                     if (snapshot.empty) {
+//                         // tslint:disable-next-line: no-console
+//                         console.log('Consulta vacía');
 
-                        return;
-                    }
-                    snapshot.forEach(doc => {
-                        // tslint:disable-next-line: no-console
-                        pxr[doc.id] = doc.data()
-                        //   console.log(doc.id, '=>', doc.data());
-                    });
-                })
-                .catch(err => {
-                    // tslint:disable-next-line: no-console
-                    console.log('Error', err.message);
-                });
-            dispatch(fetchSuccess(pxr))
+//                         return;
+//                     }
+//                     snapshot.forEach(doc => {
+//                         // tslint:disable-next-line: no-console
+//                         pxr[doc.id] = doc.data()
+//                         //   console.log(doc.id, '=>', doc.data());
+//                     });
+//                 })
+//                 .catch(err => {
+//                     // tslint:disable-next-line: no-console
+//                     console.log('Error', err.message);
+//                 });
+//             dispatch(fetchSuccess(pxr))
 
 
-        } catch (error) {
-            // tslint:disable-next-line: no-console
-            console.log(error)
-            dispatch(fetchError(error))
+//         } catch (error) {
+//             // tslint:disable-next-line: no-console
+//             console.log(error)
+//             dispatch(fetchError(error))
 
-        }
+//         }
 
-    }
+//     }
 
+
+
+// Obtiene los usuarios que han marcado como realizado un panorama (por el idPanorama)
 export const findUsersByIdPanoramaMR = (idPanorama: string) =>
     async (dispatch: Dispatch, getState: () => any, { auth, db }: IServices) => {
         return new Promise(async (resolve, eject) => {
@@ -1143,8 +1202,8 @@ export const findUsersByIdPanoramaMR = (idPanorama: string) =>
             try {
                 const consulta = db.collection('realizados')
                     .where('idPanorama', '==', idPanorama)
-                    .orderBy('fecha', 'asc')
-                    .limit(50)
+                    .orderBy('fecha', 'desc')
+                    .limit(100)
                 const usersByPaorama = {}
                 await consulta.get()
                     .then(snapshot => {
@@ -1154,8 +1213,11 @@ export const findUsersByIdPanoramaMR = (idPanorama: string) =>
                             // resolve("Consulta vacía")
                             return;
                         }
+                        // tslint:disable-next-line: no-console
+                        console.log("Largo", snapshot.docs.length);
                         snapshot.forEach(doc => {
                             // tslint:disable-next-line: no-console
+                            //  console.log("Usduarios panorama", pxr);
                             usersByPaorama[doc.data().uid] = {
                                 califiacionOtorgada: doc.data().calificacionOtorgada ? doc.data().calificacionOtorgada : "No otorgada",
                                 email: doc.data().email,
@@ -1182,6 +1244,40 @@ export const findUsersByIdPanoramaMR = (idPanorama: string) =>
         })
     }
 
+
+// Obtiene el numero de usuarios que ha marcado un panorama como realizado
+export const cantidadUsuariosByPanoramaRealizado = (idPanorama: string) =>
+    async (dispatch: Dispatch, getState: () => any, { auth, db }: IServices) => {
+        return new Promise(async (resolve, eject) => {
+            if (!auth.currentUser) {
+                return
+            }
+            try {
+                const consulta = db.collection('realizados')
+                    .where('idPanorama', '==', idPanorama)
+
+                await consulta.get()
+                    .then(snapshot => {
+                        if (snapshot.empty) {
+                            // tslint:disable-next-line: no-console
+                            // console.log('Consulta vacía');ge
+                            resolve(0)
+                            return;
+                        }
+                        // tslint:disable-next-line: no-console
+                        console.log("Largo cantidadUsuariosByPanoramaRealizado:" + snapshot.docs.length + "  idPanorama: " + idPanorama);
+                        resolve(snapshot.docs.length);
+                    });
+
+            } catch (error) {
+                // tslint:disable-next-line: no-console
+                console.log(error)
+                resolve(error.message)
+            }
+        })
+    }
+
+// Obtiene los usuarios que han marcado un panorama como deseado (por idPanorama)
 export const findUsersByIdPanoramaMD = (idPanorama: string) =>
     async (dispatch: Dispatch, getState: () => any, { auth, db }: IServices) => {
         return new Promise(async (resolve, eject) => {
@@ -1191,8 +1287,8 @@ export const findUsersByIdPanoramaMD = (idPanorama: string) =>
             try {
                 const consulta = db.collection('xrealizar')
                     .where('idPanorama', '==', idPanorama)
-                    .orderBy('fecha', 'asc')
-                    .limit(50)
+                    .orderBy('fecha', 'desc')
+                    .limit(100)
                 const usersByPaorama = {}
                 await consulta.get()
                     .then(snapshot => {

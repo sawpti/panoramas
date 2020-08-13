@@ -207,7 +207,7 @@ function ModalPanorama(datos: IPanoramaProps) {
             <Row className="show-grid">
               <Col xs={12} md={6}>
                 <Carousel>
-                  <Carousel.Item>
+                  <Carousel.Item >
                     <img className="d-block w-100" src={datos.urlImagen} />
 
                   </Carousel.Item>
